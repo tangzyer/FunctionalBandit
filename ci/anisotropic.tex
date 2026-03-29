@@ -1,0 +1,1916 @@
+\documentclass[11pt,a4paper]{article}
+
+% ========================
+% ESSENTIAL PACKAGES
+% ========================
+
+% Language and encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+
+% Math packages
+\usepackage{amsmath}        % Enhanced math environments
+\usepackage{amssymb}        % Additional math symbols
+\usepackage{amsthm}         % Theorem environments
+\usepackage{amsfonts}       % Additional math fonts
+\usepackage{mathtools}      % Extension to amsmath
+\usepackage{bm}             % Bold math symbols
+\usepackage{dsfont}         % Double-struck fonts (for sets like ℝ, ℕ)
+\usepackage{mathrsfs}       % Script fonts for math
+
+% Graphics and figures
+\usepackage{graphicx}       % Include graphics
+\usepackage{float}          % Better float placement
+\usepackage{subcaption}     % Subfigures
+\usepackage{tikz}           % Drawing diagrams
+\usepackage{pgfplots}       % Plotting
+\pgfplotsset{compat=1.17}
+
+% Page layout and formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}       % Custom headers and footers
+\usepackage{titlesec}       % Customize section titles
+\usepackage{enumitem}       % Customize lists
+\usepackage{parskip}        % Paragraph spacing
+
+% Colors and highlighting
+\usepackage{xcolor}
+\usepackage{mdframed}       % Framed environments
+\usepackage{tcolorbox}      % Colored boxes
+
+% Tables
+\usepackage{array}          % Extended array environments
+\usepackage{booktabs}       % Professional tables
+\usepackage{multirow}       % Multi-row cells
+
+% References and links
+\usepackage{hyperref}       % Hyperlinks
+\usepackage{cleveref}       % Smart cross-references
+
+% Additional useful packages
+\usepackage{cancel}         % Cancel terms in equations
+\usepackage{siunitx}        % SI units
+\usepackage{listings}       % Code listings (if needed)
+
+\usepackage{authblk}
+
+\usepackage[authoryear]{natbib}
+
+% ========================
+% CUSTOM COMMANDS
+% ========================
+
+% Common math sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+
+\newcommand{\ks}{\mathrm{KS}}
+
+% Common operators
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\rank}{rank}
+%\DeclareMathOperator{\span}{span}
+%\DeclareMathOperator{\null}{null}
+
+% Shortcuts for common expressions
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+% Derivatives and integrals
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+\newcommand{\dv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+\renewcommand{\bar}{\overline}
+
+\newcommand{\vct}{\boldsymbol}
+\newcommand{\tr}{\mathrm{tr}}
+
+% ========================
+% THEOREM ENVIRONMENTS
+% ========================
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{exercise}{Exercise}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{assumption}{Assumptio}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{note}{Note}[section]
+
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\op}{\mathrm{op}}
+
+\newcommand{\mX}{\mathcal X}
+\newcommand{\mD}{\mathcal D}
+\newcommand{\bP}{\mathbb P}
+\newcommand{\lp}{L^2(\bP)}
+\newcommand{\lx}{L^2(\mX)}
+\newcommand{\ltwo}{L^2(\mX)}
+\newcommand{\ud}{\mathrm d}
+\newcommand{\mH}{\mathcal H}
+\newcommand{\mA}{\mathcal A}
+\newcommand{\mB}{\mathcal B}
+
+\newcommand{\diag}{\mathrm{diag}}
+
+\newcommand{\mI}{\mathcal I}
+
+\newcommand{\iso}{\mathsf{iso}}
+\newcommand{\ani}{\mathsf{ani}}
+\newcommand{\anitr}{\mathsf{anitr}}
+\newcommand{\adptr}{\mathsf{adptr}}
+
+\newcommand{\und}{\underline}
+\newcommand{\sgn}{\mathrm{sgn}}
+
+
+% ========================
+% COLORED BOXES
+% ========================
+
+% Important theorem box
+\newtcolorbox{importantbox}{
+	colback=blue!5!white,
+	colframe=blue!75!black,
+	title=Important
+}
+
+% Warning/Note box
+\newtcolorbox{notebox}{
+	colback=yellow!10!white,
+	colframe=orange!75!black,
+	title=Note
+}
+
+% Example box
+\newtcolorbox{examplebox}{
+	colback=green!5!white,
+	colframe=green!75!black,
+	title=Example
+}
+
+% ========================
+% DOCUMENT SETUP
+% ========================
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\leftmark}
+
+
+% Hyperlink setup
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	citecolor=red
+}
+
+\title{Honest and Adaptive Pointwise Confidence Intervals in Linear Functional Regression: An Anisotropic Kernel Ridge Regression Approach}
+\author[1]{Paromita Dubey \footnote{Author names listed in alphabetical order.}}
+\author[2]{Zhiyuan Tang}
+\author[2]{Yining Wang}
+\affil[1]{Marshall Business School, University of Southern California}
+\affil[2]{Naveen Jindal School of Management, University of Texas at Dallas}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Abstract here.
+\end{abstract}
+
+\section{Introduction}
+
+We consider the classical model of linear functional regression with data $\{X_i,Y_i\}_{i=1}^n$, where $X_1,\cdots,X_n\sim P_X$ are independently and identically distributed \emph{functions} 
+whose domain is a non-empty compact interval $I\subseteq\mathbb R$, and $\{Y_i\}_{i=1}^n$ are scalar response variables, modeled by
+\begin{equation}
+\mathbb E[Y_i|X_i] = \eta_0(X_i) := \gamma_0 + \int_I X_i(t)\beta_0(t)\ud t,
+\label{eq:model}
+\end{equation}
+where $\gamma_0\in\mathbb R$ is the intercept term and $\beta_0: I\to\mathbb R$ is the linear functional, both being unknown parameters.
+Many well-known methods have been proposed to estimate $\gamma_0$ and $\beta_0$ from data, such as functional principal component analysis (fPCA) approaches \citep[Chapter 8]{ramsay2005functional},
+\citep{cai2006prediction} and methods based on reproducing kernel Hilbert spaces \citep{yuan2010reproducing,cai2012minimax}.
+
+In this paper, we consider the question of constructing \emph{pointwise} confidence intervals on $\eta_0(x)$ which are valuable in quantifying the uncertainty in estimates of the functional model
+when it is applied to a future data curve $x$. We study the construction of \emph{honest} confidence intervals, which are functions $\varphi$ mapping a data curve $x:I\to\mathbb R$ to a compact interval $\varphi(x)\subseteq\mathbb R$
+such that
+\begin{equation}
+\liminf_{n\to\infty}\inf_{\eta_0\in\Theta} \Pr\left[\eta_0(x)\in\varphi(x)\right] \geq 1-\alpha,\;\;\;\;\;\;\forall x\in\mathrm{supp}(P_X).
+\label{eq:honest-ci}
+\end{equation}
+where $\alpha\in(0,1)$ is a pre-determined significance level,
+$\supp(P_X)$ is the support of $P_X$, $\Theta$ is a fixed and known function class and the randomness in Eq.~(\ref{eq:honest-ci}) is over $\{(X_i,Y_i)\}_{i=1}^n$.
+To understand how \emph{adative} an honest confidence interval is, we further study the worst-case mean-squared widths of constructed intervals
+\begin{equation}
+\sup_{\eta_0\in\Theta}\mathbb E_{\eta_0} \left[\int_{\supp(P_X)}\big|\varphi(x)\big|^2\ud P_X(x)\right],
+\label{eq:adaptive}
+\end{equation}
+where $|\varphi(x)|$ is the Lesbesgue measure of the output interval $\varphi(x)$. We are particularly interested in how the above worst-case risk converges to zero as $n\to\infty$,
+and how it compares with the mean-squared prediction errors
+$$
+\sup_{\eta_0\in\Theta}\mathbb E_{\eta_0} \left[\int_{\supp(P_X)}\int_I [x(t)(\hat\eta_n(t)-\eta_0(t)]^2\ud t\ud P_X(x)\right]
+$$
+for classical fPCA or RKHS estimators $\hat\eta$ of $\eta_0$.
+
+\subsection{Our contributions}
+
+\subsection{Related works}
+
+\subsection{Notations}
+
+For two sequences of real numbers $\{a_n\}$ and $\{b_n\}$, we write $a_n\lesssim b_n$, or equivalently $a_n=O(b_n)$, if there exists a numerical constant $C$ such that $|a_n|\leq C|b_n|$ for all $n$.
+We write $a_n\gtrsim b_n$ or $a_n=\Omega(b_n)$ if $b_n\lesssim a_n$, and $a_n\asymp b_n$ or $a_n=\Theta(b_n)$ if both $a_n\lesssim b_n$ and $a_n\gtrsim b_n$ hold.
+We denote $L_2(I):=\{x: I\to\mathbb R: \int_I x(t)^2\ud t<+\infty\}$ as the class of all square integrable functions on $I$.
+For two functions $x,z\in L_2(I)$, $\langle x,z\rangle$ denotes the standard inner product of $L_2(I)$; that is, $\langle x,z\rangle = \int_I x(t)z(t)\ud t$.
+For two real numbers $a,b\in\mathbb R$, we write $a\vee b=\max\{a,b\}$ and $a\wedge b=\min\{a,b\}$.
+
+\section{Functional regression via kernel ridge regression}
+
+In this section, we give an overview of an reproducing kernel Hilbert space (RKHS) approach towards linear functional regression, following the seminal works of \cite{cai2012minimax} which also lays the foundation of 
+methodological and theoretical contributions of this paper.
+To clarify, all results in this section are relatively well-known in the literature, and we are summarizing them for the purpose of completeness only.
+
+Let $K:I\times I\to\mathbb R$ be a real, symmetric, square integrable, and non-negative definite function, known as the \emph{kernel function}.
+There then exists a reproducing kernel Hilbert space $\mH\subseteq L_2(I)$ associated with inner product $\langle\cdot,\cdot\rangle_{\mH}$
+such that the following reproducing property holds for any $f\in\mH$:
+$$
+f(t) = \langle K(t,\cdot), f\rangle_{\mH}\;\;\;\;\;\;\forall t\in I.
+$$
+Assuming $\beta_0\in\mH$. Then a standard kernel ridge regression (KRR) approach to estimate $\alpha_0,\beta_0$ from $\{X_i,Y_i\}_{i=1}^n$ is to solve the following penalized optimization problem
+\begin{equation}
+\hat\gamma_n,\hat\beta_n \in \arg\min_{\gamma\in\mathbb R,\beta\in\mH} \left\{\frac{1}{n}\sum_{i=1}^n (Y_i-\gamma-\langle X_i,\beta\rangle)^2 + \lambda_n \|\beta\|_\mH^2\right\},
+\label{eq:krr}
+\end{equation}
+where $\lambda_n>0$ is a penalization parameter.
+Let $\bar X=\frac{1}{n}\sum_{i=1}^n X_i$ and $\bar Y=\frac{1}{n}\sum_{i=1}^n Y_i$ be the sample averages. It is easy to verify that $\hat\gamma_n=\bar Y$ and 
+\begin{equation}
+\hat\beta_n\in\arg\min_{\beta\in\mH}\left\{\frac{1}{n}\sum_{i=1}^n (Y_i'-\langle X_i',\beta\rangle)^2 + \lambda_n\|\beta\|_\mH^2\right\}
+\label{eq:krr-nointercept}
+\end{equation}
+where $Y_i'=Y_i-\bar Y$ and $X_i'=X_i-\bar X$.
+
+\subsection{Reduction to an optimization problem in $L_2(I)$}
+
+The work of \cite{cai2012minimax} makes the observation that Eq.~(\ref{eq:krr-nointercept}) can be equivalently reformulated into an infinite-dimensional optimization problem
+involving the standard inner product and norm of $L_2(I)$ only, which is helpful for implementation and theoretical analysis purposes.
+We summarize how such equivalence is built below.
+
+By Mercer theorem, there exists an orthonormal basis $\{\phi_j\}_{j=1}^{\infty}$ of $L_2(I)$
+and a sequence of non-increasing, strictly positive real numbers $\rho_1\geq\rho_2\geq\cdots$ such that $\phi_j\in\mH$ for all $j$, and furthermore
+$$
+\langle\phi_j,\phi_k\rangle = \int_I \phi_j(t)\phi_k(t)\ud t = \delta_{jk},\;\;\;\;\;\langle\phi_j,\phi_k\rangle_{\mH}= \frac{\delta_{jk}}{\rho_j},\;\;\;\;\;\;\int_I K(t,\cdot)\phi_j(t)\ud t=\rho_j\phi_j.
+$$
+where $\delta_{jk}=\vct 1\{j=k\}$ is the Kronecker delta notation.
+Note that because $\mH$ is known, $\{\phi_j,\rho_j\}_{j=1}^{\infty}$ are also known.
+Following notations in \citep{cai2012minimax}, we define linear operator $L_{K^{1/2}}:L^2(I)\to L^2(I)$ and its inverse operator $L_{K^{-1/2}}$ as follows:
+$$
+L_{K^{1/2}}(\phi_j) = \sqrt{\rho_j}\phi_j,\;\;\;\;\;\; L_{K^{-1/2}}(\phi_j) = \frac{1}{\sqrt{\rho_j}}\phi_j,\;\;\;\;\;\forall j\geq 1.
+$$
+In other words, for any $f=\sum_{j=1}^{\infty}\alpha_j\phi_j\in L^2(I)$ such that $\sum_j\alpha_j^2<+\infty$, $L_{K^{1/2}}(f)=\sum_{j=1}^{\infty}\alpha_j\sqrt{\rho_j}\phi_j$
+and therefore $L_{K^{1/2}}f\in\mH$ because $\sum_{j=1}^{\infty}\langle L_{K^{1/2}}f,\phi_j\rangle^2/\rho_j <+\infty$.
+In fact, \citep[Proposition 2]{yuan2010reproducing} shows that for $f\neq 0$ and $L_{K^{1/2}}f\neq 0$, $f\in L^2(I)$ if and only if $L_{K^{1/2}}f\in\mH$ and furthermore $\int_I f(t)^2\ud t=\|f\|_2^2=\|L_{K^{1/2}}f\|_\mH^2$.
+The optimal solution $\hat\beta_n$ in Eq.~(\ref{eq:krr-nointercept}) can then be expressed as $\hat\beta_n = L_{K^{1/2}}\hat\theta_n$, where
+\begin{equation}
+\hat\theta_n \in \arg\min_{\theta\in L_2(I)}\left\{\frac{1}{n}\sum_{i=1}^n (Y_i'-\langle L_{K^{1/2}}X_i', \theta\rangle^2 + \lambda_n\|\theta\|_2^2\right\},
+\label{eq:krr-nointercept-l2}
+\end{equation}
+where $\|\theta\|_2^2 =\int_I \theta(t)^2\ud t$ is the standard squared $L_2$ norm on $I$.
+For brevity, we will also use the notation of $Z_i' = L_{K^{1/2}}X_i'$ throughout this paper.
+
+\subsection{Kernel ridge regression via spectral decomposition}
+
+The infinite-dimensional optimization problem in Eq.~(\ref{eq:krr-nointercept-l2}) can be reduced to a finite-dimensional problem and efficiently solved
+using Gram matrices, known as the kernel trick. In this section, we show an alternative characterization of $\hat\theta_n$, representing it as a smoothed version of functional PCA
+which is useful motivating our anisotropic estimators later.
+
+Let
+$$
+T_n := \frac{1}{n}\sum_{i=1}^n Z_i'\otimes Z_i'
+$$
+be the sample covariance operator, where $Z_i'=L_{K^{1/2}}X_i'$. By the spectral theorem, there exists orthonormal $\{\hat\psi_j\}_{j=1}^n$ in $L_2(I)$ and $\hat s_1\geq \hat s_2\geq\cdots\geq \hat s_n\geq 0$ such that
+$$
+T_n = \sum_{j=1}^n \hat s_j\hat \psi_j\otimes\hat \psi_j.
+$$
+The estimator $\hat\theta_n$ can then be expressed as
+\begin{equation}
+\hat\theta_n = (T_n+\lambda_n I)^{-1}\frac{1}{n}\sum_{i=1}^n Y_i'Z_i' = \frac{1}{n}\sum_{i=1}^n Y_i'\sum_{j=1}^{\infty}\frac{\hat\nu_j(Z_i')}{\hat s_j+\lambda}\hat\psi_j,
+\label{eq:krr-nointercept-fpca}
+\end{equation}
+where $\hat\nu_j(Z_i') = \langle Z_i', \hat\psi_j\rangle=\int_I Z_i'(t)\hat\psi_j(t)\ud t$.
+
+\section{Assumptions}
+
+In this section we list and discuss assumptions that we impose throughout this paper. For some results, additional assumptions are needed: 
+we will remark on them when such additional assumptions are introduced specifically for selected theorems or lemmas.
+
+We first introduce mild regularity conditions to make sure the problem is well-posed.
+\begin{enumerate}
+\item[(A1)] Noise variables $\varepsilon_i:=Y_i-\eta_0(X_i)$ are independently and identically distributed, centered random variables with $\mathbb E[\varepsilon_i^2]=\sigma_\varepsilon^2<+\infty$
+and $\mathbb E[|\varepsilon_i|^3]=M_\varepsilon < +\infty$;
+\item[(A2)] $\beta_0\in\mH$ and $\|\beta_0\|_\mH\leq 1$, which is equivalent to $\|\theta_0\|_2=\|L_{K^{-1/2}}\beta_0\|_2 =(\int_I \theta_0(t)^2\ud t)^{1/2} \leq 1$.
+\item[(A3)] For $x\sim P_X$, $\|L_{K^{1/2}}x\|_2= (\int_I (L_{K^{1/2}}x)(t))^2\ud t)^{1/2}\leq 1$ almost surely. We also assume that $x\neq 0$ and $L_{K^{1/2}}x\neq 0$ almost surely, to avoid degenerate situations.
+\end{enumerate}
+
+We remark that in Assumptions (A2) and (A3) we use one as the upper bounds to $\|\beta_0\|_\mH$ and $\|x\|_2$ for convenience only. Our constructed honest confidence bands do not require such knowledge
+and they remain valid with 1 being replaced by any other numerical constants.
+
+We use $\Theta_2(\mH)$ to denote the class of all regression functionals $\beta_0$ that satisfy (A2). Note that $\Theta_2(\mH)$ depends on the selection of the RKHS $\mH$, but not on the covariate distribution $P_X$.
+
+Let $Z:=L_{K^{1/2}}X$ be a random function and $P_Z$ be the distribution of $Z$, which is induced by both $P_X$ and $K$. Consider the population covariance operator
+$$
+T := \mathbb E_{P_Z}\left[Z\otimes Z\right].
+$$
+By the spectral theorem, there exists an orthonormal basis $\{\psi_j\}_{j=1}^{\infty}$ of $L_2(I)$ and $s_1\geq s_2\geq\cdots\geq 0$ such that
+\begin{equation}
+T = \sum_{j=1}^{\infty} s_j\psi_j\otimes\psi_j.
+\label{eq:specT}
+\end{equation}
+Note that, in general, because the population covariance operator $T$ is unknown, $\{\psi_j,s_j\}$ are also unknown.
+
+The following assumptions on imposed directly on the structure of $\{\psi_j\}_j$ and $\{s_j\}_j$.
+\begin{enumerate}
+\item[(B1)] There exists numerical constants $r>0$ and $0<c_s\leq C_s<+\infty$ such that $c_s j^{-2r}\leq s_j\leq C_sj^{-2r}$ for all $j\geq 1$;
+this also implies that $T$ is invertible;
+\item[(B2)] There exists a numerical constant $C_p<+\infty$ such that for every $f\in L_2(I)$, $\mathbb E[\langle Z,f\rangle^4] \leq C_p(\mathbb E[\langle Z,f\rangle^2])^2$;
+\item[(B3)] There exists numerical constants $\kappa\in[0,1/2)$ and $C_\nu<+\infty$ such that for every $j\geq 1$, $|\langle Z,\psi_j\rangle| \leq C_\nu n^{\kappa}\cdot \sqrt{s_j}$ almost surely.
+\end{enumerate}
+
+Assumption (B2) is also imposed, in the form of Assumption (b) in \citep{yuan2010reproducing}. It is satisfied when $X$ is a Gaussian process.
+
+We remark that, in Assumption (B3), the smaller $\kappa$ the stronger the assumption is. For the strongest version of $\kappa=0$, it essentially assumes $|\langle Z,\psi_j\rangle|\lesssim j^{-r}$,
+which coincides with coefficient decay assumptions adopted in many fPCA analysis.
+{\color{red}In particular, the results in \cite{cai2006prediction} shows that in this case ($\kappa=0$ in (B3)) fPCA achieves an MSE rate of $n^{-(2r-1)/(2r+1)}$ assuming no decay of $|\langle\theta_0,\psi_j\rangle|$.}
+
+%
+%To analyze truncated estimators, we also introduce the following assumption which is strictly weaker than Assumption (B3):
+%\begin{enumerate}
+%\item[(B3')] For some $q\in(0,1/2)$, there exists numerical constants $\kappa<1/2$ and $C_\nu<+\infty$ such that for any $\delta>0$, there exists $n_0\in\mathbb N$ depending on $\delta$ such that
+%for every $n\geq n_0$ and $1\leq j\leq n^{q+\delta}$, $|\langle Z,\psi_j\rangle|\leq C_\nu n^{\kappa}\cdot\sqrt{s_j}$.
+%\end{enumerate}
+%
+%Given Assumption (B1), the following condition is a sufficient condition that implies Assumption (B3'): for some $a<\kappa/q$, it holds almost surely that
+%$$
+%\big|\langle Z,\psi_j\rangle\big|\lesssim j^{-r+a}\;\;\;\;\;\;\forall j\geq 1.
+%$$
+
+{\color{blue}In light of Assumption (B3) which is weaker for larger $n$, we allow the distribution $P_X$ (and therefore the population covariance operator $T$) to vary for different $n$,
+so that more distributions $P_X$ satisfy Assumption (B3) for larger values of $n$.
+When necessary, we use the notation $P_X^n$ to emphasize on this fact.
+We also use $P_Z^n$ to denote the distribution of $Z=L_{K^{1/2}}X$ when $X\sim P_X$.}
+
+{\color{red}It should also be remarked that the assumption (B3) with $\kappa=0$ would greatly simplify the problem, because isotropic weight choices are automatically adaptive.
+Similar phenomenon revealed in \citep{liu2025scalable}.}
+
+\section{Under-smoothed isotropic kernel regression}\label{sec:isotropic}
+
+As a warm-up exercise and a backup method with minimal assumptions, we first consider honest confidence intervals constructed by \emph{under-smoothing} an isotropic kernel ridge estimator.
+Let $\{\lambda_n\}_{n=1}^{\infty}$ be a sequence of positive penalty parameters that satisfies
+\begin{equation}
+\lambda_n n \to 0,\;\; \lambda_n n^{1+\delta}\to \infty\;\;\;\;\;\;\text{as}\;\;n\to\infty
+\label{eq:lambdan-1}
+\end{equation}
+for any $\delta>0$.
+Let $\hat\gamma_n = \bar Y$ and $\hat\beta_n^\iso=L_{K^{1/2}}\hat\theta_n$ where 
+$$
+\hat\theta_n^\iso = (T_n+\lambda_n I)^{-1}\frac{1}{n}\sum_{i=1}^n Y_i'Z_i',
+$$
+with $Y_i'=Y_i-\bar Y$, $Z_i'=L_{K^{1/2}}(X_i-\bar X)$ and $T_n=\frac{1}{n}\sum_{i=1}^n Z_i'\otimes Z_i'$.
+This is an \emph{under-smoothed} kernel ridge regression estimator with $\lambda_n=o(n^{-1})$, while the optimal penalty parameter choice for estimating $\eta_0$ in mean-squared errors 
+is $\lambda_n\asymp n^{-2r/(2r+1)}$, per results in \cite{cai2012minimax}.
+
+For a test function $x$ in the support $P_X^n$, an honest and adaptive confidence interval of $\eta(x)$ at significance level $\alpha\in(0,1)$ is constructed as
+$$
+\varphi^\iso(x) = [\hat\eta_n^\iso(x)\;\pm\;\tau_{\alpha/2}\hat\sigma_n^\iso(L_{K^{1/2}}x)]
+$$
+where $\tau_{\alpha/2}$ is the $(1-\alpha/2)$-quantile of the standard Normal distribution, and
+$$
+\hat\eta_n^\iso(x) = \hat\gamma_n + \int_I x(t)\hat\beta_n^\iso(t)\ud t,\;\;\;\;\;\;\hat\sigma_n(z)^\iso = \frac{\sigma_\varepsilon}{\sqrt{n}}\sqrt{\langle z, (T_n+\lambda_n I)^{-1}z\rangle}.
+$$
+%To facilitate our analysis, we also introduce the following quantity $\tilde z_n(z)$ defined as
+%$$
+%\tilde\sigma_n(z) := \frac{\sigma_\varepsilon}{\sqrt{n}}\sqrt{\langle z, (T_n+\lambda_n I)^{-1}T_n(T_n+\lambda_n I)^{-1}z\rangle},
+%$$
+%which is smaller than $\hat\sigma_n(z)$ almost surely.
+
+\subsection{Honesty of confidence intervals}
+
+For the purpose of our analysis, 
+we also introduce the following quantity $\tilde z_n(z)$ defined as
+$$
+\tilde\sigma_n(z) := \frac{\sigma_\varepsilon}{\sqrt{n}}\sqrt{\langle z, (T_n+\lambda_n I)^{-1}T_n(T_n+\lambda_n I)^{-1}z\rangle},
+$$
+which is smaller than $\hat\sigma_n^\iso(z)$ almost surely.
+
+Let $\mX := \cup_{n=1}^{\infty}\cap_{m=n}^{\infty}\supp(P_X^m)$ denote the class of all functions which belong to the support of $P_X^n$ for all sufficiently large $n$.
+
+\begin{theorem}
+Suppose Assumptions (A1), (A2), (A3), (B1), (B2), (B3) hold, where (B3) holds with $\kappa<\frac{1}{6}-\frac{1}{4r}$. Suppose also that Eq.~(\ref{eq:lambdan-1}) holds. Then 
+for any $x\in\supp(P_X)$, one can decompose the pointwise prediction error at $x$ as $\hat\eta_n^\iso(x)-\eta_0(x)=b_n(x)+v_n(x)$ such that, as $n\to\infty$, 
+\begin{align*}
+\frac{b_n(x)}{\hat\sigma_n^\iso(z)}\;\;\overset{a.s.}{\to}\;\; 0,\;\;\;\;\;\;\frac{v_n(x)}{\tilde\sigma_n(z)}\;\;\overset{d}{\to}\;\;\mathcal N(0,1),
+\end{align*}
+where $z=L_{K^{1/2}}x$.
+Furthermore, if $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed, then $v_n(x)/\tilde\sigma_n(z)$ is exactly distributed as $\mathcal N(0,1)$, and
+$\sup_{x\in\mX}|b_n(x)|/\hat\sigma_n^{\iso}(z)\to 0$ almost surely, and both are true without assuming (B3).
+\label{thm:isokrr-limiting}
+\end{theorem}
+
+The following corollary is then immediate, noting that $\tilde\sigma_n(z)\leq\hat\sigma_n^\iso(z)$ almost surely.
+\begin{corollary}
+Impose conditions in Theorem \ref{thm:isokrr-limiting}. Then
+$$
+\liminf_{n\to\infty}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\iso(x)]\;\;\geq\;\; 1-\alpha,\;\;\;\;\;\;\forall x\in\mX.
+$$
+Furthermore, if $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed, then the following strengthened result holds and it holds without assuming (B3):
+$$
+\liminf_{n\to\infty}\inf_{P_X^n}\inf_{x\in\supp(P_X^n)}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\iso(x)] \;\;\geq\;\; 1-\alpha.
+$$
+\label{cor:isokrr-ci}
+\end{corollary}
+
+\subsection{Rates of convergence}
+
+\begin{theorem}
+Suppose Assumptions (A1)-(A3) and (B1)-(B3) hold, with $\kappa<1/2$. Then as $n\to\infty$, 
+\begin{equation}
+\sup_{P_X^n}\sup_{\beta_0\in\Theta_2(\mH)}\mathbb E_{\eta_0}\left[\int\big|\varphi^\iso(x)\big|^2\ud P_X^n(x)\right]\lesssim n^{-\frac{2r-1}{2r}+\delta}
+\label{eq:simple-validity}
+\end{equation}
+for any $\delta>0$.
+\label{thm:isokrr-rates}
+\end{theorem}
+
+
+\subsection{Minimax optimality}
+
+\begin{theorem}
+Fix arbitrary $\alpha\in(0,1/4)$, $r>1/2$ and $\kappa=0$. There exists a distribution $P_X$ satisfying Assumptions (A1), (A3), (B1), (B2), and (B3), such that for any $\varphi$ satisfying Eq.~(\ref{eq:honest-ci})
+with respect to the constructed $P_X$ and $\Theta_2(\mH)$, it holds that
+$$
+\sup_{\beta_0\in\Theta_2(\mH)} \mathbb E_{\beta_0}\left[\int\big|\varphi(x)\big|^2\ud P_X(x)\right] \gtrsim n^{-\frac{2r-1}{2r}}.
+$$
+\label{thm:isokrr-lb}
+\end{theorem}
+
+\begin{remark}
+While not directly related, the problem instances constructed in the lower bound proof of Theorem \ref{thm:isokrr-lb} would also satisfy the spectral gap assumption (C1) to be introduced in later sections.
+\end{remark}
+
+We remark that, in the lower bound construction we fix the distribution of $X$ that satisfies all assumptions, including Assumption (B3), with $\kappa=0$.
+Because this condition is stronger than Assumption (B3) for any $\kappa>0$, our lower bound implies lower bounds on relaxed assumptions of $\kappa>0$ as well.
+Furthermore, because $P_X$ is fixed, an honest confidence interval can be considered to know $P_X$ in advance: our lower bounds show that even in this case,
+an $\Omega(n^{-(2r-1)/2r})$ lower bound applies because the honest confidence interval does not know $\beta_0\in\Theta_2(\mH)$.
+
+Theorem \ref{thm:isokrr-lb} is proved using similar constructions in \citep{cai2012minimax}, while borrowing ideas from \citep{cai2006adaptive} 
+using two-point Le-Cam type arguments using Pinsker's inequality to prove a lower bound on the mean-squared widths of honest confidence intervals
+that are significantly slower than optimal rates of convergence for functional regression estimators under the mean-squared error criterion.
+It shows that, while known estimators in the functional regression setting attain $O(n^{-2r/(2r+1)}$ rate for the mean-squared error \citep{cai2012minimax},
+the mean-squared widths of \emph{any} honest confidence interval must scale as $\Omega(n^{-(2r-1)/2r})$, effectively losing one-half degree of smoothness in the spectral decay rate of $T$.
+
+\section{Under-smoothed anisotropic kernel regression}
+
+We consider anisotropic extensions to the classical (isotropic) kernel ridge regression, by considering the following estimator
+$$
+\hat\theta_n^\ani = (T_n+\Lambda_n)^{\dagger}\frac{1}{n}\sum_{i=1}^n Y_i' Z_i'
+$$
+where $\Lambda_n$ is a positive-semidefinite, self-adjoint covariance operator computed on data that is not necessarily (multiples) of the identity operator,
+and $C^\dagger$ is the Moore-Penrose pseudo-inverse of a not necessarily invertible linear operator $C$ (see, e.g.~\citep{fongi2023moore} and references therein).
+Because $\Lambda_n$ must be entirely calculated from data, we consider the following form of $\Lambda_n$, rendering it a finite-rank operator:
+$$
+\Lambda_n = \sum_{j=1}^n \lambda_{nj}\hat\psi_j\otimes\hat\psi_j
+$$
+where $\{\lambda_{nj}\}_{j=1}^n\geq 0$ only on $\{Z_i'\}_{i=1}^n$ but not $Y_i'$.
+With this choice, $\hat\theta_n^\ani$ can be written as
+$$
+\hat\theta_n^\ani = \frac{1}{n}\sum_{i=1}^n\sum_{j=1}^n \frac{Y_i'\langle Z_i',\hat\psi_j\rangle}{\hat s_j+\lambda_{nj}}\hat\psi_j.
+$$
+
+For the purpose of this section, we adopt the choice of 
+$$
+\lambda_{nj} = \lambda_n\wedge \sqrt{\hat s_j\lambda_n}.
+$$
+With the estimator $\hat\eta^\ani_n(\cdot)$ such that $\hat\eta^\ani_n(x)=\hat\gamma_n+\int_I (L_{K^{1/2}}x)(t)\hat\eta^\ani_n(t)\ud t$, confidence intervals are constructed as
+$$
+\varphi^\ani(x) := [\hat\eta^\ani_n(x)\;\pm\;\tau_{\alpha/2}\hat\sigma_n^\ani(L_{K^{1/2}}x)]
+$$
+where $\tau_{\alpha/2}$ is the $(1-\alpha/2)$ quantile of the standard Normal distribution, and $\hat\sigma_n^\ani(\cdot)$ 
+$$
+\hat\sigma_n^\ani(z) = \frac{\sigma_\varepsilon}{\sqrt{n}}\sqrt{\langle z, (T_n+\Lambda_n)^{\dagger}T_n(T_n+\Lambda_n)^\dagger z\rangle}.
+$$
+
+\subsection{Honesty of confidence intervals}
+
+\begin{theorem}
+Suppose Assumptions (A1), (A2), (A3), (B1), (B2) hold. Suppose also that $\lambda_n$ satisfies Eq.~(\ref{eq:lambdan-1}).If 
+\begin{equation}
+\frac{\frac{1}{n}\sum_{i=1}^n |g(Z_1,Z_i)|^3}{\sqrt{n}(\frac{1}{n}\sum_{i=1}^n g(Z_1,Z_i)^2)^{3/2}}\;\;\overset{p}{\to}\;\; 0
+\label{eq:anikrr-lyapnov}
+\end{equation}
+where $g(z,Z_i)=\langle z,(T_n+\Lambda_n)^{\dagger}Z_i\rangle$ and $Z_i=L_{K^{1/2}}X_i$, then it holds that
+\begin{equation}
+[\hat\sigma_n^\ani(Z_1)]^{-1}(\hat\eta_n^\ani(X_1)-\eta_0(X_1)) \;\;\overset{d}{\to}\;\;\mathcal N(0,1),
+\label{eq:anikrr-clt}
+\end{equation}
+Furthermore, if $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed, then Eq.~(\ref{eq:anikrr-clt}) holds for \emph{uniformly} for all $X_1,\cdots,X_n$ without the need to satisfy Eq.~(\ref{eq:anikrr-lyapnov}).
+\label{thm:anikrr-limiting}
+\end{theorem}
+
+\begin{corollary}
+Impose the same conditions in Theorem \ref{thm:anikrr-limiting}. Then 
+$$
+\liminf_{n\to\infty}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(X_1)\in\varphi^\ani(X_1)] \;\; = \;\; 1-\alpha.
+$$
+where $X_1$ is the first input function in the sample $\{(X_i,Y_i)\}_{i=1}^n$ on which estimation $\hat\eta_n^{\ani}$ and confidence intervals $\varphi^\ani$.
+Furthermore, if $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed, the above result can be strengthened to
+$$
+\liminf_{n\to\infty}\min_{1\leq i\leq n}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(X_i)\in\varphi^\ani(X_i)] \;\; = \;\; 1-\alpha.
+$$
+without the need to satisfy Eq.~(\ref{eq:anikrr-lyapnov}).
+\label{cor:anikrr-ci}
+\end{corollary}
+
+\begin{remark}
+In both statements of Theorem \ref{thm:anikrr-limiting} and Corollary \ref{cor:anikrr-ci}, we use the notation of $X_1$ and $Z_1$ without loss of generality.
+Because $X_1,\cdots,X_n$ are i.i.d., $X_1,Z_1$ can be interpreted as an arbitrary input function in the sample $\{X_i,Y_i\}_{i=1}^n$.
+\end{remark}
+
+\subsection{Rates of convergence}
+
+\begin{theorem}
+Impose the same conditions in Theorem \ref{thm:anikrr-limiting}. Then the following holds almost surely as $n\to\infty$:
+$$
+\frac{1}{n}\sum_{i=1}^n \big|\varphi^\ani(X_i)\big|^2 \lesssim \sum_{j=1}^n \frac{\sqrt{\hat s_j}}{\sqrt{\hat s_j}+\sqrt{\lambda_n}}.
+$$
+where $X_1,\cdots,X_n$ are input functions on which $\hat\eta_n^\ani$ and $\varphi^\ani$ are estimated.
+Furthermore, if $\hat s_j\lesssim j^{-2r}$ holds, then the right-hand side of the above inequality is upper bounded by $O(n^{-\frac{2r-1}{2r}+\delta})$
+for any $\delta>0$.
+\label{thm:anikrr-rates}
+\end{theorem}
+
+\subsection{Discussion of limitations}
+
+{\color{red} Discuss the limitations and mention truncation is needed.}
+
+\section{Truncated anisotropic kernel regression}\label{sec:anitr}
+
+In this section we consider \emph{truncated} anisotropic kernel regression estimators, by setting $\lambda_{nj}\equiv +\infty$
+for all $j> J(n)$ for a certain truncation level $J(n)\in[n]$ that depends on $n$.
+This effectively mutes all eigenfunctions $\{\hat\psi_j\}_{j>J(n)}$, and the resulting estimator $\hat\theta_n$ admits the following spectral expression
+\begin{equation}
+\hat\theta_n^\anitr = \frac{1}{n}\sum_{i=1}^n\sum_{j=1}^{J(n)}\frac{Y_i'\langle Z_i',\hat\psi_j\rangle}{\hat s_j+\lambda_{nj}}\hat\psi_j.
+\label{eq:anitr}
+\end{equation}
+For a compressed operator notation, define finite-rank operators $T_J$ and $\Lambda_J$ as
+$$
+T_J := \sum_{j=1}^{J(n)}\hat s_j\hat\psi_j\otimes\hat\psi_j,\;\;\;\;\;\; \Lambda_J := \sum_{j=1}^{J(n)}\lambda_{nj}\hat\psi_j\otimes\hat\psi_j.
+$$
+Then $\hat\theta_n^\anitr$ can be represented as
+$$
+\hat\theta_n^\anitr = (T_J+\Lambda_J)^{\dagger}\frac{1}{n}\sum_{i=1}^n Y_i'Z_i',
+$$
+where $C^\dagger$ is the Moore-Penrose pseudo-inverse of a not necessarily invertible linear operator $C$.
+
+Following the previous section, one option for the choice of the anisotropic Ridge penalty parameters is $\lambda_{nj}=\lambda_n\wedge\sqrt{\hat s_j\lambda_n}$ with $\lambda_n$ satisfying Eq.~(\ref{eq:lambdan-1}),
+and truncate at the level of $J(n)\leq n$.
+Let $\{\omega_n\}_{n=1}^{\infty}$ be a sequence of slowly increasing positive constants such that
+\begin{equation}
+\omega_n\to\infty,\;\;\;\;\;\;\omega_n n^{-\delta}\to 0
+\label{eq:omega}
+\end{equation}
+as $n\to\infty$, for any $\delta>0$.
+The estimator is then $\hat\eta_n^\anitr(\cdot)=\hat\gamma_n + \langle\cdot,\hat\beta_n^\anitr\rangle$ where $\hat\beta_n^\anitr = L_{K^{1/2}}\hat\theta_n^\anitr$,
+and $\langle f,g\rangle = \int_I f(t)g(t)\ud t$.
+Afterwards, for a test function $x\in\supp(P_X)$, a confidence interval for $\eta_0(x)$ is constructed as
+$$
+\varphi^\anitr(x) = [\hat\eta_n^\anitr(x)\;\pm\; \tau_{\alpha}\hat\sigma_n^\anitr(L_{K^{1/2}}x) + \omega_n\|\hat\Pi_J^\perp (L_{K^{1/2}}x)\|_2],
+$$
+where $\tau_{\alpha}$ is the $(1-\alpha/2)$ quantile of the standard Normal distribution, $\hat\Pi_J^\perp z=(I-\sum_{j=1}^{J(n)}\hat\psi_j\otimes\hat\psi_j)z$, and $\hat\sigma_n^\anitr$ is defined as
+$$
+\hat\sigma_n^\anitr(z) = \frac{\sigma_\varepsilon}{\sqrt{n}}\sqrt{\langle z, (T_J+\Lambda_J)^\dagger T_J(T_J+\Lambda_J)^\dagger z\rangle}
+$$
+
+
+\subsection{Spectrum stability of the sample covariance operator}
+
+In this section, we establish rigorously the connections between the (leading) spectrum of $T$ and $T_n$,
+with cutoff thresholds set at levels that can be as deep as $o(\sqrt{n})$. Such discussion is important for the analysis of truncated anisotropic kernel regression estimators, for two primary reasons:
+\begin{enumerate}
+\item To establish asymptotic Normality for the widest class of testing functions $x\in\supp(P_X)$ possible, we must use the central limit theorem for independently but not identically distributed random variables
+and verify classical conditions such as the Lyapnov condition or the Lindeberg condition. This involves understanding the distributions of ``influence functions'' in the variance term, which must be connected to
+their population variants in order to avoid statistical correlation between $Z_i$ and $T_n$;
+\item The condition (D1) to be introduced in the next section, unlike the condition (A2) that $\int_I \theta_0(t)^2\ud t\leq 1$, is \emph{not} basis invariant. This means that on a different orthonormal basis,
+such as the eigenfunctions $\{\hat\psi_j\}_{j=1}^n$ of the sample covariance operator $T_n$, the sum $\sum_{j\geq 1}|\langle Z_j,\hat\psi_j\rangle|$ may not be bounded by $B$,
+which leads to sub-optimal convergence rates if such sums indeed scale polynomially with $n$.
+Therefore, we must rigorously compare the spectrum $\{\psi_j\}$ and $\{\hat\psi_j\}$ of the population and sample covariance operators,
+to ensure that $\sum_{j\geq 1}|\langle Z_j,\hat\psi_j\rangle|$ remains bounded so that the bias of kernel Ridge regression can be effectively controlled.
+\end{enumerate}
+
+To establish such spectrum stability, we need the following assumption which lower bounds spectral gaps between consecutive eigenvalues on the population covariance operator:
+\begin{enumerate}
+\item[(C1)] There exists a numerical constant $c_g>0$ such that for all $j\geq 1$, $s_{j+1}-s_j\geq c_g j^{-2r-1}$, where $\{s_j\}_{j=1}^{\infty}$ are eigenvalues (listed in descending order) of the population covariance operator $T=\mathbb E_{P_X}[L_{K^{1/2}}X\otimes L_{K^{1/2}}X]$.
+\end{enumerate}
+
+We further impose the following condition on the estimator's choice of truncation levels.
+\begin{enumerate}
+\item[(C2)] There exists a constant $q\in(0,1/2)$ and $0<c_q\leq C_q<+\infty$ such that $c_q n^q\leq J(n)\leq C_q n^q$ for all $n\geq 3$.
+\end{enumerate}
+
+Recall that the population covariance operator $T=\mathbb E[Z\otimes Z]$ and the sample covariance operator $T_n=\frac{1}{n}\sum_{i=1}^nZ_i\otimes Z_i$ admit spectral decomposition of
+$T=\sum_{j=1}^{\infty}s_j\psi_j\otimes\psi_j$ and $T_n=\sum_{j=1}^n\hat s_j\hat\psi_j\otimes\hat\psi_j$, where $\{\psi_j\}_{j=1}^{\infty}$ is an orthonormal basis of $L_2(I)$ and $\{\hat\psi_j\}_{j=1}^n$ are orthonormal in $L_2(I)$.
+\begin{lemma}
+Suppose Assumptions (A3), (B1), (B2), (B3), (C1) and (C2) hold, with parameters $\kappa<1/4$ and $q\in(0,1/2)$.
+Fix an arbitrary small constant $c\geq 2$.
+Then there exist constants $C_J,L_J<+\infty$ depending only on $c$ and other parameters in assumptions, such that for every $n\geq 3$, 
+with probability $1-n^{-c}$ the following holds: there exists an injection $\varpi:[\lceil C_J J(n)\rceil]\to \mathbb N$ which is a surjection on $[J(n)]$,
+\footnote{This means that 1) for every $j,j'\in[\lceil C_JJ(n)\rceil]$, $j\neq j'$ implies $\varpi(j)\neq\varpi(j')$, and 2) for every $\ell\in[J(n)]$, there exists $j\in[\lceil C_JJ(n)\rceil]$ such that $\varpi(j)=\ell$.}
+ such that for every $j\in[\lceil C_J n\rceil]$, the following hold:
+\begin{enumerate}
+\item $j/C_J\leq \varpi(j)\leq C_J j$;
+\item $|\hat s_{\varpi(j)}/s_j-1|\leq L_J j\log^3 n/\sqrt{n}$;
+\item For every $k\in\mathbb N$, $k\neq j$, $|\langle\hat\psi_{\varpi(j)},\psi_k\rangle|\leq L_J\Delta_\psi(j,k)$, where
+$$
+\Delta_\psi(j,k) = \frac{\log n\log(3j)\log(3k)}{\sqrt{n}}\times \left\{\begin{array}{ll} k^r/j^r,& \text{if }k< j/C_J;\\ j^r/k^r,& \text{if } k> C_Jj;\\ \sqrt{jk}/|j-k|;& \text{if $j/C_J \leq k \leq C_Jj$ and $j\neq k$.}\end{array}\right.
+$$
+\end{enumerate}
+Furthermore, if $q<1/4$ then $\varpi$ can be chosen as the bijection $\varpi(j)=j$ for all $j\leq \lceil C_JJ(n)\rceil$.
+\label{lem:stability}
+\end{lemma}
+
+%\begin{enumerate}
+%\item For every $j\leq J(n)$, there exists $j'\leq C_J j\leq C_JJ(n)$ such that $\|\hat\psi_j-\psi_{j'}\|_2\leq L_J j\sqrt{\log n}/\sqrt{n}$ and $|\hat s_j/s_{j'}-1|\leq L_J j\sqrt{\log n}/\sqrt{n}$;
+%additionally, for every $k\in[C_J J(n)]\backslash\{j'\}$, $|\langle\hat\psi_j,\psi_k\rangle|\leq L_J\Delta_\psi(j',k)$;
+%\item For every $j'\leq J(n)/C_J$, there exists $j\leq C_Jj'\leq J(n)$ such that $\|\hat\psi_j-\psi_{j'}\|_2\leq L_J j'\sqrt{\log n}/\sqrt{n}$ and $|\hat s_j/s_{j'}-1|\leq L_J j'\sqrt{\log n}/\sqrt{n}$;
+%additionally, for every $k\in[C_J J(n)]\backslash\{j'\}$, $|\langle\hat\psi_j,\psi_k\rangle|\leq L_J\Delta_\psi(j',k)$.
+%\end{enumerate}
+
+
+{\color{red} Mention why this can't be done using Davis Kahan, citing existing fPCA papers.}
+
+
+The following lemma, as a consequence of Lemma \ref{lem:stability} and Assumptions (B2) and (B3) regulating the behaviors of $\langle Z,\psi_j\rangle$,
+upper bounds the discrepancy between coefficients on $\{\psi_j\}$ and $\{\hat\psi_j\}$ of a test function $z=L_{K^{1/2}}x$.
+\begin{lemma}
+Impose the same set of conditions in Lemma \ref{lem:stability}.
+Let $J=J(n)\asymp n^q$ and $\und J=J(n)/C_J$.
+For each $M\in\{2,4\}$, conditioned on results in Lemma \ref{lem:stability},
+it holds that
+$$
+\sup_{\ell\leq J}\sup_{z\in\supp(P_Z^n)}\big|\langle z,\hat\psi_\ell\rangle^M - \langle z,\psi_j\rangle^M\big|\; \lesssim\; n^{M\kappa}\times \frac{J^{1-rM}\log^4 n}{\sqrt{n}},
+$$
+where $j$ is the unique integer satisfying $\varpi(j)=\ell$, whose existence is guaranteed by Lemma \ref{lem:stability}.
+Furthermore, 
+$$
+\sup_{\ell\leq J}\bigg|\mathbb E_{Z\sim P_Z^n}\left[\langle Z,\hat\psi_\ell\rangle^M\right] -\mathbb E_{Z\sim P_Z^n}\left[\langle Z,\hat\psi_\ell\rangle^M\right]\bigg|
+\;\lesssim\;\frac{J^{1-rM}\log^4 n}{\sqrt{n}}.
+$$
+\label{lem:zpsi-stability}
+\end{lemma}
+
+\subsection{Honesty of confidence intervals}
+
+The following theorem establishes the limiting distribution of $\hat\eta_n^\anitr$.
+\begin{theorem}
+Impose all assumptions and conditions in Lemma \ref{lem:stability}. Suppose $\Lambda_n$ is constructed as $\lambda_{nj}=\sqrt{\hat s_j\lambda_n}$ for all $j\leq J(n)$,
+where $\lambda_n$ satisfies Eq.~(\ref{eq:lambdan-1}). Suppose also that Assumptions (A1), (A2) hold, and $\kappa<(1-q)/2$. Then 
+$$
+\lim_{n\to\infty} \sup_{P_X^n}\sup_{x\in\supp(P_X^n)}\sup_{\beta_0\in\Theta_2(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{\hat\eta_n^{\anitr}(x)-\eta_0(x)+\langle\hat\Pi_J^\perp z, \theta_0\rangle}{\hat\sigma_n^\anitr(L_{K^{1/2}})}\leq t\right] - \Phi(t)\right| = 0,
+$$
+where $z=L_{K^{1/2}}x$, $\theta_0=L_{K^{-1/2}}\beta_0$, $\hat\Pi_J^\perp = I - \sum_{j=1}^{J(n)}\hat\psi_j\otimes\hat\psi_j$, and $\Phi(\cdot)$ is the CDF of the standard Normal distribution.
+The probability is over the randomness of both $\{X_i\}_{i=1}^n$ and $\{\varepsilon_i\}_{i=1}^n$. 
+
+Furthermore, if $\frac{1}{2r}<q<\frac{1}{2}$ then for every $\epsilon>0$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
+such that
+$$
+\lim_{n\to\infty} \sup_{P_X^n}\sup_{x\in\mX_n}\sup_{\beta_0\in\Theta_2(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{\hat\eta_n^{\anitr}(x)-\eta_0(x)}{\hat\sigma_n^\anitr(L_{K^{1/2}}z)}\leq t\right] - \Phi(t)\right| = 0.
+$$
+\label{thm:anitr-limiting}
+\end{theorem}
+
+\begin{remark}
+Taking $q$ to be close to $1/2$, the condition $1/2r<q<1/2$ amounts to $r>1$.
+\end{remark}
+
+Note that 
+\begin{equation}
+\big|t_n(z)\big| = \big|\langle z, \hat\Pi_J^\perp\theta_0\rangle\big| \leq \|\hat\Pi_J^\perp z\|_2\cdot \|\hat\Pi_J^\perp\theta_0\|_2 \leq \omega_n\|\hat\Pi_J^\perp z\|_2,
+\label{eq:anitr-limiting-impl}
+\end{equation}
+where the first inequality holds from Cauchy-Schwarz inequality and the fact that $\hat\Pi_J^\perp$ is a self-adjoint, projection operator, and the 
+last inequality holds for sufficiently large $n$ because $\|\theta_0\|_2\leq 1$ and $\omega_n\to\infty$ as $n\to\infty$.
+
+\begin{corollary}
+Impose the same set of assumptions and conditions in Theorem \ref{thm:anitr-limiting}. Then
+$$
+\liminf_{n\to\infty}\inf_{P_X^n}\inf_{x\in\supp(P_X^n)}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\anitr(x)] \;\;\geq\;\; 1-\alpha.
+$$
+Furthermore, if $\frac{1}{2r}<q<\frac{1}{2}$, then the following holds for the choice of $\omega_n\equiv 0$:
+for any $\epsilon>0$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
+such that for any sequence $x_1\in\mX_1,x_2\in\mX_2,\cdots$, 
+$$
+\lim_{n\to\infty}\inf_{\beta_0\in\Theta_2(\mH)} \Pr[\eta_0(x)\in\varphi^\anitr(x)] \;\; = \;\; 1-\alpha.
+$$
+\label{cor:anitr}
+\end{corollary}
+
+\subsection{Rates of convergence}
+
+\begin{theorem}
+Impose all assumptions and conditions in Lemma \ref{lem:stability}. Suppose $\Lambda_n$ is constructed as $\lambda_{nj}=\sqrt{\hat s_j\lambda_n}$ for all $j\leq J(n)$,
+where $\lambda_n$ satisfies Eq.~(\ref{eq:lambdan-1}). Then as $n\to\infty$, 
+$$
+\sup_{P_X^n}\sup_{\beta_0\in\Theta_2(\mH)}\mathbb E\left[\int \big|\varphi^\anitr(x)\big|^2\ud P_X^n(x) \right] \lesssim n^{-\frac{2r-1}{2r}+\delta} + n^{2q-\frac{3}{2}+\delta} + n^{-q(2r-1)+\delta} + n^{1-c}.
+$$
+for any $\delta>0$, where $c\geq 2$ is the parameter in the failure probability in Lemma \ref{lem:stability}.
+\label{thm:anitr-rates}
+\end{theorem}
+
+\begin{remark}
+If $\frac{1}{2r}<q<\frac{1}{4r}+\frac{1}{4}$ then the right-hand side of the above inequality is asymptotically on the order of $O(n^{-(2r-1)/2r+\delta})$ for any $\delta>0$.
+\end{remark}
+
+
+%Let $\mH\subseteq L_2(I)$ be a sufficiently smooth subset of all square-integrable functions on $L_2(I)$. For example, $\mH$ could be the Sobolev class with smoothness level $\rho>1/2$.
+%Let $X_1,\cdots,X_n$ be i.i.d.~supported on $\mH$, and $\varepsilon_1,\cdots,\varepsilon_n\overset{i.i.d.}{\sim}\mathcal N(0,1)$. Is it true that, with probability $1-n^{-1}$,
+%$$
+%\sup_{\psi\in\mH}\frac{\frac{1}{n}\sum_{i=1}^n \langle X_i,\psi\rangle^2-\mathbb E[\langle X,\psi\rangle^2]}{\sqrt{\mathbb E[\langle X,\psi\rangle^4]}} \lesssim \gamma(\mH)\sqrt{\frac{\log n}{n}}?
+%$$
+%And
+%$$
+%\sup_{\psi\in\mH}\frac{\frac{1}{n}\sum_{i=1}^n \varepsilon_i\langle X_i,\psi\rangle}{\sqrt{\mathbb E[\langle X,\psi\rangle^2]}}\lesssim \gamma(\mH)\sqrt{\frac{\log n}{n}}?
+%$$
+%Is there a reference for both inequalities? What is the form of $\gamma(\mH)$ and how does it depend on $\rho$? If $1/\sqrt{n}$ is not possible, what is the right rate?
+
+\section{More adaptivity in anisotropic regularization weights}\label{sec:adptr}
+
+\begin{enumerate}
+\item[(C1)] There exists a numerical constant $B_1<+\infty$ such that $\sum_{j=1}^{\infty}|\langle \theta_0, \psi_j\rangle| \leq B_1$, where $\{\psi_j\}_{j=1}^{\infty}$ are eigenfunctions of the population covariance operator $T$,
+and $\theta_0=L_{K^{-1/2}}\beta_0$ for some $\beta_0\in\mH$.
+\end{enumerate}
+We use $\Theta_1(\mH)\subseteq\Theta_2(\mH)$ to denote all unknown linear functionals in $\Theta_2(\mH)$ that also satisfies Assumption (D1), for a pre-determined constant upper bound $B_1$.
+This assumption is also implicitly imposed, albeit in a different form, in the works of \cite{liu2025scalable} to construct pointwise confidence intervals for classical kernel estimators.
+
+{\color{red}Maybe some remarks on Fourier Basis, or alignment arising from Gaussian processes.}
+
+Let $\mu_n>0$ be a sequence of penalty parameters that decay slightly slower than $\lambda_n$, satisfying
+\begin{equation}
+\mu_n n^{2r/(2r+1)}\to 0,\;\;\;\;\;\;\mu_n n^{2r/(2r+1)-\delta}\to\infty
+\label{eq:mun}
+\end{equation}
+for all $\delta>0$.
+We consider $\hat\theta_n^\adptr$ as solution to Eq.~(\ref{eq:anitr}), with $\Lambda_n=\sum_{j=1}^{J(n)}\lambda_{nj}(z)\hat\psi_j\otimes\hat\psi_j$ being defined as
+\begin{equation}
+\lambda_{nj}(z) = \left\{\begin{array}{ll}\hat s_j\sqrt{\mu_n}/|\langle z,\hat\psi_j\rangle|,&\text{if } \langle z,\hat\psi_j\rangle^2\geq 2\hat s_j;\\ \mu_n\wedge \sqrt{\hat s_j\mu_n},& \text{otherwise};\end{array}\right.
+\label{eq:lambda-adp}
+\end{equation}
+and truncation occurs at $J(n)\leq n$.
+Note that in this estimator, the choice of $\Lambda_n$ and the penalization parameters $\lambda_{nj}$ are \emph{adaptive} to the testing function $z=L_{K^{1/2}}x$,
+which is different from the previous estimators that do not depend on $z$.
+
+We remark that the constant $2$ in the first prong of the definition of Eq.~(\ref{eq:lambda-adp}) can be changed to any constant without affecting the analysis of this estimator.
+This also implies that, if Assumption (B3) holds with $\kappa=0$, then there is no need to do have anisotropic regularization parameters depending on
+the test function $z$, and one can instead set simply $\lambda_{nj}= \mu_n\wedge\sqrt{\hat s_j\mu_n}$.
+
+For a testing function $z$ and point estimate $\hat\eta_n^\adptr(x)=\hat\gamma_n+\langle L_{K^{1/2}}z,\hat\theta_n^\adptr\rangle$, a confidence interval of $\eta_0(x)$ is constructed as
+$$
+\varphi^\adptr(x) = [\hat\eta_n^\adptr(x)\;\pm\;\tau_{\alpha}\hat\sigma_n^\adptr(L_{K^{1/2}}x)+\omega_n(\sqrt{\mu_n}+\|\hat\Pi_J^\perp(L_{K^{1/2}}x)\|_2)],
+$$
+where $\tau_{\alpha}$ is the $(1-\alpha/2)$ quantile of the standard Normal distribution, and $\hat\sigma_n^\adptr$ is defined as
+$$
+\hat\sigma_n^\adptr(z) =  \frac{\sigma_\varepsilon}{\sqrt{n}}\sqrt{\langle z, (T_J+\Lambda_J)^\dagger T_J(T_J+\Lambda_J)z\rangle} = \frac{\sigma_\varepsilon}{\sqrt{n}}\sqrt{\sum_{j=1}^{J(n)}\frac{\langle z,\hat\psi_j\rangle^2\hat s_j}{(\hat s_j+\lambda_{nj})^2}}.
+$$
+
+\subsection{Honesty of confidence intervals}
+
+\begin{theorem}
+Impose all assumptions and conditions in Lemma \ref{lem:stability}. Suppose $\Lambda_n$ is constructed in Eq.~(\ref{eq:lambda-adp}) for all $j\leq J(n)$,
+where $\mu_n$ satisfies Eq.~(\ref{eq:mun}) and $q$ in Assumption (C2) satisfies $q<1/4$. Suppose also that Assumptions (A1), (A2), (D1) hold, and $\kappa<(1-q)/2$. Then 
+$\hat\eta_n^\adptr(x)-\eta_0^\adptr(x)+\langle\hat\Pi_J^\perp L_{K^{1/2}}x,\theta_0\rangle = b_n(L_{K^{1/2}}x)+v_n(L_{K^{1/2}}x)$ for every $n$ and $x\in\supp(P_X^n)$, where
+$$
+\limsup_{n\to\infty}\sup_{P_Z^n}\sup_{z\in\supp(P_Z^n)}\sup_{\beta_0\in\Theta_1(\mH)} \frac{|b_n(z)|}{\sqrt{\mu_n}} < +\infty\;\;\;\;\;\;a.s.,
+$$
+and
+$$
+\lim_{n\to\infty} \sup_{P_Z^n}\sup_{z\in\supp(P_Z^n)}\sup_{\beta_0\in\Theta_1(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{v_n(z)}{\hat\sigma_n^\adptr(z)}\leq t\right] - \Phi(t)\right| = 0,
+$$
+where $\theta_0=L_{K^{-1/2}}\beta_0$, $\hat\Pi_J^\perp = I - \sum_{j=1}^{J(n)}\hat\psi_j\otimes\hat\psi_j$, and $\Phi(\cdot)$ is the CDF of the standard Normal distribution.
+The probability is over the randomness of both $\{X_i\}_{i=1}^n$ and $\{\varepsilon_i\}_{i=1}^n$. 
+
+Furthermore, if $\frac{2r}{(2r-1)(2r+1)}<q<\frac{1}{4}$, then for every $\epsilon>0$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
+such that for any sequence $x_1\in\mX_1,x_2\in\mX_2,\cdots$, it holds that
+$$
+\lim_{n\to\infty} \sup_{\beta_0\in\Theta_1(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{\hat\eta_n^\adptr(x)-\eta_0(x)}{\hat\sigma_n^\adptr(L_{K^{1/2}}x)}\leq t\right] - \Phi(t)\right| = 0.
+$$
+%
+%Furthermore, if $??$ then for every $\epsilon>0$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
+%such that
+%$$
+%\lim_{n\to\infty} \sup_{P_X^n}\sup_{x\in\mX_n}\sup_{\beta_0\in\Theta_1(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{\hat\eta_n^{\adptr}(x)-\eta_0(x)}{\hat\sigma_n^\adptr(L_{K^{1/2}}z)}\leq t\right] - \Phi(t)\right| = 0.
+%$$
+\label{thm:adptr-limiting}
+\end{theorem}
+
+\begin{corollary}
+Impose the same set of assumptions and conditions in Theorem \ref{thm:adptr-limiting}. Then
+$$
+\liminf_{n\to\infty}\inf_{P_X^n}\inf_{x\in\supp(P_X^n)}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\adptr(x)] \;\;\geq\;\; 1-\alpha.
+$$
+Furthermore, if $\frac{2r}{(2r-1)(2r+1)}<q<\frac{1}{4}$, then the following holds for the choice of $\omega_n\equiv 0$:
+for any $\epsilon>0$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
+such that for any sequence $x_1\in\mX_1,x_2\in\mX_2,\cdots$, 
+$$
+\lim_{n\to\infty}\inf_{\beta_0\in\Theta_1(\mH)} \Pr[\eta_0(x)\in\varphi^\adptr(x)] \;\; = \;\; 1-\alpha.
+$$
+\label{cor:adptr}
+\end{corollary}
+
+
+
+\subsection{Rates of convergence}
+
+
+\begin{theorem}
+Impose all assumptions and conditions in Lemma \ref{lem:stability}. Suppose $\Lambda_n$ is constructed as in Eq.~(\ref{eq:lambda-adp}),
+where $\mu_n$ satisfies Eq.~(\ref{eq:mun}). Then as $n\to\infty$, 
+$$
+\sup_{P_X^n}\sup_{\beta_0\in\Theta_1(\mH)}\mathbb E\left[\int \big|\varphi^\adptr(x)\big|^2\ud P_X^n(x) \right] \lesssim n^{-\frac{2r}{2r+1}+\delta} + n^{2q-\frac{3}{2}+\delta} + n^{-q(2r-1)+\delta} + n^{1-c}.
+$$
+for any $\delta>0$, where $c\geq 2$ is the parameter in the failure probability in Lemma \ref{lem:stability}.
+\label{thm:adptr-rates}
+\end{theorem}
+
+\begin{remark}
+For both Theorems \ref{thm:adptr-limiting} and \ref{thm:adptr-rates} to hold with an $n^{-2r/(2r+1)+\delta}$ mean-squared confidence interval width, $q$ must satisfy
+$$
+\frac{2r}{(2r-1)(2r+1)}\;<\; q\;<\; \frac{1}{4}.
+$$
+Provided that $r>1+\sqrt{5}/2=2.118$, the valid range of $q$ is non-empty.
+\end{remark}
+
+
+The ``effective dimension'' $d$ at which $s_d\asymp \mu_n$, is $d\asymp n^{1/(2r+1)}$ when $\mu_n\approx n^{-2r/(2r+1)}$.
+This means that the ``truncation level'' $J$ should be significantly larger than $d$, because $q>\frac{2r}{(2r-1)(2r+1)} > \frac{1}{2r+1}$.
+This means that, in the anisotropic setting, \emph{both} truncation and Ridge smoothing are necessary to achieve optimal honest and adaptive confidence intervals.
+
+\subsection{Minimax optimality of $\varphi^{\adptr}$}
+
+
+\section{Proofs}
+
+For brevity we assume $\mathbb E[x]=0$, $\gamma_0=0$ and $X_i'=X_i$ throughout all proofs, which is conventional in the analysis of linear functional regression in the literature \citep{cai2012minimax,yuan2010reproducing}.
+For all \emph{lower bound} proofs, we also assume $L_{K^{1/2}}=L_{K^{-1/2}}$ is the identity operator to simplify the proofs.
+For notational brevity, we many times drop the identity operator symbol $I$, such as writing $T_n+\lambda$ for $T_n+\lambda I$, whenever there is no ambiguity.
+
+
+
+\subsection{Some technical lemmas for results in Sec.~\ref{sec:isotropic}}
+
+We first establish a few technical lemmas which are important to our proof of later results.
+\begin{lemma}
+Suppose Assumptions (A1), (A3) and (B3) hold with $\kappa<\frac{1}{2}-\frac{1}{4r}$, and $\lambda_n$ satisfies Eq.~(\ref{eq:lambdan-1}). Then for any $\delta\in(0,1/2]$ there exists a constant $n_0\in\mathbb N$ depending only on $\delta$ and other parameters in assumptions,
+ such that for all $n\geq n_0$, with probability at least $1-n^{-1}$,
+$$
+(1-\delta)(T+\lambda_n)\preceq T_n+\lambda_n \preceq (1+\delta)(T+\lambda_n)
+$$
+where $T_n=\frac{1}{n}\sum_{i=1}^n Z_i\otimes Z_i$, $T=\mathbb E[Z\otimes Z]$, $Z_i=L_{K^{1/2}}X_i$, $Z=L_{K^{1/2}}Z$, and for two self-adjoint operators $A,B$, $A\preceq B$ if $\langle x,Ax\rangle\leq \langle x, Bx\rangle$
+for any square integrable on function $x:I\to\mathbb R$.
+Furthermore, for any $\delta>0$, there exists a constant $C<+\infty$ depending only on parameters in the assumptions, such that for all $n\geq 3$, with probability $1-n^{-1}$ it holds that
+$$
+\left\|(T+\lambda_n)^{-1/2}(T-T_n)(T+\lambda_n)^{-1/2}\right\|_\op \leq C\times n^{-\frac{1-2\kappa-1/2r}{2}+\delta}.
+$$
+\label{lem:empirical-population-cov}
+\end{lemma}
+
+We remark that similar versions of Lemma \ref{lem:empirical-population-cov} have appeared, in different forms, in classical analysis of kernel ridge regression estimators and RKHS approaches for linear functional regression.
+See e.g.~the upper bound on $\mathcal S_2(\lambda,z)$ in \citep{caponnetto2007optimal}, the second inequality in the proof of Theorem 5 in \citep{smale2007learning}, 
+Theorem 2 of \citep{hsu2014random},
+or Lemma 2 of \citep{cai2012minimax}.
+Nevertheless, in our applications the choice of $\lambda_n$ is significantly smaller than conventional choices (for inference purposes), and when $\lambda_n = o(n^{-1})$ existing arguments cannot be directly applied,
+without additional conditions such as Assumption (B3) for some $\kappa<1/2$. Therefore, we give the complete proof of Lemma \ref{lem:empirical-population-cov} below.
+
+\begin{proof}[Proof of Lemma \ref{lem:empirical-population-cov}.]
+We use Hoeffding's inequality for bounded self-adjoint operators, as developed and stated in \citep{minsker2017some}.
+For every $i\in[n]$, define
+$$
+W_i := (T+\lambda_n)^{-1/2}Z_i = (T+\lambda_n)^{-1/2}L_{K^{1/2}}X_i.
+$$
+This gives rise to
+\begin{align}
+\frac{1}{n}\sum_{i=1}^n W_i\otimes W_i &= (T+\lambda_n )^{-1/2}T_n (T+\lambda_n )^{-1/2};\label{eq:epcov-0}\\
+\mathbb E[W_i\otimes W_i] &= (T+\lambda_n)^{-1/2} T (T+\lambda_n )^{-1/2}, \;\;\;\;\;\;\forall i\in[n]\label{eq:epcov-0half}.
+\end{align}
+
+By Assumptions (B1) and (B3), it holds almost surely that 
+\begin{align}
+\|W_i\otimes W_i\|_\op&=\left\|\sum_{j,k=1}^{\infty}\frac{\langle Z_i,\psi_j\rangle\langle Z_i,\psi_k\rangle}{\sqrt{s_j+\lambda_n}\sqrt{s_k+\lambda_n}}\psi_j\otimes\psi_k\right\|_\op\nonumber\\
+&\leq \sum_{j=1}^{\infty}\frac{\langle Z_i,\psi_j\rangle^2}{s_j+\lambda_n} \leq \sum_{j=1}^{\infty} \frac{C_\nu s_j n^{2\kappa}}{s_j+\lambda_n}  \lesssim n^{2\kappa+1/2r+\delta},
+\label{eq:proof-epcov-1}
+\end{align}
+where the last inequality holds because $\lambda_n\gtrsim n^{-1-\delta}$ for any $\delta>0$.
+
+Let 
+$$
+A_n := \sum_{i=1}^n\mathbb E[(W_i\otimes W_i)^2] =n\times\sum_{j,k=1}^{\infty}\frac{\mathbb E[\langle Z,Z\rangle\langle Z,\psi_j\rangle\langle Z,\psi_k\rangle]}{(s_j+\lambda_n)(s_k+\lambda_n)}\psi_j\otimes \psi_k.
+$$
+It is easy to verify that $\|A_n\|_\op \geq n\mathbb E[\langle Z,\psi_1\rangle^4]/(s_1+\lambda_n)=ns_1^2/(s_1+\lambda_n)\geq c_sn/2$ for sufficiently large $n$. 
+On the other hand, Because $\langle Z,Z\rangle\leq 1$ almost surely thanks to Assumption (A3), it holds that
+\begin{equation}
+\tr(A_n) \leq n\times \sum_{j=1}^{\infty} \frac{s_j}{(s_j+\lambda_n)^2} \lesssim n^{(2r+1)/r},
+\label{eq:proof-epcov-2}
+\end{equation}
+where the last inequality holds because $s_j\asymp j^{-2r}$ thanks to Assumption (A1), and $\lambda_n\gtrsim n^{-2}$.
+Invoking \citep[Theorem 3.1]{minsker2017some}, for any $\delta>0$, it holds with probability $1-n^{-1}$ that
+\begin{align*}
+\left\|\frac{1}{n}\sum_{i=1}^n W_i\otimes W_i-\mathbb E[W_i\otimes W_i]\right\|_\op &\lesssim n^{-\frac{1-2\kappa-1/2r-\delta}{2}}\log n = o(1). 
+\end{align*}
+Subsequently, incorporating Eqs.~(\ref{eq:epcov-0},\ref{eq:epcov-0half}), the above inequality implies
+$$
+\left\|(T+\lambda_n)^{-1/2}(T-T_n)(T+\lambda_n)^{-1/2}\right\|_\op \lesssim n^{-\frac{1-2\kappa-1/2r}{2}+\delta} = o(1).
+$$
+This proves Lemma \ref{lem:empirical-population-cov}, by selecting $n_0$ sufficiently large such that the right-hand side of the above inequality is upper bounded by $\delta$ for any $\delta>0$.
+\end{proof}
+
+For the purpose of the next lemma, for any $z=L_{K^{1/2}}x$ for some $x\in\mathcal X$ and $Z_i=L_{K^{1/2}}X_i$, define
+$$
+g(z,Z_i) := \langle z, (T_n+\lambda_n)^{-1}Z_i\rangle,\;\;\;\;\;\;\bar g(z,Z_i) := \langle z, (T+\lambda_n)^{-1}Z_i\rangle.
+$$
+The following lemma derives probabilistic convergence between $g$, $\bar g$, and their expectations.
+\begin{lemma}
+Suppose the same set of conditions in Lemma \ref{lem:empirical-population-cov} hold, with Assumption (B3) being strengthened to $\kappa<\frac{1}{6}-\frac{1}{4r}$. 
+Then it holds that
+\begin{align*}
+\sup_{z\in L_{K^{1/2}}\mX}\left|\frac{1}{n}\sum_{i=1}^n [g(z,Z_i)-\bar g(z,Z_i)]^2\right|\;\;&\overset{p}{\to}\;0;\\
+\sup_{z\in L_{K^{1/2}}\mX}\left|\frac{1}{n}\sum_{i=1}^n \bar g(z,Z_i)^2-\mathbb E[\bar g(z,Z)^2]\right|\;\;&\overset{p}{\to}\; 0.
+\end{align*}
+\label{lem:gdiff}
+\end{lemma}
+\begin{proof}[Proof of Lemma \ref{lem:gdiff}.]
+Throughout this proof, we write $w := (T+\lambda)^{-1/2} z$ and $W_i := (T_n+\lambda)^{-1/2}X_i$ for notational simplicity, where $\lambda=\lambda_n$.
+By Assumptions (B1) and (B3), for sufficiently large $n$ it holds uniformly for all $x\in\mX$ and $z=L_{K^{1/2}}x$ that
+\begin{equation}
+\|w\|_2^2 \leq \sum_{j=1}^{\infty} \frac{\langle z,\psi_j\rangle^2}{s_j+\lambda_n} \leq \sum_{j=1}^{\infty}\frac{C_\nu s_j n^{2\kappa}}{s_j+\lambda_n} \lesssim n^{2\kappa+1/2r+\delta}
+\label{eq:proof-gdiff-0}
+\end{equation}
+for any $\delta>0$.
+
+Define $\Delta_i := g(z,Z_i)-\bar g(z,Z_i)$. Then
+\begin{align*}
+\Delta_i &= \langle z,((T_n+\lambda )^{-1}-(T+\lambda )^{-1})Z_i\rangle\nonumber\\
+&= \langle z, (T+\lambda )^{-1}((T+\lambda )(T_n+\lambda )^{-1}-I)Z_i\rangle\nonumber\\
+&= \langle z, (T+\lambda )^{-1}(T_n-T)(T_n+\lambda )^{-1}Z_i\rangle.
+\end{align*}
+Subsequently,
+\begin{align}
+\frac{1}{n}\sum_{i=1}^n \Delta_i^2 &= \langle z, (T+\lambda)^{-1}(T_n-T)(T_n+\lambda)^{-1}T_n(T_n+\lambda)^{-1}(T_n-T)(T+\lambda)^{-1}z\rangle\nonumber\\
+&= \langle w, (T+\lambda)^{-1/2}(T_n-T)(T_n+\lambda)^{-1}T_n(T_n+\lambda)^{-1}(T_n-T)(T+\lambda)^{-1/2}w\rangle\nonumber\\
+&\leq \langle w, (T+\lambda)^{-1/2}(T_n-T)(T_n+\lambda)^{-1}(T_n-T)(T+\lambda)^{-1/2}w\rangle\nonumber\\
+&\leq \|(T+\lambda)^{-1/2}(T_n-T)(T_n+\lambda)^{-1/2}\|_\op\|w\|_2^2\nonumber\\
+&\overset{(a)}{=} O_P\left(n^{-\frac{1-2\kappa-1/2r}{2}+\delta}\right)\times O(n^{2\kappa+1/2r+\delta}) \;\;\overset{p}{\to} \;\;0,
+\end{align}
+where Eq.~(a) holds by invoking Lemma \ref{lem:empirical-population-cov} and incorporating Eq.~(\ref{eq:proof-gdiff-0}). 
+This proves the first property, because Eq.~(\ref{eq:proof-gdiff-0}) is uniform in $z$.
+
+For the second identity, because $\{g(z,Z_i)^2\}_{i=1}^n$ are i.i.d.~random variables,
+the Chebyshev's inequality asserts that for any $t>0$, 
+\begin{align}
+\Pr\left[\left|\frac{1}{n}\sum_{i=1}^n \bar g(z,Z_i)^2 - \mathbb E[g(z,Z)^2]\right| > t\mathbb E[g(z,Z)^2]\right] \leq \frac{\mathbb E[g(z,Z)^4]}{nt^2(\mathbb E[g(z,Z)^2])^2} \leq \frac{C_p}{nt^2},
+\label{eq:proof-gdiff-2}
+\end{align}
+where the last inequality holds thanks to Assumption (B2). This implies
+\begin{equation*}
+\frac{1}{n}\sum_{i=1}^n\bar g(z,Z_i)^2 \;\;\overset{p}{\to}\;\; \mathbb E[g(z,Z)^2],
+\end{equation*} 
+where the convergence is uniform for all $z$ because the right-hand side of Eq.~(\ref{eq:proof-gdiff-2}) is independent of $z$.
+This completes the proof.
+\end{proof}
+
+\begin{lemma}
+Assume the same set of conditions in Lemmas \ref{lem:empirical-population-cov} and \ref{lem:gdiff}. 
+Let $\varepsilon_i = Y_i - \langle X_i,\beta_0\rangle$. 
+Then for any $x\in\mX$ and $z=L_{K^{1/2}}x$, as $n\to\infty$, 
+$$
+\frac{1}{\tilde\sigma_n(z)\sqrt{n}}\sum_{i=1}^n \varepsilon_i g(z,Z_i)\;\;\overset{d}{\to}\;\; \mathcal N(0,1),
+$$
+where $Z_i=L_{K^{1/2}}X_i$, $g(z,Z)=\langle z,(T_n+\lambda_n I)^{-1}Z\rangle$ and $\tilde\sigma_n(z)^2 = n^{-1}\sum_{i=1}^n \sigma_\varepsilon^2g(z,Z_i)^2$.
+\label{lem:isoclt}
+\end{lemma}
+
+\begin{proof}[Proof of Lemma \ref{lem:isoclt}.]
+Define $\bar g(z,Z) := \langle z,(T+\lambda_n I)^{-1}Z\rangle$.
+Because $\{\varepsilon_i\bar g(z,Z_i)\}_{i=1}^n$ are i.i.d.~centered random variables with finite variance, the standard central-limit theorem yields that
+\begin{equation}
+\frac{1}{\bar\sigma(z)\sqrt{n}}\sum_{i=1}^n \varepsilon_i\bar g(z,Z_i) \;\;\overset{d}{\to}\;\;\mathcal N(0,1),
+\label{eq:proof-isoclt-1}
+\end{equation}
+where
+$$
+\bar\sigma(z) =\sigma_\varepsilon^2\mathbb E[g(z,Z)^2]= \sigma_\varepsilon^2\mathbb E[\langle z, (T+\lambda_n I)^{-1}Z\rangle^2]
+$$
+
+Using Cauchy-Schwarz inequality, it holds almost surely that
+\begin{align*}
+\left|\frac{1}{n}\sum_{i=1}^n g(z,Z_i)^2-\bar g(z,Z_i)^2\right| &\leq \left|\frac{2}{n}\sum_{i=1}^n [g(z,Z_i)-\bar g(z,Z_i)]\bar g(z,Z_i)\right|\\
+&\leq 2\sqrt{\frac{1}{n}\sum_{i=1}^n[g(z,Z_i)-\bar g(z,Z_i)]^2}\sqrt{\frac{1}{n}\sum_{i=1}\bar g(z,Z_i)^2}.
+\end{align*}
+Lemma \ref{lem:gdiff} then asserts that the first term on the right-hand side of the above inequality converges in probability to zero, and the second term converges in probability to $\sqrt{\mathbb E[g(z,Z_i)^2]}$.
+Therefore,
+\begin{equation}
+\tilde\sigma_n(z)^2 \;\;\overset{p}{\to}\;\; \bar\sigma(z)^2.
+\label{eq:proof-isoclt-2}
+\end{equation}
+
+Next, using Chebyshev's inequality, for any $\delta>0$, conditioned on $\{Z_i\}$ it holds with probability $1-\delta$ that
+$$
+\left|\frac{1}{\sqrt{n}}\sum_{i=1}^n\varepsilon_i[g(z,Z_i)-\bar g(z,Z_i)]\right| \leq \frac{\sigma_\varepsilon^2}{\delta^2}\sqrt{\frac{1}{n}\sum_{i=1}^n[g(z,Z_i)-\bar g(z,Z_i)]^2} 
+$$
+Because $\frac{1}{n}\sum_{i=1}^n[g(z,Z_i)-\bar g(z,Z_i)]^2\overset{p}{\to}0$, for any $\epsilon,u>0$ there exists $N\in\mathbb N$ such that for any $n\geq N$, $\frac{1}{n}\sum_{i=1}^n[g(z,Z_i)-\bar g(z,Z_i)]^2\leq\epsilon$
+with probability $1-u$.
+Now for any $\epsilon',\delta'>0$, pick $\delta=\delta'/2$, $u=\delta'/2$ and $\epsilon=(\epsilon')^2\delta^4/\sigma_\varepsilon^4>0$, there exists $N\in\mathbb N$ such that for any $n\geq N$, 
+$$
+\Pr\left[\left|\frac{1}{\sqrt{n}}\sum_{i=1}^n\varepsilon_i[g(z,Z_i)-\bar g(z,Z_i)]\right|>\epsilon'\right]\leq\delta',
+$$
+where the probability is on both $\{\varepsilon_i\}$ and $\{Z_i\}$, and the above inequality holds by the union bound.
+This implies that
+\begin{equation}
+\frac{1}{\bar\sigma(z)\sqrt{n}}\sum_{i=1}^n\varepsilon_i[g(z,Z_i)-\bar g(z,Z_i)] \;\;\overset{p}{\to}\;\; 0.
+\label{eq:proof-isoclt-3}
+\end{equation}
+Combining Eqs.~(\ref{eq:proof-isoclt-1},\ref{eq:proof-isoclt-2},\ref{eq:proof-isoclt-3}), the proof of Lemma \ref{lem:isoclt} is complete with the Slutsky's theorem.
+\end{proof}
+
+
+\subsection{Proof of Theorem \ref{thm:isokrr-limiting}}
+
+To simplify notations, in the proofs of Theorems \ref{thm:isokrr-limiting} and \ref{thm:isokrr-rates} we shall drop all $\iso$ superscripts as this is the only set of estimators, confidence intervals and their related
+quantities to be analyzed in the proofs.
+With $Y_i=\langle X_i,\beta_0\rangle+\varepsilon_i = \langle Z_i,\theta_0\rangle+\varepsilon_i$, it holds that
+$$
+\hat\theta_n = (T_n+\lambda_n)^{-1}T_n\theta_0 + \frac{1}{n}\sum_{i=1}^n\varepsilon_i (T_n+\lambda_n)^{-1}Z_i.
+$$
+Subsequently,
+\begin{align}
+\hat\theta_n-\theta_0 &= \underbrace{-\lambda_n (T_n+\lambda_n)^{-1}\theta_0}_{=: b_n} + \underbrace{\frac{1}{n}\sum_{i=1}^n\varepsilon_i(T_n+\lambda_n)^{-1}Z_i}_{=:v_n}.
+\end{align}
+
+For any test function $x\in\supp(P_X)$, let $z=L_{K^{1/2}}x=\sum_{j=1}^{n}\hat\nu_j\hat\psi_j$, where $\hat\nu_j=\langle z,\hat\psi_j\rangle$.
+Let also $\hat\vartheta_j = \langle\theta_0,\hat\psi_j\rangle$.
+Slightly abusing notations by denoting $b_n(z) := \langle b_n,z\rangle = \int_I b_n(t)z(t)\ud t$, we have that
+\begin{align}
+\big|b_n(z)\big| &= \lambda_n\left|\left\langle(T_n+\lambda_n)^{-1}\sum_{j=1}^n\hat\vartheta_j\hat\psi_j, \sum_{j=1}^n\hat\nu_j\hat\psi_j\right\rangle\right|
+= \lambda_n \left|\sum_{j=1}^n \frac{\hat\nu_j\hat\vartheta_j}{\hat s_j+\lambda_n}\right|\label{eq:proof-simple-1}\\
+&\leq \lambda_n \sqrt{\sum_{j=1}^n\hat\vartheta_j^2}\sqrt{\sum_{j=1}^n\frac{\hat\nu_j^2}{(\hat s_j+\lambda_n)^2}} \label{eq:proof-simple-2}\\
+&\leq \sqrt{\lambda_n}\sqrt{\sum_{j=1}^n\hat\vartheta_j^2}\sqrt{\sum_{j=1}^n\frac{\hat\nu_j^2}{\hat s_j+\lambda_n}}\label{eq:proof-simple-2half}\\
+&= \sqrt{\lambda_n}\cdot \sqrt{\langle z,(T_n+\lambda_n)^{-1}z\rangle} = \sqrt{\lambda_nn}\hat\sigma_n(z).\label{eq:proof-simple-3}
+\end{align}
+In the above derivations, Eq.~(\ref{eq:proof-simple-1}) holds because $\{\hat\psi_j\}_{j=1}^n$ is orthonormal with respect to $L_2(I)$ and $T_n=\sum_{j=1}^n\hat s_j\hat\psi_j\otimes\hat\psi_j$;
+Eq.~(\ref{eq:proof-simple-2}) holds by the Cauchy-Schwarz inequality;
+Eq.~(\ref{eq:proof-simple-2half}) holds by noting that $\lambda_n/(\sqrt{\hat s_j+\lambda_n})\leq\sqrt{\lambda_n}$ for all $j$, and furthermore
+$$
+\langle z, (T_n+\lambda_n)^{-1}z\rangle = \left\langle\sum_{j=1}^n\hat\nu_j\hat\psi_j, \sum_{j=1}^n\frac{\hat\nu_j}{\hat s_j+\lambda_n}\hat\psi_j\right\rangle = \sum_{j=1}^n\frac{\hat\nu_j^2}{\hat s_j+\lambda_n}.
+$$
+With $\lambda_n n\to 0$ as $n\to\infty$, Eq.~(\ref{eq:proof-simple-3}) implies that
+$$
+b_n(z)/\hat\sigma_n(z)\;\;\to\;\;0\;\;\;\;\;\;a.s.
+$$
+
+We next analyze the term involving $v_n$ on an arbitrary test function $x\in\supp(P_X)$ with $z=L_{K^{1/2}}x=\sum_{j=1}^n\hat\nu_j\hat\psi_j$, where $\hat\nu_j=\langle z,\hat\psi_j\rangle$.
+Let $v_n(z)=\langle v_n,z\rangle = \int_I v_n(t)z(t)\ud t$. We have that
+$$
+v_n(z) = \frac{1}{n}\sum_{i=1}^n \varepsilon_i \langle z, (T_n+\lambda_n)^{-1}Z_i\rangle.
+$$
+Note that $v_n(z)$ is \emph{pivotal}, meaning that it does not depend on the unknown $\beta_0\in\Theta_2(\mH)$ or $\theta_0=L_{K^{1/2}}\beta_0$.
+Note also that $\{\varepsilon_i\}_{i=1}^n$ are conditionally centered when $\{Z_i\}_{i=1}^n$ are fixed. Therefore, if $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed,
+the distribution of $v_n(z)$ is an exact Normal distribution with mean zero and variance equal to
+$$
+\frac{1}{n^2}\sum_{i=1}^n \langle z,(T_n+\lambda_n)^{-1}Z_i\rangle^2 = \frac{1}{n}\langle z, (T_n+\lambda_n)^{-1}T_n(T_n+\lambda_n)^{-1}z\rangle = \frac{\tilde\sigma_n(z)^2}{n}
+$$
+because $T_n=\frac{1}{n}\sum_{i=1}^n Z_i\otimes Z_i$. If $\{\varepsilon_i\}_{i=1}^n$ are not Normally distributed, Lemma \ref{lem:isoclt} asserts that under imposed conditions,
+$$
+\frac{1}{\tilde\sigma_n(z)\sqrt{n}}\sum_{i=1}^n\varepsilon_i\langle z,(T_n+\lambda_n)^{-1}Z_i\rangle\;\;\overset{d}{\to}\;\; \mathcal N(0,1),
+$$
+which is to be proved.
+
+\subsection{Proof of Theorem \ref{thm:isokrr-rates}}
+
+For any $x\in\supp(P_X)$ and $z=L_{K^{1/2}}x$, the definition of $\varphi(x)$ yields
+$$
+n\big|\varphi(x)\big|^2 = \sigma_\varepsilon^2\langle z, (T_n+\lambda_n)^{-1}z\rangle^2.
+$$
+Because $|\varphi(x)|$ is pivotal, we may safely drop the $\sup_{\beta_0\in\Theta_2(\mH)}$ notation and instead calculate
+\begin{align*}
+n\mathbb E_{P_X}\left[|\varphi(X)|^2\right] &= n\mathbb E_{P_Z}[\langle Z,(T_n+\lambda_n)^{-1}Z\rangle^2] = \sigma_\varepsilon^2\tr((T_n+\lambda_n)^{-1/2}T(T_n+\lambda_n^{-1/2}))\\
+&= \sigma_\varepsilon^2(1+o_P(1))\tr((T+\lambda_n)^{-1/2}T(T+\lambda_n)^{-1/2}),
+\end{align*}
+where the last identity holds by invoking Lemma \ref{lem:empirical-population-cov}. Additionally, invoking Assumption (A1) and the fact that $\lambda_n\gtrsim n^{-1-\delta}$ for any $\delta>0$, it holds that
+\begin{align*}
+\tr((T+\lambda_n)^{-1/2}T(T+\lambda_n^{-1/2})) &= \sum_{j=1}^{\infty} \frac{s_j}{s_j+\lambda_n} \lesssim \int_1^{\infty}\frac{j^{-2r}}{j^{-2r}+\lambda_n}\ud j\lesssim n^{1/2r+\delta},
+\end{align*}
+which is to be proved.
+
+
+\subsection{Proof of Theorem \ref{thm:isokrr-lb}}
+
+In this lower bound we work with $\gamma_0=0$ and the definition of honest confidence intervals that
+$$
+\Pr_{\beta_0}[\langle x,\beta_0\rangle\in\varphi(x)] \geq 1-\alpha,\;\;\;\;\;\;\forall \beta_0\in\Theta_2(\mH),\;\;x\in\supp(P_X).
+$$
+The definition in Eq.~(\ref{eq:honest-ci}) is asymptotic in nature, and would imply the above property for a slightly smaller constant significance level for sufficiently large $n$.
+
+Let $\{\psi_j\}_{j=1}^{\infty}$ be an arbitrary orthonormal basis of $L_2(I)$.
+Consider a distribution $P_X$ such that for every $X\sim P_X$, $\langle X,\psi_j\rangle$ are \emph{independently distributed} random variables that satisfy
+$$
+\Pr[\langle X,\psi_j\rangle = \sqrt{s_j}] = \Pr[\langle X,\psi_j\rangle = -\sqrt{s_j}] = \frac{1}{2},\;\;\;\;\;\;\forall j\geq 1.
+$$
+with
+$$
+s_j = \frac{1}{2r-1}\times j^{-2r}.
+$$
+Let $\{\varepsilon_i\}_{i=1}^n$ be i.i.d.~standard Normally distributed random variables. It is easy to verify that this problem instance satisfies Assumptions (A1), (A3), (B1), (B2), (B3),
+with $\sigma_\varepsilon=1$, $M_\varepsilon=1.6$, $c_s=1/(2r-1)$, $C_s=1$, $C_p=2$, $\kappa=0$ and $C_\nu=1$.
+
+Let $M$ be an integer that grows in a particular way with $n$, to be specified later in this proof. 
+Consider a model class $\Theta_n$ such that for every $\beta_0\in\Theta_n$, either $\beta_0\equiv 0$ or
+$$
+\langle L_{K^{-1/2}}\beta_0, \psi_j\rangle = \left\{\begin{array}{ll} \pm 1/\sqrt{M},& \text{if }M< j\leq 2M;\\ 0,& \text{otherwise}.\end{array}\right.
+$$
+It is easy to see that $\Theta_n\subseteq\Theta_2(\mH)$. Furthermore, all $\beta_0\in\Theta_n$ would satisfy Assumption (A2).
+There are a total of $2^M+1$ hypothetical regression functionals (the one additional functional comes from $\beta_0\equiv 0$) in $\Theta_n$.
+For convenience, given any binary vector $\vct\iota\in\{\pm 1\}^{2M}$, define
+$$
+\beta_{\vct\iota} := \sum_{j=M+1}^{2M}\frac{\vct\iota_j}{\sqrt{M}} L_{K^{1/2}}\psi_j.
+$$
+Additionally, we use $\beta_o\equiv 0$ to denote the zero regression functional.
+
+Because $\varphi$ is an honest confidence interval at significance level $\alpha$, it holds that 
+\begin{equation}
+\Pr_{\beta_o}\left[0\in\varphi(x)\right] \geq 1-\alpha,\;\;\;\;\;\;\forall x\in\supp(P_X).
+\label{eq:proof-isolb-1}
+\end{equation}
+
+Fix arbitrary $\vct\iota\in\{\pm 1\}^{2M}$, let $x_{\vct\iota}\in\supp(P_X)$ be such that $\sgn(\langle x_{\vct\iota},\psi_j\rangle)=\vct\iota_j$ for all $j\leq 2M$.
+Note that there might be multiple such test functions satisfying the sign matching property: an arbitrary test function could be selected.
+Define constant $a_n$ as
+$$
+a_n := \langle x_{\vct\iota},\beta_{\vct\iota}\rangle = \frac{1}{2r-1}\sum_{j=M+1}^{2M}\frac{j^{-r}}{\sqrt{M}}
+$$
+which satisfies
+\begin{equation}
+\frac{(2M)^{-r}\sqrt{M}}{2r-1} \leq a_n \leq \frac{M^{-r}\sqrt{M}}{2r-1}.
+\label{eq:proof-isolb-1half}
+\end{equation}
+Then, invoking again the honesty of $\varphi$, it holds that
+\begin{equation}
+\Pr_{\beta_{\vct\iota}}\left[a_n\in\varphi(x_{\vct\iota})\right] \geq 1-\alpha.
+\label{eq:proof-isolb-2}
+\end{equation}
+Furthermore, for any $\beta_{\vct\iota}\in\Theta_2(\mH)$, 
+\begin{align}
+\mathrm{KL}(P_{\beta_o}^n\|P_{\beta_{\vct\iota}}^n) &= n\times \mathbb E_{X\sim P_X}\mathbb E_{\beta_o}\left[\log\frac{P(Y|X,\beta_{\vct\iota})}{P(Y|X,\beta_o)}\right]
+= \frac{n}{2}\mathbb E_{X\sim P_X}[\langle X, \beta_{\vct\iota}-\beta_o\rangle^2]\nonumber\\
+&= \frac{n}{2}\sum_{j=M+1}^{2M} \frac{1}{M}\times \frac{j^{-2r}}{(2r-1)^2} \leq \frac{nM^{-2r}}{2(2r-1)^2}.\label{eq:proof-isolb-3}
+\end{align}
+Selecting 
+$$
+M\asymp n^{1/2r}
+$$
+the right-hand side of Eq.~(\ref{eq:proof-isolb-3}) is upper bounded by 0.1, and therefore using Pinsker's inequality,
+\begin{align}
+\Pr_{\beta_o}[a_n\in\varphi(x)]\geq \Pr_{\beta_{\vct\iota}}[a_n\in\varphi(x)] - \sqrt{2\mathrm{KL}(P_{\beta_o}^n\|P_{\beta_{\vct\iota}}^n)} \geq 1/2.
+\label{eq:proof-isolb-4}
+\end{align}
+Because Eq.~(\ref{eq:proof-isolb-4}) holds for any $\vct\iota\in\{\pm 1\}^{2M}$, we have that
+\begin{align*}
+\mathbb E_{X\sim P_X} \mathbb E_{\beta_o}[|\varphi(x)|^2] &\geq a_n^2/2 \gtrsim M^{1-2r} \asymp n^{-(2r-1)/2r},
+\end{align*}
+which is to be proved.
+
+
+\subsection{Proof of Theorem \ref{thm:anikrr-limiting}}
+
+In the proofs of Theorems \ref{thm:anikrr-limiting} we shall drop all $\ani$ superscripts as this is the only set of estimators, confidence intervals and their related quantities to be analyzed in these proofs.
+Following similar derivations that lead to Eq.~(\ref{eq:proof-isoclt-1}), and accounting for the null space of $\{\hat\psi_j\}_{j=1}^n$, we have for the anisotropic case that
+\begin{equation}
+\hat\theta_n-\theta_0 =\underbrace{-(I-\hat\Pi)\theta_0}_{=:t_n}\underbrace{- (T_n+\Lambda_n)^{\dagger}\Lambda_n\theta_0}_{=: b_n} + \underbrace{\frac{1}{n}\sum_{i=1}^n\varepsilon_i(T_n+\Lambda_n)^{\dagger}Z_i}_{=:v_n},
+\label{eq:proof-aniclt-1}
+\end{equation}
+where $\hat\Pi = \sum_{j=1}^n\hat\psi_j\otimes\hat\psi_j$.
+
+Consider $X_1$ being an arbitrary input function in $\{(X_i,Y_i)\}_{i=1}^n$,
+and let $Z_1=L_{K^{1/2}}X_1$, $b_n(Z_1)=\langle b_n,Z_1\rangle$, $v_n(Z_1)=\langle v_n,Z_1\rangle$.
+Noet that $t_n(Z_1)=0$ because $\hat\Pi(Z_1)=Z_1$.
+Because $v_n(z)$ is either exactly Normally distributed (if $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed), or satisfies Lyapnov conditions of central limit theorem with probabilities converging to one
+provided that Eq.~(\ref{eq:anikrr-lyapnov}) is satisfied, we know that $v_n(z)$ is asymptotically Normally distributed whose variance is exactly $\frac{\sigma_\varepsilon^2}{n^2}\sum_{i=1}^n\langle z, (T_n+\Lambda_n)^{\dagger}Z_i\rangle^2 = \frac{\sigma_\varepsilon^2}{n}\langle z, (T_n+\Lambda_n)^{\dagger}T_n(T_n+\Lambda_n)^{\dagger}z\rangle=\hat\sigma_n^\ani(z)^2$. This shows
+\begin{equation}
+\frac{v_n(z)}{\hat\sigma_n^\ani(z)}\;\;\overset{d}{\to}\;\;\mathcal N(0,1).
+\label{eq:proof-aniclt-2}
+\end{equation}
+
+We next analyze the bias term. Using the spectral decomposition of both $T_n$ and $\Lambda_n$, $b_n(z)$ can be expressed as
+$$
+b_n(z) = \left\langle(T_n+\Lambda_n)^{\dagger}\Lambda_n\sum_{j=1}^n\hat\vartheta_j\hat\psi_j, \sum_{j=1}^n\hat\nu_j\hat\psi_j\right\rangle = \sum_{j=1}^n\frac{\lambda_{nj}\hat\nu_j\hat\vartheta_j}{\hat s_j+\lambda_{nj}},
+$$
+where $\hat\vartheta_j=\langle\theta_0,\hat\psi_j\rangle$ and $\hat\nu_j = \langle z,\hat\psi_j\rangle$.
+Using Cauchy-Schwarz inequality and the fact that $\sum_{j=1}^n\hat\vartheta_j^2\leq 1$ because $\|\theta_0\|_2^2 = \int_I\theta_0(t)^2\ud t\leq 1$, it holds that
+$$
+b_n(z)^2 \leq \sum_{j=1}^n\frac{\lambda_{nj}^2\hat\nu_j^2}{(\hat s_j+\lambda_{nj})^2}.
+$$
+Using the choice that $\lambda_{nj}=\lambda_n\wedge \sqrt{\hat s_j\lambda_n}$, the above inequality simplifies to
+\begin{align}
+b_n(z)^2 \leq \lambda_n\sum_{j=1}^n\frac{\hat\nu_j^2(\lambda_n\wedge\hat s_j)}{(\hat s_j+(\lambda_n\wedge\sqrt{\hat s_j\lambda_n}))^2}\leq \lambda_n\sum_{j=1}^n\frac{\hat\nu_j^2\hat s_j}{(\hat s_j+(\lambda_n\wedge\sqrt{\hat s_j\lambda_n}))^2}.
+\label{eq:proof-aniclt-3}
+\end{align}
+On the other hand, expanding $\hat\sigma_n^2(z)$ in the spectrum of $\{\hat\psi_j\}_{j=1}^n$ we obtain
+\begin{align}
+\hat\sigma_n^2(z) &= \frac{\sigma_\varepsilon^2}{n}\langle z, (T_n+\Lambda_n)^{\dagger}T_n(T_n+\Lambda_n)^{\dagger}z\rangle = \frac{\sigma_\varepsilon^2}{n}\sum_{j=1}^n\frac{\hat\nu_j^2\hat s_j}{(\hat s_j+(\lambda_n\wedge\sqrt{\hat s_j\lambda_n}))^2}.
+\label{eq:proof-aniclt-4}
+\end{align}
+Comparing Eqs.~(\ref{eq:proof-aniclt-3},\ref{eq:proof-aniclt-4}) and noting that $\lambda_n n\to\infty$ as $n\to\infty$, we obtain
+\begin{equation}
+\frac{|b_n(z)|}{\hat\sigma_n(z)} \leq \sigma_\varepsilon^{-1}\sqrt{\lambda_n n} \to 0\;\;\;\;\;a.s.
+\label{eq:proof-aniclt-5}
+\end{equation}
+Eqs.~(\ref{eq:proof-aniclt-1},\ref{eq:proof-aniclt-5}) together yield Theorem \ref{thm:anikrr-limiting}, by Slutsky's theorem.
+
+\subsection{Proof of Theorem \ref{thm:anikrr-rates}}
+
+Let $Z_i=L_{K^{1/2}}X_i$.
+It holds that
+\begin{align*}
+\frac{1}{n}\sum_{i=1}^n\big|\varphi(X_i)\big|^2 &= \frac{4\tau_\alpha^2}{n^2}\sum_{i=1}^n\hat\sigma_n^\ani(z_i)^2 = \frac{4\sigma_\varepsilon^2\tau_\alpha^2}{n^2}\sum_{i=1}^n \langle Z_i, (T_n+\Lambda_n)^{\dagger}T_n(T_n+\Lambda_n)^{\dagger}Z_i\rangle\\
+&= \frac{4\sigma_\varepsilon^2\tau_\alpha^2}{n}\tr(((T_n+\Lambda_n)^{\dagger}T_n)^2) = \frac{4\sigma_\varepsilon^2\tau_\alpha^2}{n}\sum_{j=1}^n\frac{\hat s_j^2}{(\hat s_j+\lambda_{nj})^2}\\
+&\leq \frac{4\sigma_\varepsilon^2\tau_\alpha^2}{n}\sum_{j=1}^n\frac{\hat s_j}{\hat s_j+\lambda_{nj}} \overset{(a)}{\leq} \frac{4\sigma_\varepsilon^2\tau_\alpha^2}{n}\sum_{j=1}^n\frac{\hat s_j}{\hat s_j+\lambda_n}\\
+&\lesssim \frac{1}{n}\int_1^{\infty} \frac{j^{-2r}}{j^{-2r}+\lambda_n}\ud j \lesssim n^{-\frac{2r-1}{2r}+\delta}
+\end{align*}
+for any $\delta>0$, where Eq.~(a) holds because $\lambda_{nj}=\lambda_n\wedge \sqrt{\hat s_j\lambda_n}\geq\lambda_n$, and
+the last inequality holds by the condition imposed on $\hat\{s_j\}$ and the asymptotic scaling that $\lambda_n\gtrsim n^{-1-\delta}$ for any $\delta>0$.
+
+
+
+
+\subsection{Proof of Lemma \ref{lem:stability}}
+
+Express both $T$ and $T_n$ on the eigenfunctions $\{\psi_j\}_{j=1}^n$ and obtain their infinite-dimensional matrix representations $A$ and $A_n$,
+where $A_{ij}=\langle \psi_i,T\psi_j\rangle$ and $[A_n]_{ij}=\langle\psi_i, T_n\psi_j\rangle$ for all $i,j\geq 1$.
+More specifically,
+$$
+A_{ij} = \mathbb E[\langle Z,\psi_i\rangle\langle Z,\psi_j\rangle] = \vct 1\{i=j\}s_i.
+$$
+On the other hand, $[A_n]_{ij}$ is the sample average of a sum of $n$ i.i.d.~random variables and is potentially non-zero for $i\neq j$:
+$$
+[A_n]_{ij} = \frac{1}{n}\sum_{\ell=1}^n \langle Z_\ell,\psi_i\rangle\langle Z_\ell,\psi_j\rangle.
+$$
+
+%{\color{blue}
+%Consider the submatrix of $A_n$ corresponding to eigenfunctions $J(n)+1,\cdots,n$. The trace formula and Eq.~(\ref{eq:proof-stability-1}) implies that, with probability $1-n^{-1}$,
+%\begin{align}
+%\sum_{j=J(n)+1}^n\hat s_j &= \sum_{j=J(n)+1}^n [A_n]_{jj} \leq \sum_{j=J(n)+1} s_j + O\left(\frac{s_j\sqrt{\log n}}{\sqrt{n}} + \frac{s_jn^{2\kappa}\log n}{n}\right)\nonumber\\
+%&\lesssim \int_{J(n)}^{\infty} j^{-2r}\left(1+\frac{\sqrt{\log n}}{\sqrt{n}}\right)\ud j  \lesssim J(n)^{-2r+1}.
+%\end{align}
+%This proves the second property of Lemma \ref{lem:stability}.
+%}
+
+%{\color{blue}
+%Consider the submatrix of $A_n$ corresponding to eigenfunctions $J(n)+1,\cdots,n$. The trace formula yields
+%\begin{align}
+%\sum_{j=J(n)+1}^n\hat s_j-s_j &= \sum_{j=J(n)+1}^{\infty} [A_n]_{jj}-A_{jj} = \sum_{j=J(n)+1}^n \langle\psi_j, (T_n-T)\psi_j\rangle.
+%\label{eq:proof-stability-1-1}
+%\end{align}
+%For every $i\in[n]$, define $w_i := \sum_{j=J(n)+1}^{\infty}\langle\psi_j, Z_i\rangle^2$ such that $\mathbb E[w_i] = \sum_{j=J(n)+1}^{\infty}s_j$.
+%The right-hand side of Eq.~(\ref{eq:proof-stability-1-1}) is precisely $\frac{1}{n}\sum_{i=1}^n w_i-\mathbb E[w_i]$.
+%Furthermore, 
+%\begin{align*}
+%\mathbb E[w_i^2] &=\sum_{j,k>J(n)}\mathbb E[\langle Z_i,\psi_j\rangle^2\langle Z_i,\psi_k\rangle^2]\overset{(a)}{\leq} \left(\sum_{j>J(n)}\sqrt{\mathbb E[\langle Z_i,\psi_j\rangle^4]}\right)^2\\
+%&\overset{(b)}{\leq} \left(\sum_{j>J(n)}C_ps_j\right)^2 \overset{(c)}{\lesssim} \left(\int_{J(n)}^{\infty} j^{-2r}\ud j\right)^2 \lesssim J(n)^{2-4r},
+%\end{align*}
+%where Eq.~(a) holds by the Cauchy-Schwarz inequality, Eq.~(b) holds by Assumption (B2) and Eq.~(c) holds by Assumption (B1).
+%Additionally, Assumption (A3) implies that $w_i\leq \|Z\|_2^2\leq 1$ almost surely. Subsequently, using Bernstein's inequality, with probability $1-n^{-1}$ it holds that
+%\begin{align}
+%\left|\sum_{j=J(n)+1}^n \langle\psi_j, (T_n-T)\psi_j\rangle\right| &= \left|\frac{1}{n}\sum_{i=1}^n w_i-\mathbb E[w_i]\right| \lesssim \frac{J(n)^{1-2r}\sqrt{\log n}}{\sqrt{n}} + \frac{\log n}{n}.
+%\label{eq:proof-stability-1-2}
+%\end{align}
+%Combining Eqs.~(\ref{eq:proof-stability-1-1},\ref{eq:proof-stability-1-2}) and noting that $\sum_{j>J(n)}s_j \lesssim \int_{J(n)}^{\infty} j^{-2r}\ud j \lesssim J(n)^{1-2r}$, we complete the proof of the second property of Lemma \ref{lem:stability}.
+%}
+
+
+Now, let $C=(2C_s/3c_s)^{1/(2r)}>0$ be a constant such that, for every $j\in\mathbb N$, $s_{Cj}\leq C_s (Cj)^{-2r} \leq c_sj^{-2r}/2\leq s_j/2$ thanks to Assumption (B1). 
+Let $\bar J=\lceil CJ(n)\rceil$.
+By Assumption (B2) and the Cauchy-Schwarz inequality, it holds for every $i,j\geq 1$ that 
+$$
+\mathbb E[\langle Z,\psi_i\rangle^2\langle Z,\psi_j\rangle^2] \leq \sqrt{\mathbb E[\langle Z,\psi_i\rangle^4]}\sqrt{\mathbb E[\langle Z,\psi_j\rangle^4]}
+\leq C_p\mathbb E[\langle Z,\psi_i\rangle^2]\mathbb E[\langle Z,\psi_j\rangle^2] = C_ps_is_j.
+$$
+By Assumption (B3), it holds for every $i,j\geq 1$ that 
+$$
+|\langle Z,\psi_i\rangle\langle Z,\psi_j\rangle| \leq C_\nu^2\sqrt{s_js_k}n^{2\kappa}
+$$ almost surely.
+Subsequently, using Bernstein's inequality, for every $i,j\geq 1$, with probability $1-n^{-c}/(3i^2j^2)$ it holds that 
+\begin{align}
+\big|[A_n]_{ij}-A_{ij}\big| \leq C_1\left(\sqrt{\frac{C_ps_is_j\log (nij)}{n}} + \frac{C_\nu\sqrt{s_is_j}n^{2\kappa}\log (nij)}{n}\right) \lesssim \frac{\sqrt{s_is_j}\log(nij)}{\sqrt{n}},
+\label{eq:proof-stability-1}
+\end{align}
+where $C_1<+\infty$ is a numerical constant depending only on $c$, and the last inequality holds provided that $\kappa<1/4$.
+Using the union bound (i.e.~Bonferroni's inequality) and noting that $(\sum_{j=1}^{\infty}1/j^2)^2=\pi^4/36<3$, with probability $1-n^{-c}$ Eq.~(\ref{eq:proof-stability-1}) holds for all $i,j\geq 1$.
+
+Let $e_1,e_2,\cdots$ be the standard basis vectors.
+We will prove that, for every $j\in[\bar J]$, there exists $w$ satisfying $\|w\|_2 =(\sum_{j=1}^{\infty}w_j^2)^{1/2}= O(j\log^3 n/\sqrt{n})=o(1)$, $w_j=0$ and $|w_k|\lesssim \Delta_\psi(j,k)$ for all $k\in\mathbb N\backslash\{j\}$ such that
+\begin{equation}
+A_n (e_j+w) = s_j(e_j+w),
+\label{eq:eigen-an}
+\end{equation}
+and furthermore the convergence in the $o(1)$ term to zero as $n\to\infty$ is \emph{uniform} over $j\in[\bar J]$.
+This shows that the self-adjoint operator $T_n=\sum_{k,\ell=1}^{n}[A_n]_{k\ell}\psi_k\otimes\psi_\ell$ admits a pair of eigenvalue and eigenfunction $(\hat s,\hat\psi)$ that satisfies
+$\hat s=s_j(1+O(j\log^3 n/\sqrt{n}))=s_j(1+o(1))$, $\|\hat\psi-\psi_j\|_2=O(j\log^3 n/\sqrt{n})=o(1)$ and $|w_k|\lesssim \Delta_\psi(j,k)$ for all $k\neq j$. 
+Furthermore:
+\begin{enumerate}
+\item These eigenfunctions of $T_n$ are unique for different $j$, because an $1-o(1)$ mass is concentrated on $e_j$; therefore, $\varpi$ is an injection;
+\item Because $\hat s_j \geq (1+o(1))c_s j^{-2r}$ and $\hat s_j\leq (1+o(1))C_s j^{-2r}$, it holds that $j/C\leq \varpi(j)\leq Cj$;
+\item All eigenvalue and eigenfunction pairs $(\hat s,\hat\psi)$ for $j\in[\bar J]$ will cover the top $J(n)$ eigenvalues and eigenfunctions of $T_n$ simply from the sufficiently large number of eigenvalues;
+this shows that $\varpi$ is a surjection on $[J(n)]$.
+\end{enumerate}
+
+Let $H=A_n-A$ and consider $w_j=0$ which is simply a Gauge choice. Because $Ae_j=s_je_j$, Eq.~(\ref{eq:eigen-an}) implies
+$$
+(A-s_j I+H)w = -He_j.
+$$
+Let $\bar H$ be the submatrix (also infinite-dimensional) formed by removing the $j$th row and $j$th column of $H$. Let $h$ be the $j$th column of $H$, removing $H_{jj}$.
+Let $D=\diag(s_1-s_j,\cdots,s_{j-1}-s_j,s_{j+1}-s_j,\cdots)$ be a diagonal matrix of the same shape of $\bar H$. 
+Let $\bar w=(w_1,\cdots,w_{j-1},w_{j+1},\cdots)$. Then
+$$
+\bar w = -(D+\bar H)^{-1}h = -D^{-1/2}(I+\tilde H)^{-1}D^{-1/2}h,
+$$
+where $\tilde H = D^{-1/2} \bar H D^{-1/2}$. 
+
+For any $i,k\neq j$, Eq.~(\ref{eq:proof-stability-1}) implies
+$$
+\big|\tilde H_{ik}\big| \lesssim \frac{1}{\sqrt{n}} \frac{i^{-r}k^{-r}\log(nik)}{\sqrt{|(s_i-s_j)(s_k-s_j)|}} \leq \frac{1}{\sqrt{n}}z_iz_k\;\;\;\;\;\;\text{where}\;\; z_k = \frac{k^{-r}{\sqrt{\log n}\log(3k)}}{\sqrt{|s_k-s_j|}},
+$$
+and the $\lesssim$ inequality hides only constants and is uniform over all $i,k$.
+In a similar way, $D^{-1/2}h$ can also be upper bounded component-wise as
+\begin{equation}
+\big|[D^{-1/2}h]_k \big| \lesssim  \frac{1}{\sqrt{n}}\frac{j^{-r}k^{-r}\log(njk)}{\sqrt{|s_k-s_j|}}\leq \frac{j^{-r}\log(nj)}{\sqrt{n}}z.
+\label{eq:proof-stability-3}
+\end{equation}
+
+Discuss the following three cases:
+\begin{enumerate}
+\item The case of $k\leq j/C$. In this case, by Assumption (B1), $|s_k-s_j|\geq c_s k^{-2r} - C_s(Ck)^{-2r}\geq 0.5c_sk^{-2r}$, and therefore $|z_k|/\sqrt{\log n}\log(3k)\leq \sqrt{2/c_s}=O(1)$;
+\item The case of $k\geq Cj$. In this case, by Assumption (B1), $|s_k-s_j| \geq c_s j^{-2r} - C_s (Cj)^{-2r}\geq 0.5c_s j^{-2r}$, and therefore $|z_k|/\sqrt{\log n}\log(3k)\leq \sqrt{2/c_s}j^r/k^r= O(j^rk^{-r})$.
+\item The case of $j/C\leq k\leq Cj$. In this case, by Assumption (D1), $|s_k-s_j| \geq |k-j| \cdot c_g(Cj)^{-2r-1}$, and therefore 
+$$
+|z_k|/\sqrt{\log n}\log(3k)\leq \sqrt{C}j^{r+1/2}k^{-r}/\sqrt{c_g|k-j|}\leq C^{r+1}\sqrt{c_gk/|j-k|}= O(\sqrt{k/|j-k|}).
+$$
+\end{enumerate}
+Because $\tilde H=zz^\top/\sqrt{n}$, summarizing the above cases we obtain 
+\begin{align}
+\|\tilde H\|_\op&\lesssim \frac{1}{\sqrt{n}}\|z\|_2^2 =\frac{1}{\sqrt{n}}\sum_{k\neq j}|z_k|^2 \nonumber\\
+& \lesssim \frac{1}{\sqrt{n}}\left(j\log n\log^2(3j) + j^{2r}\int_j^{\infty}\frac{\log n\log^2 (3t)\ud t}{t^{2r}} + Cj\log n\log^2 (3Cj+3)\int_1^{Cj} \frac{\ud t}{t}\right)\nonumber\\
+& \lesssim \frac{j\ln n\ln^2 (j+1))}{\sqrt{n}}\lesssim \frac{j\log^3 n}{\sqrt{n}}.
+\end{align}
+With $\bar J\asymp n^q$ for $q\in(0,1/2)$ (Because $J(n)\asymp n^q$ and $\bar J=CJ$, where $C$ is a constant), the right-hand side of the above inequality is $o(1)$ and therefore we have $\|\tilde H\|_\op=o(1)$ as $n\to\infty$.
+We can then do the following Taylor expansion using $(I+\tilde H)^{-1} = \sum_{\ell=0}^{\infty} (-1)^\ell \tilde H^\ell$, for every $k\neq j$:
+\begin{align}
+|w_k| &\leq \sum_{\ell=0}^{\infty} \big|e_k^\top D^{-1/2}\tilde H^\ell D^{-1/2}h\big| \overset{(a)}{\leq }\sum_{\ell=0}^{\infty} \frac{j^{-r}\log(nj)}{\sqrt{n}}\left|e_k^\top D^{-1/2}\left(\frac{1}{\sqrt{n}}zz^\top\right)^\ell z\right|\nonumber\\
+&\lesssim \sum_{\ell=0}^{\infty}\frac{j^{-r}\log(nj)}{\sqrt{n}}\left(\frac{j\log^3 n}{\sqrt{n}}\right)^\ell \big|e_k^\top D^{-1/2}z\big| \lesssim\frac{j^{-r}\log(nj)}{\sqrt{n}}\big|e_k^\top D^{-1/2}z\big|\nonumber\\
+& = \frac{j^{-r}\log (nj)}{\sqrt{|s_k-s_j| n}}\big|z_k\big|.\label{eq:proof-stability-4} 
+\end{align}
+Here, Eq.~(a) holds by plugging in the expression of $D^{-1/2}h$ in Eq.~(\ref{eq:proof-stability-3}).
+Invoking the case discussions earlier. For $k\leq j/C$, the right-hand side of Eq.~(\ref{eq:proof-stability-4}) is upper bounded by
+$$
+ \frac{j^{-r}\log(nj)}{\sqrt{|s_k-s_j|n}}\times \sqrt{\log n}\log(3k)\times O(1) = O\left(\frac{j^{-r}k^r\log^2 n\log(3j)\log(3k)}{\sqrt{n}}\right);
+$$
+for $k\geq Cj$, the right-hand side of Eq.~(\ref{eq:proof-stability-4}) is upper bounded by 
+$$
+\frac{j^{-r}\log(nj)}{\sqrt{|s_k-s_j|n}} \times\sqrt{\log n}\log(3k)\times O(j^rk^{-r}) = O\left(\frac{j^rk^{-r}\log^2 n\log(3j)\log(3k)}{\sqrt{n}}\right);
+$$
+for $j/C\leq k\leq Cj$, the right-hand side of Eq.~(\ref{eq:proof-stability-4}) is upper bounded by
+\begin{align*}
+\frac{j^{-r}\log(nj)}{\sqrt{|s_k-s_j|n}}\times O\left(\sqrt{\frac{k\log n\log^2(3k)}{|j-k|}}\right) &= \frac{j^{-r}\log^2 n}{\sqrt{n}}\times O\left(\frac{j^{r+1/2}}{\sqrt{|k-j|}}\right)\times O\left(\sqrt{\frac{k\log n\log^2(3j)}{|j-k|}}\right)\\
+&= O\left(\frac{\sqrt{jk}\log^2 n\log(3j)\log(3k)}{|j-k|\sqrt{n}}\right).
+\end{align*}
+Combining all of the above cases we complete the proof of upper bounds on $|\langle\hat\psi_j,\psi_k\rangle|$ in Lemma \ref{lem:stability}.
+
+Furthermore, 
+\begin{align}
+\|w\|_2 &\leq \frac{j^{-r}\log (nj)\sqrt{\log n}}{\sqrt{n}}\left(\int_1^j \frac{\log^3(3t)\ud t}{t^{-2r}} + j^{2r}\int_j^{\bar J}\frac{t^{-2r}\log^2(3t)}{j^{-2r}}\ud t \right.\nonumber\\
+&\;\;\;\;\;\left.+ Cj\cdot \int_1^{Cj}\frac{1}{tj^{-2r-1}}\frac{\log^2(3t)\ud t}{t}\right)^{1/2}\nonumber\\
+&\lesssim \frac{j^{-r}\log n\log^2(3Cj+3)}{\sqrt{n}}\left(j^{2r+1} + j^{2r+1} + j^{2r+2}\right)^{1/2} \lesssim  \frac{j\log^3 n}{\sqrt{n}}\leq \frac{\bar J\sqrt{\log n}}{\sqrt{n}}.\label{eq:proof-stability-5}
+\end{align}
+Because $\bar J\asymp n^q$ for some $q<1/2$, the right-hand side of Eq.~(\ref{eq:proof-stability-5}) is $o(1)$ uniformly for all $j\leq\bar J$. This completes the proof.
+
+Finally, with the additional assumption that $q<1/4$, the right-hand side of Eq.~(\ref{eq:proof-stability-5}) is further upper bounded by $o(1/\bar J)=o(1/J(n))$. 
+Additionally, in this case we have for every $j\leq \bar J$ that $\hat s_j-\hat s_{j+1} = s_j-s_{j+1}+o(s_j/\bar J)=s_j-s_{j+1}+o(j^{-2r}/\bar J) = (1+o(1))(s_j-s_{j+1})$ because $s_j-s_{j+1}\gtrsim j^{-2r-1}$.
+This shows that there is a one-to-one match between $(s_j,\psi_j)$ and $(\hat s_j,\hat\psi_j)$ for all $j\leq\bar J$.
+
+
+
+\subsection{Proof of Lemma \ref{lem:zpsi-stability}}
+Fix arbitrary $z\in\supp(P_Z^n)$, $\ell\leq J$ and $\ell/C_J\leq j\leq C_J\ell$ such that $\varpi(j)=\ell$. 
+Recall that for $a,b>0$, $(a+b)^M = \sum_{m=0}^M \binom{M}{m}a^mb^{M-m}$ from the binomial expansion property.
+Therefore, for $M\in\{2,4\}$, 
+\begin{align}
+&\big|\langle z,\hat\psi_\ell\rangle^M-\langle z,\psi_j\rangle^M\big|\nonumber\\
+& \leq \langle z,\psi_j\rangle^M(1-\langle\hat\psi_\ell,\psi_j\rangle^M) + 6\sum_{m=0}^{M-1}\big|\langle z,\psi_j\rangle\big|^m\left(\sum_{k\neq j}\big|\langle z,\psi_k\rangle\langle\hat\psi_\ell,\psi_k\rangle\big|\right)^{M-m}\nonumber\\
+&\leq 2\langle z,\psi_j\rangle^M\sum_{k\neq j}\langle\hat\psi_\ell,\psi_k\rangle^2 +  6\sum_{m=0}^{M-1}\big|\langle z,\psi_j\rangle\big|^m\left(\sum_{k\neq j}\big|\langle z,\psi_k\rangle\langle\hat\psi_\ell,\psi_k\rangle\big|\right)^{M-m}\label{eq:zpsi-1}\\
+&\leq 2L_J^M\left[\langle z,\psi_j\rangle^M\sum_{k\neq j}\Delta_\psi(j,k)^2 +3\sum_{m=0}^{M-1}\big|\langle z,\psi_j\rangle\big|^m\ \left(\sum_{k\neq j}\big|\langle z,\psi_k\rangle\big|\Delta_\psi(j,k)\right)^{M-m} \right].\label{eq:zpsi-2}
+\end{align}
+Here, Eq.~(\ref{eq:zpsi-1}) holds because $1-\langle\hat\psi_\ell,\psi_j\rangle^2=\sum_{k\neq j}\langle\hat\psi_\ell,\psi_k\rangle^2$ from the Pythagorean theorem,
+and $1-\langle\hat\psi_\ell,\psi_j\rangle^4 = (1+\langle\hat\psi_\ell,\psi_j\rangle^2)(1-\langle\hat\psi_\ell,\psi_j\rangle^2) \leq 2(1-\langle\hat\psi_\ell,\psi_j\rangle^2)$.
+By Assumption (B3), $|\langle z,\psi_k\rangle|\leq C_\nu\sqrt{s_k}n^{\kappa} \lesssim k^{-r}n^{\kappa}$ almost surely.
+Subsequently, the right-hand side of Eq.~(\ref{eq:zpsi-2}) is upper bounded almost surely, up to constants depending only on $q$ and other parameters in assumptions, by
+\begin{align}
+ n^{M\kappa}\left[j^{-rM}\sum_{k\neq j}\Delta_\psi(j,k)^2 + \sum_{m=0}^{M-1} j^{-rm}\left(\sum_{k\neq j}k^{-r}\Delta_\psi(j,k)\right)^{M-m} \right].
+ \label{eq:zpsi-3}
+\end{align}
+Using expressions of $\Delta_\psi(\cdot,\cdot)$, we have that
+\begin{align}
+\sum_{k\neq j}\Delta_\psi(j,k)^2 &\lesssim \frac{\log^2 n\log^2(3j)}{n}\times \left( \frac{1}{j^{2r}}\int_1^{C_J j} k^{2r}\log^2(3k)\ud k \right.\nonumber\\
+&\;\;\;\;\left.+ j^{2r}\int_{C_J j}^{\infty}\frac{\log^2(3k)\ud k}{k^{2r}} + 3C_J j^2\log^2(3C_Jj)\cdot \int_1^{C_j j}\frac{\ud t}{t^2}\right)\nonumber\\
+&\lesssim \frac{j^2\log^6 n}{n},\label{eq:zpsi-4}
+\end{align}
+and 
+\begin{align}
+\sum_{k\neq j}k^{-r}\Delta_\psi(j,k) &\lesssim  \frac{\log n\log(3j)}{n^{\tau/2}}\times \left( \frac{1}{j^{r}}\int_1^{C_J j}k^{-r}\cdot k^{r}\log(3k)\ud k \right.\nonumber\\
+&\;\;\;\;\left.+ j^{r}\int_{C_J j}^{\infty}k^{-r}\cdot\frac{\log(3k)\ud k}{k^{r}} + \frac{(3C_J)^{1/2} j\log(3C_Jj)}{(j/C_j)^{r}}\cdot \int_1^{C_j j}\frac{\ud t}{t}\right)\nonumber\\
+&\lesssim \frac{j^{1-r}\log^{4}n}{\sqrt{n}}.\label{eq:zpsi-5}
+\end{align}
+%\begin{align}
+%\sum_{k\neq j}k^{-r\tau}\Delta_\psi(j,k)^\tau &\lesssim  \frac{\log^\tau n\log^\tau(3j)}{n^{\tau/2}}\times \left( \frac{1}{j^{r\tau}}\int_1^{C_J j}k^{-r\tau}\cdot k^{r\tau}\log^\tau(3k)\ud k \right.\nonumber\\
+%&\;\;\;\;\left.+ j^{r\tau}\int_{C_J j}^{\infty}k^{-r\tau}\cdot\frac{\log^\tau(3k)\ud k}{k^{r\tau}} + \frac{(3C_J)^{\tau/2} j^\tau\log^\tau(3C_Jj)}{(j/C_j)^{r\tau}}\cdot \int_1^{C_j j}\frac{\ud t}{t^\tau}\right)\nonumber\\
+%&\lesssim \frac{j^{\tau(1-r)}\log^{3\tau+1}n}{n^{\tau/2}}.\label{eq:zpsi-5}
+%\end{align}
+Subsequently,
+\begin{align}
+\sum_{m=0}^{M-1}& j^{-rm}\left(\sum_{k\neq j}k^{-r}\Delta_\psi(j,k)\right)^{M-m}
+\lesssim \sum_{m=0}^{M-1}j^{-rm}\left(\frac{j^{1-r}\log^4 n}{\sqrt{n}}\right)^{M-m}\nonumber\\
+&= \sum_{m=0}^{M-1}j^{-rM}\left(\frac{j\log^4 n}{\sqrt{n}}\right)^{M-m} \lesssim \frac{J^{1-rM}\log^4 n}{\sqrt{n}},
+\label{eq:zpsi-6}
+\end{align}
+where the last inequality holds because $j\log^4n/\sqrt{n}\leq J\log^4 n/\sqrt{n} = O(n^{1/2-q}\log^4 n)\to 0$ and as $n\to\infty$, and therefore the $m=M-1$ term dominates.
+Combining Eqs.~(\ref{eq:zpsi-3},\ref{eq:zpsi-4},\ref{eq:zpsi-6}) and noting that $j\lesssim n^q$ for some $q<1/2$, we complete the proof of the first statement in Lemma \ref{lem:zpsi-stability}.
+
+Finally, because the right-hand side of Eq.~(\ref{eq:zpsi-2}) is a low-degree polynomial of $\{\langle z,\psi_k\rangle\}_{k=1}^{\infty}$,
+to prove the second inequality involving expectations, simply replace Assumption (B3) with Assumption (B2) and remove the $n^{M\kappa}$ factor.
+
+
+\subsection{Technical lemmas for results in Secs.~\ref{sec:anitr} and \ref{sec:adptr}.}
+
+
+\begin{lemma}
+%Let $\{\psi_j\}_{j=1}^{\infty}$ and $\{\hat\psi_j\}_{j=1}^n$ be the eigenfunctions of $T$ and $T_n$, listed in descending order with respect to their eigenvalues.
+Let $J=J(n)$ and $\und J=J(n)/C_J$.
+Conditioned on results in Lemma \ref{lem:stability}, it holds that
+%$$
+%\|\hat\Pi_{J}^\perp z\|_2^2 \leq \|\Pi_{\und J}^\perp z\|_2^2 + L_J\times \sum_{j=1}^{\und J}\sum_{k\neq j}\langle z,\psi_k\rangle^2\Delta_\psi(j,k)^2\;\;\;\;\;\;\forall z\in L_2(I),
+%$$
+%. Furthermore, with $X\sim P_X^n$ and $Z=L_{K^{1/2}}X$, it holds that
+$$
+\mathbb E_{Z\sim P_Z^n}[\|\hat\Pi_J^\perp Z\|_2^2] \lesssim J^{1-2r}\left(1+\frac{J\log^4 n}{\sqrt{n}}\right),
+$$
+where $\hat\Pi_{J}^\perp = I-\sum_{j=1}^{J}\hat\psi_j\otimes\hat\psi_j$.
+%and
+%$$
+%\|\hat\Pi_J^\perp Z\|_2^2 \;\;\lesssim \;\;n^{2\kappa}\times  J^{1-2r}\left(1+\frac{J\log^6 n}{n}\right) \;\;\;\;\;\;a.s.
+%$$
+\label{lem:truncation}
+\end{lemma}
+
+\begin{proof}[Proof of Lemma \ref{lem:truncation}.]
+Fix arbitrary $z\in L_2(I)$ and, without loss of generality, assume $\|z\|_2=1$.
+The Pythagorean theorem asserts that
+\begin{align}
+\|z\|_2^2 = \|\hat\Pi_{J}z\|_2^2+\|\hat\Pi_{J}^\perp z\|_2^2 = \|\Pi_{\und J}z\|_2^2+\|\Pi_{\und J}^\perp z\|_2^2,
+\label{eq:proof-truncation-1}
+\end{align}
+where $\hat\Pi_J=\sum_{j=1}^J\hat\psi_j\otimes\hat\psi_j$, $\Pi_{\und J}=\sum_{j=1}^{\und J}\psi_j\otimes\psi_j$ and $\hat\Pi_J^\perp=I-\hat\Pi_J$, $\Pi_{\und J}^\perp = I-\Pi_{\und J}$.
+Using Lemmas \ref{lem:stability} and \ref{lem:zpsi-stability}, it holds that
+\begin{align}
+\mathbb E[\|\hat\Pi_J^\perp Z\|_2^2] &= \sum_{j=1}^J \mathbb E[\langle Z,\hat\psi_j\rangle^2] \geq \sum_{j=1}^{\und J}\mathbb E[\langle Z,\hat\psi_{\varpi(j)}\rangle^2]\nonumber\\
+&\geq \left(\sum_{j=1}^{\und J}\mathbb E[\langle Z,\psi_j\rangle^2]\right) - O\left(\frac{J^{2-2r}\log^4 n}{\sqrt{n}}\right).\label{eq:proof-truncation-2}
+\end{align}
+Combining Eqs.~(\ref{eq:proof-truncation-1},\ref{eq:proof-truncation-2}) and noting that $\mathbb E[\|\Pi_{\und J}^\perp Z\|_2^2 \lesssim \int_{\und J}^{\infty} j^{-2r}\ud j \lesssim \bar J^{1-2r}$, 
+we complete the proof of Lemma \ref{lem:truncation}.
+%Invoking Lemma \ref{lem:stability}, for every $j\leq \und J$, there exists a unique $\ell\leq J$ such that $|\langle\hat\psi_\ell,\psi_j\rangle| = 1-o(1)\leq 1$, and
+%$$
+%\big|\langle\hat\psi_\ell, \psi_k\rangle\big| \leq L_J\Delta_\psi(j,k),\;\;\;\;\;\;\forall k\in\mathbb N,\;k\neq j.
+%$$
+%Subsequently,
+%\begin{align}
+%&\;\;\|\hat\Pi_J z\|_2^2 = \sum_{j=1}^J\langle z,\hat\psi_j\rangle^2 \geq \sum_{j=1}^{\und J}\langle z,\hat\psi_{\varpi(j)}\rangle^2 = \sum_{j=1}^{\und J}\left\langle z, \sum_{k=1}^{\infty}\langle\hat\psi_{\varpi(j)},\psi_k\rangle\psi_k\right\rangle^2\nonumber\\
+%&\geq \sum_{j=1}^{\und J}\left[\langle z,\psi_j\rangle^2\langle\psi_j,\hat\psi_{\varpi(j)}\rangle^2 -  2\big|\langle z,\psi_j\rangle\big| \sum_{k\neq j}\big|\langle z,\psi_k\rangle\langle\psi_k,\hat\psi_{\varpi(j)}\rangle)\big|\right]\nonumber\\
+%&\geq \sum_{j=1}^{\und J}\langle z,\psi_j\rangle^2 - \sum_{j=1}^{\und J}\left[\langle z,\psi_j\rangle^2\sum_{k\neq j}L_J^2\Delta_\psi(j,k)^2 + 2L_J\big|\langle z,\psi_j\rangle\big| \sum_{k\neq j}\big|\langle z,\psi_k\rangle\Delta_\psi(j,k)\big|\right]\label{eq:proof-truncation-1-1}\\
+%&= \|\Pi_{\und J} z\|_2^2 - \sum_{j=1}^{\und J}\left[\langle z,\psi_j\rangle^2\sum_{k\neq j}L_J^2\Delta_\psi(j,k)^2 + 2L_J\big|\langle z,\psi_j\rangle\big| \sum_{k\neq j}\big|\langle z,\psi_k\rangle\Delta_\psi(j,k)\big|\right].\label{eq:proof-truncation-2}
+%\end{align}
+%Here, Eq.~(\ref{eq:proof-truncation-1-1}) holds because $\langle\psi_j,\hat\psi_{\varpi(j)}\rangle^2 = 1-\sum_{k\neq j}\langle\psi_k,\hat\psi_{\varpi(j)}\rangle^2 \geq 1-\sum_{k\neq j}L_J^2\Delta_\psi(j,k)^2$
+%thanks to the Pythagorean theorem and Lemma \ref{lem:stability}.
+%It is worth pointing out that Eq.~(\ref{eq:proof-truncation-2}) holds for any $z\in \supp(P_Z^n)$.
+%
+%Note that $\mathbb E[|\langle Z,\psi_j\rangle\langle Z,\psi_k\rangle|] \leq \sqrt{s_js_k}\lesssim j^{-r}k^{-r}$ for any $j,k\geq 1$, thanks to Assumption (B1). Subsequently,
+%\begin{align}
+%\sum_{j=1}^{\und J}&\mathbb E[\langle Z,\psi_j\rangle^2]\sum_{k\neq j}\Delta_\psi(j,k)^2\nonumber\\ %\leq \sum_{j>\und J} s_j+ L_J^2\times \sum_{j=1}^{\und J}\sum_{k\neq j}s_k\Delta_\Psi(j,k)^2\label{eq:proof-truncation-3}\\
+%&\lesssim \sum_{j=1}^{\und J}\frac{1}{j^{2r}}\times \frac{\log^2 n\log^2(3j)}{n}\times \left( \frac{1}{j^{2r}}\int_1^{C_J j} k^{2r}\log^2(3k)\ud k \right.\nonumber\\
+%&\;\;\;\;\left.+ j^{2r}\int_{C_J j}^{\infty}\frac{\log^2(3k)\ud k}{k^{2r}} + 3C_J j^2\log^2(3C_Jj)\cdot \int_1^{C_j j}\frac{\ud t}{t^2}\right) \nonumber\\
+%&\lesssim \sum_{j=1}^{\und J}j^{2-2r}\times\frac{\log^6 n}{n}\lesssim \frac{J^{3-2r}\log^6 n}{n};\label{eq:proof-truncation-4}
+%\end{align}
+%additionally,
+%\begin{align}
+%\sum_{j=1}^{\und J}& \mathbb E\left[\big|\langle Z,\psi_j\rangle\big|\sum_{k\neq j}\big|\langle Z,\psi_k\rangle|\Delta_\psi(j,k)\right]\nonumber\\
+%&\lesssim \sum_{j=1}^{\und J}\frac{1}{j^r}\times \frac{\log n\log(3j)}{\sqrt{n}}\times \left( \frac{1}{j^{r}}\int_1^{C_J j} k^{-r}\cdot k^{r}\log(3k)\ud k \right.\nonumber\\
+%&\;\;\;\;\left.+ j^{r}\int_{C_J j}^{\infty}k^{-r}\cdot\frac{\log(3k)\ud k}{k^{r}} + \frac{\sqrt{3C_J }j\log(3C_Jj)}{(j/C_j)^r}\cdot \int_1^{C_j j}\frac{\ud t}{t}\right) \nonumber\\
+%&\lesssim \sum_{j=1}^{\und J}j^{1-2r}\times \frac{\log^4 n}{\sqrt{n}}\lesssim \frac{J^{2-2r}\log^4 n}{\sqrt{n}}.\label{eq:proof-truncation-5}
+%\end{align}
+%Combining Eqs.~(\ref{eq:proof-truncation-1},\ref{eq:proof-truncation-2},\ref{eq:proof-truncation-5}) and noting that $\mathbb E[\|\Psi_{\und J}^\perp Z\|_2^2 \lesssim \int_{\und J}^{\infty} j^{-2r}\ud j \lesssim \bar J^{1-2r}$, we complete the proof of Lemma \ref{lem:truncation}.
+%
+%To prove the second inequality, note that $\mathbb E[\langle Z,\psi_k\rangle^4]\leq C_p s_k^2$ for every $k$, thanks to Assumption (B2).
+%
+%
+%Finally, for the last inequality, note that both Eqs.~(\ref{eq:proof-truncation-3},\ref{eq:proof-truncation-4}) would hold almost surely for $Z$, if both right-hand sides are multiplied by $C_\nu^2 n^{2\kappa}$.
+\end{proof}
+
+
+The following lemma holds for \emph{any} choices of $\Lambda_J$.
+\begin{lemma}
+Let $J=J(n)$ and suppose $q\in(0,1/2)$ and $\kappa<(1-q)/2$.
+Conditioned on the results in Lemma \ref{lem:truncation}, it holds that 
+$$
+\sup_{x\in \supp(P_X^n)}\frac{\sum_{i=1}^n |g(z,Z_i)|^3}{(\sum_{i=1}^n g(z,Z_i)^2)^{3/2}} \;\;\lesssim \;\; \frac{\sqrt{J}n^\kappa}{\sqrt{n}}\left(1+\frac{\sqrt{J}\log^2 n}{\sqrt[4]{n}}\right) \;\; \to 0\;\;\;\;\;\;\text{as }n\to\infty,
+$$
+where $z=L_{K^{1/2}}x$, $Z_i=L_{K^{1/2}}X_i$ and $g(z,Z)=\langle z, (T_J+\Lambda_J)^\dagger Z\rangle$.
+\label{lem:anitr-lyapnov}
+\end{lemma}
+\begin{proof}[Proof of Lemma \ref{lem:anitr-lyapnov}.]
+Let $\varsigma^2 = \frac{1}{n}\sum_{i=1}^n g(z,Z_i)^2 = \langle z, (T_J+\Lambda_J)^\dagger T_n (T_J+\Lambda_J)^\dagger z\rangle = \langle z,(T_J+\Lambda_J)^{\dagger}T_J(T_J+\Lambda_J)^\dagger z\rangle
+= \|T_J^{1/2}(T_J+\Lambda_J)^\dagger z\|_2^2$.
+Using H\"{o}lder's inequality, we have that
+\begin{align}
+\frac{\sum_{i=1}^n |g(z,Z_i)|^3}{(\sum_{i=1}^n g(z,Z_i)^2)^{3/2}} &\leq \frac{\max_{1\leq i\leq n}|g(z,Z_i)|}{\sqrt{n}\varsigma}
+= \max_{1\leq i\leq n}\frac{|\langle z, (T_J+\Lambda_J)^\dagger Z_i\rangle|}{\sqrt{n}\|T_J^{1/2}(T_J+\Lambda_J)^\dagger z\|_2}\nonumber\\
+&\leq \max_{1\leq i\leq n}\frac{\|T_J^{\dagger/2} Z_i\|_2}{\sqrt{n}},\label{eq:proof-anitr-lyapnov-1}
+\end{align}
+where Eq.~(\ref{eq:proof-anitr-lyapnov-1}) holds by using the Cauchy-Schwarz inequality on $\langle z, (T_J+\Lambda_J)^\dagger Z_i\rangle$ to cancel the demoninator,
+and $T_J^{\dagger/2} = (T_J^\dagger)^{1/2}=\sum_{j=1}^J (\hat s_j)^{-1/2}\hat\psi_j\otimes\hat\psi_j$.
+
+By the results of Lemma \ref{lem:truncation}, for any $\ell\leq J$, there exists $j\leq \bar J=C_J J$ such that $\varpi(j)=\ell$. We denote $\varpi^{-1}(\ell)=j$ in this case. 
+Using also Lemma \ref{lem:zpsi-stability}, it holds almost surely that
+\begin{align}
+\|T_J^{\dagger/2}Z_i\|_2^2  &= \sum_{\ell=1}^J\frac{\langle Z_i,\hat\psi_\ell\rangle^2}{\hat s_\ell}
+\leq \sum_{\ell=1}^J\frac{2\langle Z_i,\hat\psi_\ell\rangle^2}{s_{\varpi^{-1}(\ell)}}\nonumber\\
+&\leq \sum_{\ell=1}^J \frac{2}{s_{\varpi^{-1}(\ell)}}\left[\langle Z_i,\psi_{\varpi^{-1}(\ell)}\rangle^2 + O\left(\frac{n^{2\kappa}J^{1-2r}\log^4 n}{\sqrt{n}}\right)\right]\nonumber\\
+&\lesssim \sum_{j=1}^{\bar J}O(n^{2\kappa})\times\left[1 + \frac{1}{s_j}\cdot \frac{J^{1-2r}\log^4 n}{\sqrt{n}}\right]\nonumber\\
+&\lesssim Jn^{2\kappa} + J^2 n^{2\kappa}\log^4 n/\sqrt{n},\label{eq:proof-anitr-lyapnov-2}
+\end{align}
+where the last inequality holds because $\sum_{j=1}^{\bar J}\lesssim \int_1^{\bar J}j^{2r}\ud j \lesssim \bar J^{1+2r}\lesssim J^{1+2r}$.
+Combining Eqs.~(\ref{eq:proof-anitr-lyapnov-1},\ref{eq:proof-anitr-lyapnov-2}) we complete the proof of Lemma \ref{lem:anitr-lyapnov}.
+%\begin{align}
+%\|T_J^{\dagger/2}Z_i\|_2^2 &= \sum_{\ell=1}^J\frac{\langle Z_i,\hat\psi_\ell\rangle^2}{\hat s_\ell}
+%= \sum_{\ell=1}^J\sum_{k=1}^{\infty}\frac{\langle Z_i,\psi_k\rangle^2\langle\hat\psi_\ell,\psi_k\rangle^2}{\hat s_\ell}\nonumber\\
+%&\leq \sum_{\ell=1}^J \left[\frac{\langle Z_i,\psi_{\varpi^{-1}(\ell)}\rangle^2}{\hat s_\ell} + \sum_{k\neq\varpi^{-1}(\ell)}\frac{\langle Z_i,\psi_k\rangle^2\langle\hat\psi_\ell,\psi_k\rangle^2}{\hat s_\ell} \right]\nonumber\\
+%&\leq \sum_{\ell=1}^J \left[\frac{\langle Z_i,\psi_{\varpi^{-1}(\ell)}\rangle^2}{\hat s_\ell} + L_J^2\sum_{k\neq\varpi^{-1}(\ell)}\frac{\langle Z_i,\psi_k\rangle^2\Delta_\psi(k,\varpi^{-1}(\ell))^2}{\hat s_\ell} \right]\label{eq:proof-anitr-lyapnov-2}\\
+%&\leq C_\nu^2n^{2\kappa}\times \sum_{\ell=1}^J \left[\frac{s_{\varpi^{-1}(\ell)}}{\hat s_\ell} + L_J^2\sum_{k\neq\varpi^{-1}(\ell)}\frac{s_k\Delta_\psi(k,\varpi^{-1}(\ell))^2}{\hat s_\ell} \right]\label{eq:proof-anitr-lyapnov-3}\\
+%&\leq 2C_\nu^2n^{2\kappa}\times \sum_{\ell=1}^J \left[1 + \frac{L_J^2}{s_{\varpi^{-1}(\ell)}}\sum_{k\neq\varpi^{-1}(\ell)}s_k\Delta_\psi(k,\varpi^{-1}(\ell))^2 \right].\label{eq:proof-anitr-lyapnov-4}
+%\end{align}
+%Here, Eq.~(\ref{eq:proof-anitr-lyapnov-2}) holds by applying Lemma \ref{lem:stability}; 
+%Eq.~(\ref{eq:proof-anitr-lyapnov-3}) holds almost surely thanks to Assumption (B3);
+%Eq.~(\ref{eq:proof-anitr-lyapnov-4}) holds by applying Lemma \ref{lem:stability} again on the upper bound of $|\hat s_\ell/s_{\varpi^{-1}(\ell)}-1|$.
+%For any $j$ and $\ell=\varpi(j)$, Assumption (B1) and the fact that $j/C_J\leq \ell\leq C_J j$ yield
+%\begin{align}
+%\frac{1}{s_j}\sum_{k\neq j}s_k\Delta_\psi(j,k)^2 &\lesssim j^{2r}\times \frac{\log^2 n\log^2(3j)}{n}\times \left(\int_1^{j/C_J}k^{-2r}\cdot\frac{k^{2r}\log^2(3k)\ud k}{j^{2r}}\right. \nonumber\\
+%&\;\;\;\;\left.+ j^{2r}\int_{C_J j}^{\infty}k^{-2r}\cdot \frac{\log^2(3k)\ud k}{k^{2r}} + \frac{(C_J j)^2\log^2(3C_J j)}{(j/C_j)^{2r}}\int_1^{C_J j}\frac{\ud t}{t^2}\right)^2\nonumber\\
+%&\lesssim \frac{j^2\log^6 n}{n}.\nonumber
+%\end{align}
+%Subsequently, 
+%\begin{equation}
+%\|T_J^{\dagger/2}Z_i\|_2^2 \lesssim Jn^{2\kappa}\left(1 + \frac{J^2\log^6 n}{n}\right).
+%\label{eq:proof-anitr-lyapnov-5}
+%\end{equation}
+%Combining Eqs.~(\ref{eq:proof-anitr-lyapnov-1},\ref{eq:proof-anitr-lyapnov-5}) and we complete the proof of Lemma \ref{lem:anitr-lyapnov}.
+\end{proof}
+
+\begin{lemma}
+There exists a constant $n_0$ depending only on parameters on assumptions, such that for all $n\geq n_0$,
+conditioned on results in Lemma \ref{lem:zpsi-stability}, the following inequalities hold:
+\begin{align*}
+\mathbb E_{P_Z^n}[\sigma(Z)^2] &\leq 2\sum_{j=1}^{J(n)}\frac{s_{\varpi^{-1}(j)}}{(s_{\varpi^{-1}(j)}+\lambda_{nj})^2}\left[s_{\varpi^{-1}(j)} + O\left(\frac{J(n)^{1-2r}\log^4 n}{\sqrt{n}}\right)\right];\\
+\mathbb E_{P_Z^n}[\sigma(Z)^2] &\geq \frac{1}{2}\sum_{j=1}^{J(n)}\frac{s_{\varpi^{-1}(j)}}{(s_{\varpi^{-1}(j)}+\lambda_{nj})^2}\left[s_{\varpi^{-1}(j)} + O\left(\frac{J(n)^{1-2r}\log^4 n}{\sqrt{n}}\right)\right];\\
+\mathbb E_{P_Z^n}[\sigma(Z)^4] &\leq 2\sum_{j=1}^{J(n)}\frac{s_{\varpi^{-1}(j)}^2}{(s_{\varpi^{-1}(j)}+\lambda_{nj})^4}\left[C_p s_{\varpi^{-1}(j)}^2 + O\left(\frac{J(n)^{1-4r}\log^4 n}{\sqrt{n}}\right)\right]
+\end{align*}
+where $\varpi^{-1}$ is its inverse map of $\varpi$ implied in Lemma \ref{lem:truncation}, which exists on $[J(n)]$ on which $\varpi$ is a surjection,
+and $\sigma(Z)^2 = \langle Z, (T_J+\Lambda_J)^\dagger T_J(T_J+\Lambda_J)^\dagger Z\rangle$.
+Constants in all $O(\cdot)$ notations depend only on parameters in assumptions.
+\label{lem:variance-stability}
+\end{lemma}
+
+\begin{remark}
+If Assumptions (B1) and (C2) hold with $q<1/2$, then all terms in big-O notations in Lemma \ref{lem:variance-stability} can be safely dropped, at a cost of perhaps larger $n_0$ that still depends only on parameters in assumptions.
+\end{remark}
+
+\begin{proof}[Proof of Lemma \ref{lem:variance-stability}.]
+Let $J=J(n)$.
+It holds that
+\begin{align*}
+\sigma(Z)^2 &= \sum_{j=1}^J \frac{\langle Z,\hat\psi_j\rangle^2\hat s_j}{(\hat s_j+\lambda_{nj})^2} = (1+o(1))\sum_{j=1}^J\frac{\langle Z,\hat\psi_j\rangle^2 s_{\varpi^{-1}(j)}}{(s_{\varpi^{-1}(j)}+\lambda_{nj})^2};\\
+\sigma(Z)^4 &= \sum_{j=1}^J\frac{\langle Z,\hat\psi_j\rangle^4\hat s_j^2}{(\hat s_j+\lambda_{nj})^4} = (1+o(1))\sum_{j=1}^J\frac{\langle Z,\hat\psi_j\rangle^4 s_{\varpi^{-1}(j)}^2}{(s_{\varpi^{-1}(j)}+\lambda_{nj})^4}.
+\end{align*}
+All inequalities in Lemma \ref{lem:variance-stability} are then consequences of Lemma \ref{lem:zpsi-stability}.
+\end{proof}
+
+\begin{lemma}
+Impose all assumptions in Lemmas \ref{lem:stability} and \ref{lem:zpsi-stability}.
+Suppose for some $a>0$, $\lambda_n=o(n^{-a})$ and $\lambda_n=\omega(n^{-a-\delta})$ for any $\delta>0$.
+If $\frac{a}{2r}<q<\frac{1}{2}$, then for any $\epsilon>0$, there exist $n_\epsilon\in\mathbb N$ and $C_\epsilon<+\infty$, both depending only on $\epsilon,a$ and other parameters in assumptions, such that
+$$
+\Pr_{Z\sim P_Z^n}\left[\sum_{j=1}^{J(n)}\frac{\langle Z,\hat\psi_j\rangle^2\hat s_j}{(\hat s_j+2\sqrt{\hat s_j\lambda_n})^2} \geq C_\epsilon \lambda_n^{-1/2r}\right]\;\geq\;1-\epsilon
+$$
+for every $n\geq n_\epsilon$ and $P_Z^n$, and the statement is conditioned on the success event in Lemma \ref{lem:zpsi-stability} over $\{\hat s_j,\hat\psi_j\}$.
+\label{lem:truncation-whp}
+\end{lemma}
+\begin{proof}[Proof of Lemma \ref{lem:truncation-whp}.]
+Let $J=J(n)$ and $\bar J=C_JJ(n)$.
+Let $\sigma(Z)^2 = \langle z, (T_J+\Lambda_J)^\dagger T_J(T_J+\Lambda_J)^\dagger z\rangle$, where $T_J=\sum_{j=1}^J\hat s_j\hat\psi_j\otimes\hat\psi_j$
+and $\Lambda_J = \sum_{j=1}^J 2\sqrt{\hat s_j\lambda_n}\hat\psi_j\otimes\hat\psi_j$.
+Using Chebyshev's inequality, for any $\epsilon>0$ it holds with probability $1-\epsilon/2$ that
+\begin{align}
+\sigma(Z)^2 &\geq \mathbb E[\sigma(Z)^2] - \sqrt{\frac{2}{\epsilon}}\sqrt{\mathbb E[\sigma(Z)^4]}.
+\label{eq:proof-anitr-limiting-7}
+\end{align}
+For any $j\leq J$, Lemma \ref{lem:stability} implies that, for every $t,\tau\geq 1$, 
+$$
+\frac{s_{\varpi^{-1}(j)}^t}{(s_{\varpi^{-1}(j)}+2(1+o(1))\sqrt{s_{\varpi^{-1}(j)}\lambda_n})^\tau} \asymp \frac{j^{-2rt}}{j^{-2r\tau}+j^{-r\tau}\lambda_n^{\tau/2}},
+$$
+where the $\asymp$ notation hide only constants depending on assumption parameters, and hold uniformly for all $j$ and $n$. Lemma \ref{lem:variance-stability} then yields,
+with the condition $q<1/2$, that
+\begin{align*}
+\mathbb E[\sigma(Z)^2] &\gtrsim \int_1^J\frac{j^{-4r}\ud j}{j^{-4r}+j^{-2r}\lambda_n}\overset{(a)}{\gtrsim} \lambda_n^{-1/2r}  \gtrsim  \lambda_n^{-1/2r};\\
+\mathbb E[\sigma(Z)^4] &\lesssim \int_1^J\frac{j^{-8r}\ud j}{j^{-8r}+j^{-4r}\lambda_n^2}
+\lesssim \lambda_n^{-1/2r} \lesssim \lambda_n^{-1/2r}.
+\end{align*}
+Here, Eq.~(a) holds if $q>a/2r$, because $\lambda_n =o(n^{-a})$ and $\lambda_n=\omega(n^{-a-\delta})$ for any $\delta>0$.
+With $a>0$, this shows that $\mathbb E[\sigma(Z)^2]\gtrsim\lambda_n^{-1/2r}$ and $\sqrt{\mathbb E[\sigma(Z)^4]}\lesssim \lambda_n^{-1/4r} \ll \lambda_n^{-1/2r}$.
+%With $q<\frac{1}{4}+\frac{a}{4r}$, the above inequalities imply that $\mathbb E[\sigma(Z)^2]\gtrsim \lambda_n^{-1/2r}$ and $\sqrt{\mathbb E[\sigma(Z)^4]}\lesssim \lambda_n^{-1/4r} \ll \lambda_n^{-1/2r}$.
+Hence, Eq.~(\ref{eq:proof-anitr-limiting-7}) implies that, for some constant $C'<+\infty$, with probability $1-\epsilon/2$ 
+\begin{equation*}
+\sigma(Z)^2 \geq C'\lambda_n^{-1/2r},
+\end{equation*}
+which is to be proved.
+%\begin{align*}
+%\mathbb E[\sigma(Z)^2] &\gtrsim \int_1^J\frac{j^{-4r}\ud j}{j^{-4r}+j^{-2r}\lambda_n} - O\left(\frac{J^{1-2r}\log^4 n}{\sqrt{n}}\right)\times \int_1^J\frac{j^{-2r}\ud j}{j^{-4r}+j^{-2r}\lambda_n}\nonumber\\
+%&\overset{(a)}{\gtrsim} \lambda_n^{-1/2r} - O\left(\frac{J^{1-2r}\log^4 n}{\sqrt{n}}\right)\times J^{1+2r} \gtrsim  \lambda_n^{-1/2r}- O\left(\frac{J^2\log^4 n}{\sqrt{n}}\right);\\
+%\mathbb E[\sigma(Z)^4] &\lesssim \int_1^J\frac{j^{-8r}\ud j}{j^{-8r}+j^{-4r}\lambda_n^2} + O\left(\frac{J^{1-4r}\log^4 n}{\sqrt{n}}\right)\times \int_1^J\frac{j^{-4r}\ud j}{j^{-8r}+j^{-4r}\lambda_n^2}\nonumber\\
+%&\lesssim \lambda_n^{-1/2r}+ O\left(\frac{J^{1-4r}\log^4 n}{\sqrt{n}}\right)\times J^{1+4r} \lesssim \lambda_n^{-1/2r} + O\left(\frac{J^2\log^4 n}{\sqrt{n}}\right).
+%\end{align*}
+%Here, Eq.~(a) holds if $q>a/2r$, because $\lambda_n =o(n^{-a})$ and $\lambda_n=\omega(n^{-a-\delta})$ for any $\delta>0$.
+%With $q<\frac{1}{4}+\frac{a}{4r}$, the above inequalities imply that $\mathbb E[\sigma(Z)^2]\gtrsim \lambda_n^{-1/2r}$ and $\sqrt{\mathbb E[\sigma(Z)^4]}\lesssim \lambda_n^{-1/4r} \ll \lambda_n^{-1/2r}$.
+%Hence, Eq.~(\ref{eq:proof-anitr-limiting-7}) implies that, for some constant $C'<+\infty$, with probability $1-\epsilon/2$ 
+%\begin{equation*}
+%\sigma(Z)^2 \geq C'\lambda_n^{-1/2r},
+%\end{equation*}
+%which is to be proved.
+\end{proof}
+
+\subsection{Proof of Theorem \ref{thm:anitr-limiting}}
+
+Let $J=J(n)$, $T_J=\sum_{j=1}^J \hat s_j\hat\psi_j\otimes \hat\psi_j$ and $\Lambda_J=\sum_{j=1}^J\lambda_{nj}\hat\psi_j\otimes\hat\psi_j$.
+Decompose the estimation error of $\hat\theta_n^\anitr-\theta_0$ as
+\begin{equation}
+\hat\theta_n^\anitr-\theta_0 = \underbrace{-\hat\Pi_J^\perp\theta_0}_{=:t_n} \underbrace{-(T_J+\Lambda_J)^\dagger \Lambda_J\theta_0}_{=: b_n} + \underbrace{\frac{1}{n}\sum_{i=1}^n\varepsilon_i (T_J+\Lambda_J)^\dagger Z_i}_{=:v_n},
+\label{eq:anitr-decomp}
+\end{equation}
+where $\hat\Pi_J^\perp = I - \sum_{j=1}^J\hat\psi_j\otimes\hat\psi_j$.
+
+The rest of the proof is carried out fixing an arbitrary $x\in\supp(P_X)$ and $z=L_{K^{1/2}}x$. 
+The truncation error is precisely $t_n(z)=\langle z, t_n\rangle = -\langle z, \hat\Pi_J^\perp\theta_0\rangle = -\langle \hat\Pi_J^\perp,\theta_0\rangle$, 
+because $\hat\Pi_J^\perp$ is a self-disjoint, projection operator.
+
+For the bias term $b_n(z)=\langle z,b_n\rangle$, define $\hat\nu_j := \langle z,\hat\psi_j\rangle$ and $\hat\vartheta_j := \langle \theta_0,\hat\psi_j\rangle$ for all $j\leq J$. 
+Recall also the definition that $\lambda_{nj} = \sqrt{\hat s_j\lambda_n}$. Then
+\begin{align}
+\big|b_n(z)\big|^2 &= \left|\sum_{j=1}^J\frac{\lambda_{nj}^2\hat\vartheta_j\hat\nu_j}{\hat s_j+\lambda_{nj}}\right|^2 \leq \sum_{j=1}^J\frac{\lambda_{nj}^2\hat\nu_j^2}{(\hat s_j+\lambda_{nj})^2}
+=\lambda_n\sum_{j=1}^J\frac{\hat\nu_j^2(\lambda_n\wedge\hat s_j)}{(\hat s_j+(\lambda_n\wedge\sqrt{\hat s_j\lambda_n}))^2}\label{eq:proof-anitr-limiting-2}\\
+&\leq \lambda_n\sum_{j=1}^J\frac{\hat\nu_j^2\hat s_j}{(\hat s_j+(\lambda_n\wedge\sqrt{\hat s_j\lambda_n}))^2} = \lambda_n\langle z, (T_J+\Lambda_J)^\dagger T_J(T_J+\Lambda_J)^\dagger z\rangle.\label{eq:proof-anitr-limiting-3}
+\end{align}
+Here, the second inequality in Eq.~(\ref{eq:proof-anitr-limiting-2}) holds by using the Cauchy-Schwarz inequality and noting that $\sum_{j=1}^J\hat\vartheta_j^2\leq \|\theta_0\|_2^2\leq 1$.
+Because $\lambda_n n\to0$ as $n\to\infty$, Eq.~(\ref{eq:proof-anitr-limiting-3}) implies
+\begin{equation}
+\sup_{x\in \supp(P_X^n)}b_n(z)/\hat\sigma_n^\anitr(z)\;\;\to\;\;0\;\;\;\;\;\;a.s.
+\label{eq:proof-anitr-limiting-3half}
+\end{equation}
+as $n\to\infty$, where $z=L_{K^{1/2}}x$.
+
+For the variance term $v_n$, let $v_n(z)= \langle v_n,z\rangle = \frac{1}{n}\sum_{i=1}^n\varepsilon_i \langle z, (T_J+\Lambda_J)^\dagger z\rangle$.
+Using Lemma \ref{lem:anitr-lyapnov} and the finite-sample Berry-Esseen theorem for independently but not identically distributed random variables, there exists a constant $C<+\infty$
+depending only on parameters of Assumptions, such that
+\begin{equation}
+\sup_{x\in\supp(P_X^n)} \|\hat\sigma_n^\anitr(z)^{-1}v_n(z) - u\|_{\ks} \;\;\leq\;\; C\left(n^{-c} + \frac{\sqrt{J}n^{\kappa}}{\sqrt{n}} \left(1+\frac{\sqrt{J}\log^2 n}{\sqrt[4]{n}}\right)\right),
+\label{eq:anitr-limiting-4}
+\end{equation}
+where $z=L_{K^{1/2}}x$, $u\sim\mathcal N(0,1)$ and $\|P-Q\|_\ks := \sup_{t\in\mathbb R}|F_P(t)-F_Q(t)|$ is the Kolmogorov-Smirnov (KS) distance between two uni-variate distributions $P$ and $Q$,
+with $F_P$ and $F_Q$ being their CDFs respectively.
+The first term in Eq.~(\ref{eq:anitr-limiting-4}) accounts for the failure probability in Lemma \ref{lem:stability}.
+Under the conditions imposed, the right-hand side of Eq.~(\ref{eq:anitr-limiting-4}) converges to zero as $n\to\infty$.
+Combining Eqs.~(\ref{eq:proof-anitr-limiting-3half},\ref{eq:anitr-limiting-4}) we complete the proof of the first statement in Theorem \ref{thm:anitr-limiting}.
+
+To prove the strengthened second statement in Theorem \ref{thm:anitr-limiting} under the additional conditions, first note that, using the Markov inequality, the second property of Lemma \ref{lem:truncation} implies
+for every $\epsilon>0$ that 
+\begin{equation}
+\Pr_{Z\sim P_Z^n}\left[\|\hat\Pi_J^\perp Z\|_2 > \frac{CJ^{\frac{1}{2}-r}}{\epsilon}\left(1+\frac{\sqrt{J}\log^2 n}{\sqrt[4]{n}}\right)\right] \;\leq\; \epsilon/2,
+\label{eq:proof-anitr-limiting-6}
+\end{equation}
+where $C<+\infty$ is a constant depending only on constants in the assumptions.
+On the other hand, note that 
+$$
+\hat\sigma_n^\anitr(z)^2 = \frac{\sigma_\epsilon^2}{n}\langle z,(T_J+\Lambda)J^\dagger T_J(T_J+\Lambda_J)^\dagger z\rangle \geq \frac{\sigma_\epsilon^2}{n}\sum_{j=1}^n\frac{\langle z,\hat\psi_j\rangle^2\hat s_j}{(\hat s_j+2\sqrt{\hat s_j\lambda_n})^2}
+$$
+where the second inequality holds because $\lambda_{nj}=\lambda_n\wedge\sqrt{\hat s_j\lambda_n}\leq 2\sqrt{\hat s_j\lambda_n}$.
+Invoking Lemma \ref{lem:truncation-whp} with $a=1$ and $\frac{1}{2r}<q<\frac{1}{2}$, for any $\epsilon>0$ it holds for sufficiently large $n$ that
+\begin{equation}
+\Pr_{Z\sim P_Z^n}\left[\hat\sigma_n^\anitr(Z) > \frac{C_\epsilon'\sigma_\varepsilon}{\sqrt{n}}\lambda_n^{-1/4r}\right]\geq 1-\epsilon/2,
+\label{eq:proof-anitr-limiting-6half}
+\end{equation}
+where $C_\epsilon'<+\infty$ only depends on $\epsilon$ and other assumption parameters.
+Comparing Eqs.~(\ref{eq:proof-anitr-limiting-6},\ref{eq:proof-anitr-limiting-6half}) and using the union bound, with probability $1-\epsilon$ it holds that
+$$
+\frac{\|\hat\Pi_J^\perp Z\|}{\hat\sigma_n^\anitr(Z)} \lesssim \sqrt{n}\lambda_n^{1/4r} J^{\frac{1}{2}-r} \to 0, 
+$$
+provided that $q>1/2r$. This completes the proof.
+
+
+\subsection{Proof of Theorem \ref{thm:anitr-rates}}
+Let $J=J(n)\asymp n^q$ for some $q\in(0,1/2)$.
+Without explicitly mentioned, all expectations and probabilities in this proof are with respect to the randomness in $Z\sim P_Z^n$.
+Invoking Lemma \ref{lem:truncation}, it holds that $\mathbb E[\|\hat\Pi_J^\perp Z\|_2^2]\lesssim J^{1-2r} \lesssim n^{-q(2r-1)}$. This explains the second term in Theorem \ref{thm:anitr-rates}.
+
+Now let us focusing only on the $\sigma(Z)^2=\langle Z,(T_J+\Lambda_J)^\dagger T_J (T_J+\Lambda_J)^\dagger Z\rangle$ term in the definition of $\hat\sigma_n^\anitr(Z)$.
+Using spectral representations, it holds that
+\begin{equation}
+\mathbb E[\sigma(Z)^2] = \sum_{j=1}^J \frac{\hat s_j \mathbb E[\langle Z,\hat\psi_j\rangle^2]}{(\hat s_j+\lambda_{nj})^2}\leq 
+\sum_{j=1}^J\frac{\mathbb E[\langle Z,\hat\psi_j\rangle^2]}{{\hat s_j}+(\lambda_n\wedge\sqrt{\hat s_j\lambda_n})}
+\leq \sum_{j=1}^J\frac{\mathbb E[\langle Z,\hat\psi_j\rangle^2]}{{\hat s_j}+\lambda_n}.
+\label{eq:proof-anitr-rates-1}
+\end{equation}
+Applying Lemmas \ref{lem:stability} and \ref{lem:zpsi-stability}, with probability $1-O(n^{-c})$ it holds for sufficiently large $n$ that
+\begin{align}
+\sum_{j=1}^J&\frac{\mathbb E[\langle Z,\hat\psi_j\rangle^2]}{{\hat s_j}+{\lambda_n}}
+\leq \sum_{j=1}^J\frac{2}{{s_{\varpi^{-1}(j)}}+\lambda_n}\left[s_{\varpi^{-1}(j)} + O\left(\frac{J^{1-2r}\log^4 n}{\sqrt{n}}\right)\right]\nonumber\\
+&\lesssim \int_1^{\infty} \frac{j^{-2r}\ud j}{j^{-2r}+{\lambda_n}} + O\left(\frac{J^{1-2r}\log^4 n}{\sqrt{n}}\right)\times \int_1^{C_J j}\frac{\ud j}{j^{-2r}}\nonumber\\
+&\lesssim \lambda_n^{-1/2r} + O\left(\frac{J^2\log^4 n}{\sqrt{n}}\right).
+\end{align}
+With $J\asymp n^q$ and $\lambda_n=\omega(n^{-1-\delta})$ for any $\delta>0$, we complete the proof of Theorem \ref{thm:anitr-rates}.
+
+
+\subsection{Proof of Theorem \ref{thm:adptr-limiting}}
+
+The analysis of the truncation and variance terms are identical to the proof in Theorem \ref{thm:adptr-limiting}.
+In the rest of this proof, we shall therefore focus on the bias term primarily, and additional constraints leading to the strengthened statement dropping truncation terms.
+
+Let $J=J(n)$ and $\bar J=C_JJ$.
+Fix arbitrary $x\in\supp(P_X^n)$ and let $z=L_{K^{1/2}}x$. Let $b_n(z)=\langle z, b_n\rangle$ be the bias term that is represented as
+$$
+b_n(z) = -\sum_{j=1}^J\frac{\lambda_{nj}\hat\vartheta_j\hat\nu_j}{\hat s_j+\lambda_{nj}},
+$$
+where $\hat\vartheta_j=\langle\theta_0,\hat\psi_j\rangle$ and $\hat\nu_j=\langle z, \hat\psi_j\rangle$. It should be noted that the choice of
+$\lambda_{nj}=\hat s_j\sqrt{\mu_n}/|\hat\nu_j|$ if $\hat\nu_j^2\geq 2\hat s_j$ and $\lambda_{nj}=\mu_n$ otherwise also depends on $z$.
+Using H\"{o}lder's inequality and Assumption (D1), it holds almost surely that
+\begin{align}
+\big|b_n(z)\big| \leq \left(\sum_{j=1}^{J}|\vartheta_j|\right)\times \max_{1\leq j\leq J}\frac{\lambda_{nj}|\hat\nu_j|}{\hat s_j+\lambda_{nj}}.
+\label{eq:proof-adptr-limiting-1}
+\end{align}
+Recall the definition that $\theta_k=\langle\theta_0,\psi_k\rangle$ for every $k\geq 1$.
+Because $q<1/4$, the map $\varpi$ in Lemma \ref{lem:stability} can be chosen as the bijection $\varpi(j)=j$.
+Conditioned on the results in Lemma \ref{lem:stability}, it holds for every $j\leq J$ that
+\begin{align}
+\big|\hat\vartheta_j\big| &= \big|\langle \theta_0,\hat\psi_j\rangle\big| \leq \big|\langle \theta_0,\psi_j\rangle\big| + \sum_{k\neq j}\big|\langle\theta_0,\psi_k\rangle\langle\hat\theta_\ell,\psi_k\rangle\big|
+=\big|\theta_j\big| + \sum_{k\neq j}\big|\theta_k\langle\hat\psi_\ell,\psi_k\rangle\big|\nonumber\\
+&\leq \big|\theta_j\big| + \sqrt{\sum_{k\neq j}\langle\hat\psi_\ell,\psi_k\rangle^2} \leq \big|\theta_j\big| + L_J\sqrt{\sum_{k\neq j}\Delta_\psi(j,k)^2}\label{eq:proof-adptr-limiting-2}\\
+&\leq |\theta_j| + O\left(\frac{j\log^3 n}{\sqrt{n}}\right)\label{eq:proof-adptr-limiting-3}
+\end{align}
+where the first inequality in Eq.~(\ref{eq:proof-adptr-limiting-2}) holds by using the Cauchy-Schwarz inequality and noting that $\theta_0\in\Theta_1(\mH)\subseteq\Theta_2(\mH)$ implies $\sum_{j=1}^{\infty}\theta_j^2<+\infty$,
+and the second inequality in Eq.~(\ref{eq:proof-adptr-limiting-2}) holds by applying Lemma \ref{lem:stability}; the last inequality holds by plugging in the expressions of $\Delta_\psi(j,k)$
+and following the analysis that leads to Eq.~(\ref{eq:zpsi-4}) in the proof of Lemma \ref{lem:zpsi-stability}.
+With $J(n)\asymp n^q$ for $q\in(0,1/4)$, Eqs.~(\ref{eq:proof-adptr-limiting-1},\ref{eq:proof-adptr-limiting-3}) then imply that
+\begin{equation}
+\big|b_n(z)\big| \leq C\times  \max_{1\leq j\leq J}\frac{\lambda_{nj}|\hat\nu_j|}{\hat s_j+\lambda_{nj}}
+\label{eq:proof-adptr-limiting-4}
+\end{equation}
+for some $C>0$ depending only on assumption parameters. 
+
+For every $j\leq J$, conduct a case analysis: 
+\begin{enumerate}
+\item If $\hat\nu_j^2\geq 2\hat s_j$, then $\lambda_{nj}=\hat s_j\sqrt{\mu_n}/|\hat\nu_j|$ and therefore
+$$
+\frac{\lambda_{nj}|\hat\nu_j|}{\hat s_j+\lambda_{nj}}\leq \frac{\hat s_j\sqrt{\mu_n}}{\hat s_j+\lambda_{nj}}\leq \sqrt{\mu_n};
+$$
+\item If $\hat\nu_j^2< 2\hat s_j$ and $\hat s_j<{\mu_n}$, then $\lambda_{nj}=\sqrt{\hat s_j\mu_n}$ and therefore
+$$
+\frac{\lambda_{nj}|\hat\nu_j|}{\hat s_j+\lambda_{nj}} \leq \frac{\sqrt{\hat s_j\mu_n}\sqrt{2\hat s_j}}{\hat s_j+\sqrt{\hat s_j\mu_n}}\leq \sqrt{2\mu_n};
+$$
+\item If $\hat\nu_j^2<2\hat s_j$ and $\hat s_j\geq{\mu_n}$, then $\lambda_{nj}=\mu_n$ and therefore
+$$
+\frac{\lambda_{nj}|\hat\nu_j|}{\hat s_j+\lambda_{nj}}\leq \frac{\mu_n\sqrt{2\hat s_j}}{\hat s_j+\mu_n}\leq \frac{\sqrt{2}{\mu_n}}{\sqrt{\hat s_j}}\leq \sqrt{2\mu_n}.
+$$
+\end{enumerate}
+Combining the above inequalities with Eq.~(\ref{eq:proof-adptr-limiting-4}), we have
+$$
+\big|b_n(z)\big| \leq C\times  \sqrt{\mu_n},
+$$
+which proves the upper bound on $|b_n(z)|$.
+
+Next, we show that under additional conditions $\omega_n$ can be set to zero. Note that, with the choice of $\lambda_{nj}(z)$, it always holds that $\lambda_{nj}(z)\leq 2\sqrt{\hat s_j\mu_n}$.
+Subsequently,
+$$
+\hat\sigma_n^\adptr(z)^2 \geq \frac{\sigma_\varepsilon^2}{n}\sum_{j=1}^J \frac{\langle z,\hat\psi_j\rangle^2\hat s_j}{(\hat s_j+2\sqrt{\hat s_j\mu_n})^2}.
+$$
+Invoking Lemma \ref{lem:truncation-whp} with $a=2r/(2r+1)$, under the conditions that $\frac{1}{2r+1}<q<\frac{1}{4}$, for any $\epsilon>0$ it holds with probability at least $1-\epsilon/2$ for all sufficiently large $n$ that
+$$
+\hat\sigma_n^\adptr(z)^2 \gtrsim n^{-1}\mu_n^{-1/2r}.
+$$
+Combining this with Eq.~(\ref{eq:proof-anitr-limiting-6}) in the proof of Theorem \ref{thm:anitr-limiting}, with probability $1-\epsilon$ it holds for sufficiently large $n$ that
+$$
+\frac{\|\hat\Pi_J^\perp Z\|_2+|b_n(z)|}{\hat\sigma_n^\adptr(Z)} \lesssim \sqrt{n}\mu_n^{1/4r}J^{1/2-r} + \sqrt{n}\mu_n^{1/4r}\sqrt{\mu_n} \to 0,
+$$
+provided that $q>2r/((2r-1)(2r+1))$.
+
+
+
+\subsection{Proof of Theorem \ref{thm:adptr-rates}}
+
+The $n^{-q(2r-1)+\delta}$ and $n^{1-c}$ terms arise from the truncation errors and failure probabilities of Lemma \ref{lem:stability}, which enjoy the same analysis and upper bounds
+in the proof of Theorem \ref{thm:anitr-rates}.
+Furthermore, $\omega_n\mu_n\lesssim n^{-\frac{2r}{2r+1}+\delta}$ for any $\delta>0$ simply from the asymptotic scalings of $\omega_n$ and $\mu_n$.
+Therefore, we shall focus entirely on the $\hat\sigma_n^\adptr(z)^2$ term in the rest of this proof.
+
+Let $J=J(n)$.
+It holds that
+\begin{align}
+\hat\sigma_n^\adptr(z)^2 &\leq \frac{\sigma_\varepsilon^2}{n}\sum_{j=1}^J\frac{\hat\nu_j(z)^2\hat s_j}{(\hat s_j+\lambda_{nj}(z))^2} \leq \frac{\sigma_\varepsilon^2}{n}\sum_{j=1}^J\frac{\hat\nu_j(z)^2}{\hat s_j+\lambda_{nj}(z)}\nonumber\\
+&\leq \frac{\sigma_\varepsilon^2}{n}\sum_{j=1}^J\frac{\hat\nu_j(z)^2}{\hat s_j+(\mu_n\wedge\sqrt{\hat s_j\mu_n})} + \frac{\sigma_\varepsilon^2}{n}\sum_{j=1}^J\frac{\hat\nu_j(z)^2}{\hat s_j+\hat s_j\sqrt{\mu_n}/|\hat\nu_j(z)|} \label{eq:proof-adptr-rates-0}\\
+&\leq  \frac{\sigma_\varepsilon^2}{n}\underbrace{\sum_{j=1}^J\frac{\hat\nu_j(z)^2}{\hat s_j+(\mu_n\wedge\sqrt{\hat s_j\mu_n})}}_{=:\mA(z)} + \frac{\sigma_\varepsilon^2}{n}\underbrace{\sum_{j=1}^J\frac{|\hat\nu_j(z)|^3}{\hat s_j(|\hat\nu_j(z)|+\sqrt{\mu_n})}}_{=:\mB(z)}.
+\label{eq:proof-adptr-rates-1}
+\end{align}
+where Eq.~(\ref{eq:proof-adptr-rates-0}) by splitting the two case of $\hat\nu_j^2(Z)\geq 2\hat s_j$, $\hat\nu_j^2(Z)<2\hat s_j$ and including both of them in the upper bound.
+
+For term $\mA$, conditioned on the results of Lemma \ref{lem:stability} (note that $\varpi(j)=j$ in this case because $q<1/4$), we upper bound its expectation as
+\begin{align}
+\mathbb E_{Z\sim P_Z^n}[\mA(Z)] &\leq \sum_{j=1}^J \frac{\mathbb E[\hat\nu_j(Z)^2]}{\hat s_j + \mu_n} \leq \sum_{j=1}^J\frac{2\mathbb E[\hat\nu_j(Z)^2]}{s_j+\mu_n}.\label{eq:proof-adptr-sp1}
+\end{align}
+for sufficiently large $n$.
+
+For term $\mB$, we upper bound its expectation as
+\begin{align}
+\mathbb E_{Z\sim P_Z^n}[\mB(Z)] &\leq \sum_{j=1}^{J}\frac{\sqrt{\mathbb E\left[\hat\nu_j(Z)^4\right]}}{\hat s_j}\sqrt{\mathbb E\left[\frac{\hat\nu_j(Z)^2}{(|\hat\nu_j(Z)|+\sqrt{\mu_n})^2}\right]}\label{eq:proof-adptr-rates-2}\\
+&\leq\sum_{j=1}^{J}\sum_{j=1}^{J}\frac{\sqrt{\mathbb E\left[\hat\nu_j(Z)^4\right]}}{\hat s_j}\sqrt{\mathbb E\left[\frac{\hat\nu_j(Z)^2}{\hat\nu_j(Z)^2+\mu_n}\right]} \label{eq:proof-adptr-rates-3}\\
+&\leq \sum_{j=1}^{J}\sum_{j=1}^{J}\frac{\sqrt{\mathbb E\left[\hat\nu_j(Z)^4\right]}}{\hat s_j}\sqrt{\frac{\mathbb E[\hat\nu_j(Z)^2]}{\mathbb E[\hat\nu_j(Z)^2]+\mu_n}}\label{eq:proof-adptr-rates-3half}\\
+&\leq \sum_{j=1}^{J}\sum_{j=1}^{J}\frac{2\sqrt{\mathbb E\left[\hat\nu_j(Z)^4\right]}}{s_j}\sqrt{\frac{\mathbb E[\hat\nu_j(Z)^2]}{\mathbb E[\hat\nu_j(Z)^2]+\mu_n}}\label{eq:proof-adptr-rates-4}
+\end{align}
+Here, Eq.~(\ref{eq:proof-adptr-rates-2}) holds by Cauchy-Schwarz inequality;
+Eq.~(\ref{eq:proof-adptr-rates-3}) holds by the fact that $(a+b)^2\geq a^2+b^2$;
+Eq.~(\ref{eq:proof-adptr-rates-3half}) holds from the Jensen's inequality and the fact that $f(x)=x/(a+x)$ is a concave function of $x$ on $\mathbb R_+$ for every $a>0$;
+Eq.~(\ref{eq:proof-adptr-rates-5}) holds by applying Lemma \ref{lem:stability} for sufficiently large $n$.
+
+Next, conditioned on results in Lemma \ref{lem:zpsi-stability} and the fact that $\varpi(j)=j$ since $q<1/4$, for every $j\leq J$ we have
+\begin{align}
+\mathbb E[\hat\nu_j(Z)^2] &= \mathbb E[\langle Z,\psi_j\rangle^2] + O\left(\frac{J^{1-2r}\log^4 n}{\sqrt{n}}\right) \in [0.5s_j,2s_j];\label{eq:proof-adptr-rates-5}\\
+\mathbb E[\hat\nu_j(Z)^4] &\leq \mathbb E[\langle Z,\psi_j\rangle^4] + O\left(\frac{J^{1-2r}\log^4 n}{\sqrt{n}}\right)\leq 2C_p s_j^2,\label{eq:proof-adptr-rates-5half}
+\end{align}
+where the second inequality in Eq.~(\ref{eq:proof-adptr-rates-5half}) holds thanks to Assumption (B2).
+Because $s_J\gtrsim J^{-2r}$, with the condition that 
+
+Combining Eqs.~(\ref{eq:proof-adptr-rates-1}), (\ref{eq:proof-adptr-sp1}), (\ref{eq:proof-adptr-rates-4}), (\ref{eq:proof-adptr-rates-5}), and (\ref{eq:proof-adptr-rates-5half}), we obtain
+\begin{align*}
+\mathbb E_{Z\sim P_Z^n}\left[\hat\sigma_n^\adptr(Z)]^2\right]
+&\leq \frac{\sigma_\varepsilon^2}{n}\left(\sum_{j=1}^J\frac{4s_j}{s_j+\mu_n} + \sum_{j=1}^J\frac{2\sqrt{C_p}s_j^{3/2}}{0.5s_j(\sqrt{s_j}+\sqrt{\mu_n})}\right)\\
+&\lesssim \frac{1}{n}\left(\int_1^{\infty}\frac{j^{-2r}\ud j}{j^{-2r}+\mu_n} + \int_1^{\infty}\frac{j^{-r}\ud j}{j^{-r}+\sqrt{\mu_n}}\right)\\
+&\lesssim \frac{\mu_n^{-1/2r}}{n}\lesssim n^{-\frac{2r}{2r+1}+\delta},
+\end{align*}
+for any $\delta>0$,
+which is to be proved.
+ 
+
+
+\bibliographystyle{apalike}
+\bibliography{refs}
+
+\end{document}

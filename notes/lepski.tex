@@ -1,0 +1,225 @@
+\documentclass[11pt,a4paper]{article}
+
+% ========================
+% ESSENTIAL PACKAGES
+% ========================
+
+% Language and encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+
+% Math packages
+\usepackage{amsmath}        % Enhanced math environments
+\usepackage{amssymb}        % Additional math symbols
+\usepackage{amsthm}         % Theorem environments
+\usepackage{amsfonts}       % Additional math fonts
+\usepackage{mathtools}      % Extension to amsmath
+\usepackage{bm}             % Bold math symbols
+\usepackage{dsfont}         % Double-struck fonts (for sets like ℝ, ℕ)
+\usepackage{mathrsfs}       % Script fonts for math
+
+% Graphics and figures
+\usepackage{graphicx}       % Include graphics
+\usepackage{float}          % Better float placement
+\usepackage{subcaption}     % Subfigures
+\usepackage{tikz}           % Drawing diagrams
+\usepackage{pgfplots}       % Plotting
+\pgfplotsset{compat=1.18}
+
+% Page layout and formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}       % Custom headers and footers
+\usepackage{titlesec}       % Customize section titles
+\usepackage{enumitem}       % Customize lists
+\usepackage{parskip}        % Paragraph spacing
+
+% Colors and highlighting
+\usepackage{xcolor}
+\usepackage{mdframed}       % Framed environments
+\usepackage{tcolorbox}      % Colored boxes
+
+% Tables
+\usepackage{array}          % Extended array environments
+\usepackage{booktabs}       % Professional tables
+\usepackage{multirow}       % Multi-row cells
+
+% References and links
+\usepackage{hyperref}       % Hyperlinks
+\usepackage{cleveref}       % Smart cross-references
+
+% Additional useful packages
+\usepackage{cancel}         % Cancel terms in equations
+\usepackage{siunitx}        % SI units
+\usepackage{listings}       % Code listings (if needed)
+
+% ========================
+% CUSTOM COMMANDS
+% ========================
+
+% Common math sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+
+% Common operators
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\rank}{rank}
+%\DeclareMathOperator{\span}{span}
+%\DeclareMathOperator{\null}{null}
+
+% Shortcuts for common expressions
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+% Derivatives and integrals
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+\newcommand{\dv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+
+% ========================
+% THEOREM ENVIRONMENTS
+% ========================
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{exercise}{Exercise}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{assumption}{Assumptio}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{note}{Note}[section]
+
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\op}{\mathrm{op}}
+
+\newcommand{\mX}{\mathcal X}
+\newcommand{\mD}{\mathcal D}
+\newcommand{\bP}{\mathbb P}
+\newcommand{\lp}{L^2(\bP)}
+\newcommand{\lx}{L^2(\mX)}
+\newcommand{\ltwo}{L^2(\mX)}
+\newcommand{\ud}{\mathrm d}
+\newcommand{\mH}{\mathcal H}
+\newcommand{\mA}{\mathcal A}
+
+% ========================
+% COLORED BOXES
+% ========================
+
+% Important theorem box
+\newtcolorbox{importantbox}{
+	colback=blue!5!white,
+	colframe=blue!75!black,
+	title=Important
+}
+
+% Warning/Note box
+\newtcolorbox{notebox}{
+	colback=yellow!10!white,
+	colframe=orange!75!black,
+	title=Note
+}
+
+% Example box
+\newtcolorbox{examplebox}{
+	colback=green!5!white,
+	colframe=green!75!black,
+	title=Example
+}
+
+% ========================
+% DOCUMENT SETUP
+% ========================
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\leftmark}
+
+% Title formatting
+\title{Functional Bandit Notes}
+\author{Your Name}
+\date{\today}
+
+% Hyperlink setup
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	citecolor=red
+}
+
+\begin{document}
+
+The main purpose of this document is to give a technical summary of existing approaches towards (offline) functional regression,
+and remark on their strengths/weakness. When appropriate, I will also remark on possibilities to bandit problems (mostly confidence intervals).
+
+Let $\mX$ be a compact Euclidean set and $\mD=L^2(\mX)$ be the set of all square integrable functions on $\mX$.
+Let $\mathbb P$ be the distribution on $\mD$. The model is 
+$$
+y_i = \langle f_i, \beta_0\rangle + \varepsilon_i
+$$
+where $\{\varepsilon_i\}_{i=1}^n$ are centered, exogenous sub-Gaussian random variables, $\beta_0\in\mathcal F\subseteq \mD$ is an unknown regression model and $f_1,\cdots,f_N\overset{i.i.d.}{\sim}\mathbb P$.
+The inner product is taken with respect to the Lesbesgue measure on $\mX$:
+$$
+\langle f_i, \beta_0\rangle := \int_{\mX} f_i(u)\beta_0(u)\ud u.
+$$
+Sometimes, we will place additional assumptions on $\mathcal F$, or restrict the support of $\bP$.
+Errors are measured in 
+$$
+\|\hat \beta_n-\beta_0\|_{\lp}^2 := \int_{\mD} \langle f, \hat \beta_n-\beta_0\rangle^2\ud\bP(f).
+$$
+
+Let $K$ be the RKHS and recall the notation that $\tilde f = L_{K^{1/2}}f$, $\tilde\beta_0=L_{K^{-1/2}}\beta_0$, such that $\|\tilde\beta_0\|_2 < +\infty$.
+Let $T=\mathbb E[\tilde f\otimes \tilde f]$ be the population covariance operator, which is decomposed as $T=\sum_{j=1}^{\infty}s_j\psi_j\otimes\psi_j$ for an orthonormal basis $\{\psi_j\}_{j=1}^{\infty}$ of $L_2(\mX)$,
+and $s_j\asymp j^{-2r}$.
+
+\paragraph{The self-similarity condition.}
+For a test function $f$ and $\tilde f=L_{K^{1/2}}f$, it satisfies the self-similarity condition with respect to $\tilde\beta_0$, if there exists $c>0$ such that for all $1\leq k\leq \sqrt{n}$, 
+$$
+\frac{1}{c}\leq \left|\langle \tilde\beta_0, (k T+k^{-1}I)^{-1}\tilde f\rangle\right| \leq C.
+$$
+
+\begin{remark}
+We only need the inequality to hold over a geometric grid $k=2^{\ell}$ for $\ell=0,1,\cdots,\log_2(\sqrt{n})$.
+\end{remark}
+
+\begin{remark}
+Unlike the anisotropic approach, this framework does \emph{not} require self-similarity to be defined on the sample covariance operator, because the concentration from $T_n$ to $T$ is supposedly higher-order. In this anisotropic approach because we can only do anisotropic regularization on $\{\hat\psi\}$ this becomes an issue. In Lepski, for a particular $\tilde f$, regularization is still isotropic (albeit different $\lambda$ is chosen for different $\tilde f$), so the population covariance operator is sufficient.
+\end{remark}
+
+\begin{remark}
+The scaling in the condition is non-homogeneous ($k$ versus $k^2$) so it might look strange. This condition, however, stems directly from the \emph{exact} bias expression
+$$
+\langle\tilde f, \beta_\lambda-\tilde\beta_0\rangle = \sqrt{\lambda}\cdot \langle \tilde\beta_0,\sqrt{\lambda}(T+\lambda)^{-1}\tilde f\rangle.
+$$
+If we want the bias to be upper and lower bounded by $\sqrt{\lambda}$, then the inner product must stay at constant level. If $\lambda=1/k^2$ for some $1\leq k\leq \sqrt{n}$, then
+\begin{align*}
+\sqrt{\lambda}(T+\lambda)^{-1}\tilde f &= (T+k^{-2})^{-1} k^{-1} \tilde f = (kT+k^{-1}I)^{-1} \tilde f.
+\end{align*}
+\end{remark}
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

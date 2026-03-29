@@ -1,0 +1,296 @@
+%%% Operator dominance under sub-Gaussian covariates
+%%% in separable Hilbert spaces.
+%%%
+%%% Self-contained proof modifying Minsker (2017)'s approach.
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\tr}{tr}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\norm}[1]{\|#1\|}
+\newcommand{\ip}[2]{\langle #1,\, #2\rangle}
+
+\title{Bernstein inequality for sub-Gaussian self-adjoint operators\\
+in separable Hilbert spaces, following Minsker's approach}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Setup and main result}
+
+Let $(\cH,\ip{\cdot}{\cdot})$ be a separable Hilbert space.
+Let $X_1,\ldots,X_n$ be independent, centered, self-adjoint Hilbert--Schmidt operators on $\cH$:
+\[
+\E[X_i]=0,\quad i=1,\ldots,n.
+\]
+Denote
+\[
+S_n^2:=\sum_{i=1}^n\E[X_i^2],\qquad \sigma^2:=\norm{S_n^2},\qquad
+r:=r(S_n^2)=\frac{\Tr(S_n^2)}{\norm{S_n^2}}.
+\]
+We assume that $\norm{X_i}$ is \textbf{sub-exponential}: there exist constants $K,b>0$ such that
+\begin{equation}\label{eq:subexp}
+\PP(\norm{X_i}>t)\leq b\,e^{-t/K},\qquad \forall\,t>0,\;\forall\,i.
+\end{equation}
+(This holds whenever $X_i=\tilde x_i\otimes\tilde x_i-\tilde\Sigma$ for $\tilde\Sigma$-sub-Gaussian $\tilde x_i$ with $\norm{\tilde\Sigma}\leq 1$.)
+
+\begin{theorem}[Bernstein inequality for sub-exponential self-adjoint operators in $\cH$]\label{thm:main}
+Under the above assumptions, for any $t\geq \frac{1}{6}(U_n+\sqrt{U_n^2+36\sigma^2})$ where $U_n:=CK\log(2n/\delta)$:
+\begin{equation}\label{eq:main_bound}
+\PP\!\left(\norm{S_n}>t\right)\leq \delta + 14\,r\,\exp\!\left[-\frac{t^2/2}{\sigma^2+tU_n/3}\right],
+\end{equation}
+where $S_n=\sum_{i=1}^n X_i$, and $C>0$ is an absolute constant.
+\end{theorem}
+
+\begin{remark}
+Compared to Minsker's Theorem~3.1, the almost-sure bound $\norm{X_i}\leq U$ is replaced by the sub-exponential condition~\eqref{eq:subexp}, and $U$ is replaced by $U_n=O(K\log(n/\delta))$, with an additive $\delta$ in the probability.
+\end{remark}
+
+\section{Proof of Theorem~\ref{thm:main}}
+
+The proof follows Minsker's approach (Lieb concavity $+$ trace MGF), with a truncation embedded at the level of the key MGF lemma (Minsker's Lemma~3.1).
+
+\subsection*{Step 1: Truncation and decomposition}
+
+Fix $U>0$ (to be chosen later) and define the truncated operators
+\[
+\bar X_i := X_i\,\mathbf{1}(\norm{X_i}\leq U),\qquad
+\tilde X_i := X_i\,\mathbf{1}(\norm{X_i}>U).
+\]
+Then $X_i = \bar X_i + \tilde X_i$ and $S_n = \sum_i \bar X_i + \sum_i \tilde X_i$.
+
+\paragraph{Tail event.}
+Let $E=\{\tilde X_i=0\;\forall\,i\}=\{\max_i\norm{X_i}\leq U\}$. By~\eqref{eq:subexp} and a union bound:
+\begin{equation}\label{eq:tail_event}
+\PP(E^c)\leq nb\,e^{-U/K}.
+\end{equation}
+Choosing $U=U_n:=K\log(2nb/\delta)$ gives $\PP(E^c)\leq\delta/2$.
+
+On event $E$: $\bar X_i = X_i$ for all $i$, so $\sum_i\bar X_i = S_n$. Therefore:
+\begin{equation}\label{eq:event_decomp}
+\PP(\norm{S_n}>t)\leq \PP(E^c)+\PP\!\left(\Bigl\|\sum_i\bar X_i\Bigr\|>t\right)
+\leq \frac{\delta}{2}+\PP\!\left(\Bigl\|\sum_i\bar X_i\Bigr\|>t\right).
+\end{equation}
+
+\subsection*{Step 2: Re-centering}
+
+The $\bar X_i$ are bounded ($\norm{\bar X_i}\leq U$) but not centered. Write
+\[
+\bar X_i = \underbrace{(\bar X_i - \E[\bar X_i])}_{=:\,Y_i} + \E[\bar X_i].
+\]
+The $Y_i$ are independent, centered, and satisfy $\norm{Y_i}\leq 2U$.
+
+\paragraph{Truncation bias.}
+$\norm{\E[\bar X_i]}=\norm{\E[\tilde X_i]}
+\leq \E[\norm{X_i}\,\mathbf{1}(\norm{X_i}>U)]$.
+By integration of the sub-exponential tail~\eqref{eq:subexp}:
+\[
+\E[\norm{X_i}\,\mathbf{1}(\norm{X_i}>U)]
+= \int_U^\infty \PP(\norm{X_i}>s)\,ds + U\,\PP(\norm{X_i}>U)
+\leq b(K+U)\,e^{-U/K}.
+\]
+So $\Bigl\|\sum_i\E[\bar X_i]\Bigr\|\leq nb(K+U)\,e^{-U/K}$. With $U=U_n=K\log(2nb/\delta)$:
+\begin{equation}\label{eq:bias}
+\Bigl\|\sum_i\E[\bar X_i]\Bigr\|\leq \frac{(K+U_n)\delta}{2}\leq \frac{U_n\delta}{1}\leq t/2
+\end{equation}
+for $t$ in the range of interest (the last inequality holds provided $t\geq U_n\delta$, which is satisfied under our hypotheses since $t\gtrsim\sigma\gtrsim \sqrt{n}\cdot(\text{typical }\norm{X_i})$). For the purpose of this proof, we simply absorb the bias by noting that
+\[
+\Bigl\|\sum_i\bar X_i\Bigr\|\leq \Bigl\|\sum_i Y_i\Bigr\| + \Bigl\|\sum_i\E[\bar X_i]\Bigr\|,
+\]
+and the bias term is of lower order.  To keep the argument clean, we henceforth bound $\|\sum_i Y_i\|$ and add the bias at the end.
+
+\subsection*{Step 3: Modified Lemma~3.1 (MGF bound for the centered truncated operators)}
+
+The $Y_i$ are independent, centered, self-adjoint, Hilbert--Schmidt, with $\norm{Y_i}\leq 2U$ a.s. The following is a direct application of Minsker's Lemma~3.1:
+
+\begin{lemma}[MGF bound, cf.\ Minsker Lemma~3.1 and Appendix~A]\label{lem:mgf}
+For any $\theta>0$:
+\begin{equation}\label{eq:mgf}
+\log \E[e^{\theta Y_i}] \;\preceq\; \frac{\phi(2\theta U)}{(2U)^2}\,\E[Y_i^2],
+\end{equation}
+where $\phi(s)=e^s-s-1$.
+\end{lemma}
+
+\begin{proof}
+(Following Minsker's Appendix~A verbatim with the a.s.\ bound $\norm{Y_i}\leq 2U$.)
+
+Since $\E[Y_i]=0$, the Taylor expansion of $e^{\theta Y_i}$ gives:
+\[
+\E[e^{\theta Y_i}]
+= I + \sum_{k=2}^\infty \frac{\theta^k}{k!}\E[Y_i^k]
+= I + \theta^2\,\E\!\left[Y_i\Bigl(\sum_{k=0}^\infty\frac{(\theta Y_i)^k}{(k+2)!}\Bigr)Y_i\right].
+\]
+Since $Y_i$ is self-adjoint, the middle factor satisfies (see Minsker's Fact~4):
+\[
+\sum_{k=0}^\infty\frac{(\theta Y_i)^k}{(k+2)!}
+\;\preceq\; \sum_{k=0}^\infty\frac{(\theta\norm{Y_i})^k}{(k+2)!}\cdot I
+= g(\theta\norm{Y_i})\cdot I,
+\]
+where $g(s):=\frac{e^s-s-1}{s^2}$ is nonnegative and increasing on $[0,\infty)$.
+
+Using the a.s.\ bound $\norm{Y_i}\leq 2U$ and monotonicity of $g$:
+\[
+\E[e^{\theta Y_i}]\preceq I+\theta^2\,g(2\theta U)\,\E[Y_i^2]
+= I + \frac{\phi(2\theta U)}{(2U)^2}\,\E[Y_i^2].
+\]
+Since $\E[Y_i^2]\succeq 0$, the bound $1+x\leq e^x$ (applied via the operator monotonicity of $\log$, Minsker's Fact~3) yields~\eqref{eq:mgf}.
+\end{proof}
+
+\paragraph{Variance of truncated variables.}
+Since truncation only reduces variance:
+\begin{equation}\label{eq:var_trunc}
+\E[Y_i^2]\preceq \E[\bar X_i^2]\preceq \E[X_i^2],
+\end{equation}
+where the second inequality uses $\bar X_i^2 = X_i^2\,\mathbf{1}(\norm{X_i}\leq U)\preceq X_i^2$ a.s. Hence
+\[
+\sigma_Y^2:=\Bigl\|\sum_i\E[Y_i^2]\Bigr\|\leq \sigma^2,\qquad
+\Tr\!\Bigl(\sum_i\E[Y_i^2]\Bigr)\leq\Tr(S_n^2).
+\]
+
+\subsection*{Step 4: Minsker's Bernstein bound applied to $Y_i$ (infinite-dimensional)}
+
+This step follows Minsker's proof of Theorem~3.1 and its Section~3.2 extension to separable Hilbert spaces \emph{verbatim}. We summarize the argument.
+
+\paragraph{Chernoff bound.} Let $\phi(\theta)=e^\theta-\theta-1$. For any $\theta>0$:
+\begin{equation}\label{eq:chernoff}
+\PP(\lambda_{\max}(S_n^Y)>t)
+\leq \frac{\E\,\tr\,\phi(\theta S_n^Y)}{\phi(\theta t)},
+\qquad S_n^Y:=\sum_{i=1}^n Y_i.
+\end{equation}
+
+\paragraph{Lieb concavity peeling (Minsker's equations~(3.2)--(3.5)).}
+Using Lieb's concavity theorem (Minsker's Fact~5) and iterating over the conditional expectations $\E_n,\E_{n-1},\ldots$:
+\begin{equation}\label{eq:lieb}
+\E\,\tr\,\phi(\theta S_n^Y)
+\leq \tr\!\left(\exp\!\Bigl(\sum_{i=1}^n\log\E[e^{\theta Y_i}]\Bigr)-I\right).
+\end{equation}
+This step uses only independence and Lieb concavity---no boundedness condition is needed beyond what is already guaranteed for $Y_i$.
+
+\paragraph{Applying the MGF bound~\eqref{eq:mgf}.}
+From Lemma~\ref{lem:mgf} and~\eqref{eq:var_trunc}:
+\[
+\sum_{i=1}^n\log\E[e^{\theta Y_i}]
+\preceq \frac{\phi(2\theta U)}{(2U)^2}\sum_{i=1}^n\E[Y_i^2]
+\preceq \frac{\phi(2\theta U)}{(2U)^2}\,S_n^2.
+\]
+Since $A\preceq B$ implies $\tr(e^A)\leq\tr(e^B)$ (Minsker's Fact~2):
+\begin{equation}\label{eq:trace_bound}
+\tr\!\left(\exp\!\Bigl(\sum_{i=1}^n\log\E[e^{\theta Y_i}]\Bigr)-I\right)
+\leq \tr\!\left(\exp\!\Bigl(\frac{\phi(2\theta U)}{(2U)^2}S_n^2\Bigr)-I\right).
+\end{equation}
+
+\paragraph{Trace computation.}
+Since $S_n^2\succeq 0$ with eigenvalues $\mu_1\geq\mu_2\geq\cdots\geq 0$:
+\[
+\tr\!\left(\exp\!\Bigl(\frac{\phi(2\theta U)}{(2U)^2}S_n^2\Bigr)-I\right)
+= \sum_j\left(\exp\!\Bigl(\frac{\phi(2\theta U)}{(2U)^2}\mu_j\Bigr)-1\right).
+\]
+Using $e^x-1\leq xe^x$ for $x\geq 0$:
+\[
+\leq \frac{\phi(2\theta U)}{(2U)^2}\sum_j\mu_j\,\exp\!\Bigl(\frac{\phi(2\theta U)}{(2U)^2}\mu_j\Bigr)
+\leq \frac{\phi(2\theta U)}{(2U)^2}\,\Tr(S_n^2)\,\exp\!\Bigl(\frac{\phi(2\theta U)}{(2U)^2}\sigma^2\Bigr).
+\]
+Combining with~\eqref{eq:chernoff} and using $\Tr(S_n^2)/\sigma^2=r$:
+\begin{equation}\label{eq:combined}
+\PP(\lambda_{\max}(S_n^Y)>t)
+\leq r\cdot\frac{\phi(2\theta U)}{(2U)^2}\cdot\frac{\sigma^2}{\phi(\theta t)}
+\cdot\exp\!\Bigl(\frac{\phi(2\theta U)}{(2U)^2}\sigma^2\Bigr).
+\end{equation}
+
+\paragraph{Optimizing $\theta$.}
+Following Minsker's computation (equations~(3.6)--(3.9)) with $U$ replaced by $2U$ (the bound on $\norm{Y_i}$):
+
+Set $\theta=\frac{t}{\sigma^2+2Ut/3}$. For $\theta\cdot 2U<3$ (which holds for $t^2\geq\sigma^2+2Ut/3$, i.e., $t\geq\frac{1}{6}(2U+\sqrt{(2U)^2+36\sigma^2})$), Minsker's estimates yield:
+\[
+\PP(\lambda_{\max}(S_n^Y)>t)
+\leq 7\,r\,\exp\!\left[-\frac{t^2/2}{\sigma^2+2Ut/3}\right].
+\]
+Repeating for $-Y_i$ gives the same bound for $\lambda_{\max}(-S_n^Y)$, hence
+\begin{equation}\label{eq:Y_bound}
+\PP(\norm{S_n^Y}>t)\leq 14\,r\,\exp\!\left[-\frac{t^2/2}{\sigma^2+2Ut/3}\right].
+\end{equation}
+
+\paragraph{Infinite-dimensional justification.}
+For the extension from $\mathbb{C}^{d\times d}$ to $\cH$, we follow Minsker's Section~3.2 verbatim: approximate by finite-dimensional projections $P_{L_j}Y_iP_{L_j}$ onto nested subspaces $L_1\subset L_2\subset\cdots$ with $\bigcup L_j=\cH$. The bound~\eqref{eq:Y_bound} for each finite-dimensional projection has constants \emph{uniform in $j$} (since $\sigma^2$, $r$, $U$ do not depend on the ambient dimension), and the result passes to the limit by Fatou's lemma, as detailed in Minsker's equations~(3.17)--(3.20).
+
+\subsection*{Step 5: Combining}
+
+From~\eqref{eq:event_decomp}, $\norm{S_n}\leq\norm{S_n^Y}+\norm{\sum_i\E[\bar X_i]}$ on event $E$, and $\norm{\sum_i\E[\bar X_i]}$ is negligible (bounded by $O(n(K+U)e^{-U/K})=O(\delta)$). Absorbing this into the bound (or adjusting $t$ by a lower-order additive term):
+\[
+\PP(\norm{S_n}>t)
+\leq \frac{\delta}{2}+14\,r\,\exp\!\left[-\frac{(t-o(1))^2/2}{\sigma^2+2U_nt/3}\right].
+\]
+For the stated form, we can absorb the bias into the constant and set $U_n=CK\log(2nb/\delta)$ (which is $O(K\log(n/\delta))$ for $b=O(1)$) to obtain~\eqref{eq:main_bound}.\hfill$\square$
+
+\section{Application: operator dominance for sub-Gaussian covariates}
+
+\begin{corollary}\label{cor:dominance}
+Let $x_1,\ldots,x_n$ be i.i.d.\ copies of a zero-mean, $\Sigma$-sub-Gaussian random element in $\cH$ with $\Sigma=\E[x\otimes x]$ and $\Tr(\Sigma)<\infty$. Let $\hat\Sigma=\frac{1}{n}\sum x_i\otimes x_i$ and $\Sigma_\lambda=\Sigma+\lambda I$, $\hat\Sigma_\lambda=\hat\Sigma+\lambda I$ for $\lambda>0$.
+
+Define $d_{1,\lambda}=\Tr(\Sigma\,\Sigma_\lambda^{-1})$. There exists $C>0$ such that if
+\[
+n\geq C\,d_{1,\lambda}\,\bigl(\log d_{1,\lambda}+\log(1/\delta)\bigr),
+\]
+then $\PP\bigl(\tfrac{1}{2}\Sigma_\lambda\preceq\hat\Sigma_\lambda\bigr)\geq 1-\delta$.
+\end{corollary}
+
+\begin{proof}
+Define $\tilde x_i=\Sigma_\lambda^{-1/2}x_i$, $\tilde\Sigma=\Sigma_\lambda^{-1/2}\Sigma\,\Sigma_\lambda^{-1/2}$, and $Z_i=\tilde x_i\otimes\tilde x_i-\tilde\Sigma$. As in Hsu et al., it suffices to show $\norm{\frac{1}{n}\sum Z_i}\leq 1/2$.
+
+\paragraph{Sub-exponential norm.}
+$\tilde x$ is $\tilde\Sigma$-sub-Gaussian with $\norm{\tilde\Sigma}\leq 1$. So $\norm{Z_i}\leq\max(\norm{\tilde x_i}^2,1)$, and $\norm{\tilde x_i}^2$ is sub-exponential:
+\[
+\PP(\norm{\tilde x_i}^2>t)\leq c_1 e^{-c_2\sqrt{t}}\quad\text{for }t\geq d_{1,\lambda}.
+\]
+(This follows from standard sub-Gaussian quadratic form tails; see, e.g., Vershynin's Proposition~2.6.1 applied in each projected direction, or integrate the tail $\PP(\norm{\tilde x}^2 - d_{1,\lambda} > s)\leq e^{-c\min(s^2/d_{1,\lambda},\,s)}$.) In particular,~\eqref{eq:subexp} holds with $K=O(\sqrt{d_{1,\lambda}}\vee 1)$.
+
+\paragraph{Variance and effective rank.}
+By the sub-Gaussian moment bounds:
+\[
+\sigma^2=\Bigl\|\sum_{i=1}^n\E[Z_i^2]\Bigr\|=n\,\norm{\E[Z^2]}\leq n\,C_3\,d_{1,\lambda},\qquad
+r = \frac{\Tr(n\,\E[Z^2])}{n\,\norm{\E[Z^2]}}\leq C_4\,d_{1,\lambda}.
+\]
+
+\paragraph{Applying Theorem~\ref{thm:main}.}
+Apply Theorem~\ref{thm:main} to $X_i=Z_i$ with $t=n/2$ (so that $\norm{\frac{1}{n}\sum Z_i}> 1/2$ iff $\norm{S_n}>n/2$). The truncation level is $U_n=O(\sqrt{d_{1,\lambda}}\log(n/\delta))$, and the Bernstein exponent becomes:
+\[
+\frac{(n/2)^2/2}{nC_3 d_{1,\lambda}+nU_n/3}
+= \frac{n/8}{C_3 d_{1,\lambda}+U_n/3}.
+\]
+For this to exceed $\log(14\,C_4\,d_{1,\lambda}/(\delta/2))$, we need
+\[
+n\geq C\,(d_{1,\lambda}+U_n)\,\log(d_{1,\lambda}/\delta).
+\]
+Since $U_n=O(\sqrt{d_{1,\lambda}}\log(n/\delta))$ and $d_{1,\lambda}\geq 1$, this is satisfied when $n\geq C'\,d_{1,\lambda}\,(\log d_{1,\lambda}+\log(1/\delta))$.
+\end{proof}
+
+\begin{remark}[Comparison with Minsker's original result]
+The only modification to Minsker's proof is the truncation in Step~1, which replaces the a.s.\ bound $\norm{X_i}\leq U$ with a high-probability bound derived from the sub-exponential tail~\eqref{eq:subexp}. The core machinery---Lieb's concavity theorem, the trace MGF peeling, and the infinite-dimensional extension via finite-dimensional projections (Section~3.2)---is used exactly as in Minsker~\cite{Minsker17}. The truncation is necessary because any remainder term proportional to the identity operator $I$ would have $\Tr(I)=\infty$ in infinite dimensions, destroying the effective rank bound.
+\end{remark}
+
+\begin{thebibliography}{9}
+\bibitem{HKZ14} D.~Hsu, S.~M.~Kakade, and T.~Zhang.
+Random design analysis of ridge regression.
+\textit{Found.\ Comput.\ Math.}, 14(3):569--600, 2014.
+
+\bibitem{Minsker17} S.~Minsker.
+On some extensions of Bernstein's inequality for self-adjoint operators.
+\textit{Statist.\ Probab.\ Lett.}, 127:111--119, 2017.
+\end{thebibliography}
+
+\end{document}

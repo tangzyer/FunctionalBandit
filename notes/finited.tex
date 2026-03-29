@@ -1,0 +1,337 @@
+\documentclass[11pt,a4paper]{article}
+
+% ========================
+% ESSENTIAL PACKAGES
+% ========================
+
+% Language and encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{natbib}
+
+% Math packages
+\usepackage{amsmath}        % Enhanced math environments
+\usepackage{amssymb}        % Additional math symbols
+\usepackage{amsthm}         % Theorem environments
+\usepackage{amsfonts}       % Additional math fonts
+\usepackage{mathtools}      % Extension to amsmath
+\usepackage{bm}             % Bold math symbols
+\usepackage{dsfont}         % Double-struck fonts (for sets like ℝ, ℕ)
+\usepackage{mathrsfs}       % Script fonts for math
+
+% Graphics and figures
+\usepackage{graphicx}       % Include graphics
+\usepackage{float}          % Better float placement
+\usepackage{subcaption}     % Subfigures
+\usepackage{tikz}           % Drawing diagrams
+\usepackage{pgfplots}       % Plotting
+\pgfplotsset{compat=1.18}
+
+% Page layout and formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}       % Custom headers and footers
+\usepackage{titlesec}       % Customize section titles
+\usepackage{enumitem}       % Customize lists
+\usepackage{parskip}        % Paragraph spacing
+
+% Colors and highlighting
+\usepackage{xcolor}
+\usepackage{mdframed}       % Framed environments
+\usepackage{tcolorbox}      % Colored boxes
+
+% Tables
+\usepackage{array}          % Extended array environments
+\usepackage{booktabs}       % Professional tables
+\usepackage{multirow}       % Multi-row cells
+
+% References and links
+\usepackage{hyperref}       % Hyperlinks
+\usepackage{cleveref}       % Smart cross-references
+
+% Additional useful packages
+\usepackage{cancel}         % Cancel terms in equations
+\usepackage{siunitx}        % SI units
+\usepackage{listings}       % Code listings (if needed)
+
+% ========================
+% CUSTOM COMMANDS
+% ========================
+
+% Common math sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+
+% Common operators
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\rank}{rank}
+%\DeclareMathOperator{\span}{span}
+%\DeclareMathOperator{\null}{null}
+
+% Shortcuts for common expressions
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+% Derivatives and integrals
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+\newcommand{\dv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+
+% ========================
+% THEOREM ENVIRONMENTS
+% ========================
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{exercise}{Exercise}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{note}{Note}[section]
+
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\op}{\mathrm{op}}
+
+% ========================
+% COLORED BOXES
+% ========================
+
+% Important theorem box
+\newtcolorbox{importantbox}{
+	colback=blue!5!white,
+	colframe=blue!75!black,
+	title=Important
+}
+
+% Warning/Note box
+\newtcolorbox{notebox}{
+	colback=yellow!10!white,
+	colframe=orange!75!black,
+	title=Note
+}
+
+% Example box
+\newtcolorbox{examplebox}{
+	colback=green!5!white,
+	colframe=green!75!black,
+	title=Example
+}
+
+% ========================
+% DOCUMENT SETUP
+% ========================
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\leftmark}
+
+% Title formatting
+\title{Functional Bandit Notes}
+\author{Your Name}
+\date{\today}
+
+% Hyperlink setup
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	citecolor=red
+}
+
+\begin{document}
+
+Let $x_1,\cdots,x_n\overset{i.i.d.}{\sim} P$ where $P$ is supported on $\mathbb R^d$ with $\|x\|_2,\|\beta_0\|_2\leq B$ almost surely.
+Let $X=(x_1,\cdots,x_n)\in\mathbb R^{n\times d}$ and $y=X\beta_0 + \varepsilon$, with $\varepsilon$ being centered and sub-Gaussian.
+Throughout we omit poly-logarithmic terms in $\tilde O(\cdot)$ and $\lesssim$ notations. When we say ``with high probability'', it means with probability $1-O(T^{-4})$ or higher degrees.
+
+Let $V_0 = \mathbb E_P[xx^\top]$ and $\hat V = \sum_{i=1}^n x_ix_i^\top=\frac{1}{n}X^\top X$.  
+For $\lambda>0$, let $V_\lambda = V_0+\lambda I$ and $\hat V_\lambda = \hat V+\lambda I$ be Ridge terms. The Ridge regression is defined as
+$$
+\hat\beta = \hat V_\lambda^{-1}\frac{1}{n}X^\top y.
+$$
+
+The objective is to construct UCB $\Delta(\cdot)$ so that it satisfies the following properties:
+\begin{enumerate}
+\item With high probability $|x^\top(\hat\beta-\beta_0)|\leq\Delta(x)$ for all $x\in\mathcal X$, where $\mathcal X$ contains $T$ vectors in the support of $P$;
+\item $\mathbb E_P[\Delta(x)]\leq \Psi$ where $\Psi$ is on the order of $\tilde O(1/\sqrt{n})$.
+\end{enumerate}
+
+Note that we don't require $\Delta(x)$ to be valid \emph{uniformly} on the support of $P$, but it has to be valid pointwise with high probability so that a union bound of $T$ vectors won't hurt.
+
+\subsection{Successive elimination}
+
+It is possible to use such an UCB to do successive elimination, without requiring $\lambda_{\min}$ conditions. Algorithm operates as below:
+\begin{enumerate}
+\item For epochs $\tau=1,2,3,\cdots$ each of length $n_\tau=2^\tau$, do the following:
+\begin{enumerate}
+\item Obtain $\hat\beta_\tau^1$, $\hat\beta_\tau^2$ and $\Delta_\tau^1(\cdot)$, $\Delta_\tau^2(\cdot)$ from all samples in the previous epoch;
+\item For all $t$ in epoch $\tau$, observe $x_t\sim P$ and do the following:
+\begin{enumerate}
+\item If $x_t^\top\hat\beta_s^1-\Delta_s^1(x_t)>x_t^\top\hat\beta_s^2+\Delta_s^2(x_t)$ for any $s\leq \tau$ then take action 1, and similarly in the other direction take action 2;
+\item Otherwise, take action 1 or 2 with half probability each.
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+
+\paragraph{Analysis.} With high probability the optimal action is never eliminated. So regret is only incurred when actions are taken with half probability each. 
+Define distribution $z\sim Q_\tau$ as the following: first sample $x\sim P$, then set $z=x$ if on $x$ actions are taken with half probability each during epoch $\tau$, and $z=0$ otherwise, with the understanding that $\Delta_\tau^1(0)=\Delta_\tau^2(0)=0$.
+Let $P_\tau^1,P_\tau^2$ be the distributions received by actions 1 and 2 from all samples in the previous epoch.
+We have the following observations:
+\begin{enumerate}
+\item $\mathbb E[\Delta_\tau^1(x)|P_\tau^1],\mathbb E[\Delta_\tau^2(x)|P_\tau^2]\lesssim \Psi_\tau \lesssim 1/\sqrt{n_\tau}$, where the last inequality is hiding $\mathrm{poly}(d)$ factors. This holds true as long as the two actions are balanced.
+\item For any $x\in\supp(Q_\tau)\backslash\{0\}$, $p(x|Q_\tau)\leq \max\{2\kappa_{\min}^{-1}p(x|P_\tau^1),2\kappa_{\min}^{-1}p(x|P_\tau^2)\}$ where $\kappa_{\min}=\min\{P(a^*(x)=1),P(a^*(x)=2)\}$ because $x$ is not eliminated during epoch $\tau-1$ and therefore has half probability being assigned to each action.
+\end{enumerate}
+
+Therefore, during epoch $\tau$, the cumulative regret is
+\begin{align*}
+n_\tau&\mathbb E[\Delta_\tau^1(z)+\Delta_\tau^2(z)|Q_\tau] \lesssim n_\tau(\mathbb E[\Delta_\tau^1(x)|P_\tau^1] + \mathbb E[\Delta_\tau^2(x)|P_\tau^2]) \lesssim n_\tau\times \frac{1}{\sqrt{n_\tau}} = \tilde O(\sqrt{n_\tau}).
+\end{align*}
+This leads to $\tilde O(\sqrt{T})$ regret. Dimension dependency depends on $\Psi$ and varies.
+
+\subsection{Direct analysis of Ridge regression}
+
+Simple algebra tells us that
+$$
+\hat\beta-\beta_0 = -\lambda \hat V_\lambda^{-1}\beta_0 + \frac{1}{n}\hat V_\lambda^{-1}X^\top\epsilon =: b+v
+$$
+
+\paragraph{Analysis of the bias term.}
+Note that
+\begin{align*}
+\big|x^\top\hat V_\lambda^{-1}\beta_0\big| \leq \sqrt{x^\top\hat V_\lambda^{-1} x}\cdot \sqrt{\beta_0^\top\hat V_\lambda^{-1}\beta_0}.
+\end{align*}
+With $\|\beta_0\|_2\leq B$ and $\hat V_\lambda^{-1}\leq1/\lambda$, we have that
+$$
+\big|\lambda x^\top b\big| \leq \sqrt{\lambda}\cdot \sqrt{x^\top\hat V_\lambda^{-1}x}.
+$$
+
+\paragraph{Analysis of the variance term.}
+We have $v\sim \mathcal N(0, n^{-1}\hat V_\lambda^{-1}\hat V\hat V_\lambda^{-1})$. So for any fixed $x\in\supp(P)$, with high probability 
+\begin{align*}
+\big|x^\top v\big| \lesssim \sqrt{\frac{x^\top \hat V_\lambda^{-1}\hat V\hat V_{\lambda}^{-1}x}{n}} \leq \sqrt{\frac{x^\top\hat V_\lambda^{-1} x}{n}},
+\end{align*}
+where the last inequality holds because $\hat V\preceq\hat V_\lambda$. Subsequently, 
+$$
+\big|x^\top(\hat\beta-\beta_0)\big| \leq (\sqrt{\lambda}+1/\sqrt{n})\sqrt{x^\top\hat V_\lambda^{-1}x} =: \Delta(x).
+$$
+
+Consequently
+\begin{align*}
+\mathbb E[\Delta(x)|P] = \left(\frac{1}{\sqrt{n}}+\sqrt{\lambda}\right)\mathbb E[\sqrt{x^\top \hat V_\lambda^{-1}x}|P] 
+\end{align*}
+
+For two symmetric matrices $A,B$, we write $A\preceq B$ if $x^\top Ax\leq x^\top Bx$ for all $x\in\mathbb R^d$.
+We write $A\succeq B$ if and only if $B\preceq A$.
+\begin{proposition}
+If $A\preceq B$ then for any square matrix $D$, $DAD^\top\preceq DBD^\top$.
+\label{prop:1}
+\end{proposition}
+\begin{proof}
+For any $x\in\mathbb R^d$, $x^\top (DAD^\top)x = z^\top Az \leq z^\top Bz = x^\top (DBD^\top)x$, where $z=D^\top x$.
+Note that this is true regardless of whether $A$ or $B$ is positive semi-definite.
+\end{proof}
+
+\begin{proposition}
+For every positive definite $A$ and $B$, $A\preceq B$ implies $A^{-1}\succeq B^{-1}$.
+\label{prop:2}
+\end{proposition}
+\begin{proof}
+Because $A\preceq B$, the previous proposition implies that $C=B^{-1/2}AB^{-1/2}\preceq I$. Since $A$ is pd, $B$is inevrtible, $C$ is also pd and therefore all eigenvalues of $C$ are between 0 and 1. This means all eigenvalues of $C^{-1}$ are between $1$ and $+\infty$, implying $C^{-1}\succeq I$. 
+This means $B^{1/2}A^{-1}B^{1/2}\succeq I$ and invoking the previous proposition again we have $A^{-1}\succeq B^{-1}$.
+\end{proof}
+
+\begin{lemma}
+If $\lambda\gtrsim B^2\log n/n$ then with high probability $0.5V_\lambda\preceq \hat V_\lambda\preceq 1.5 V_\lambda$.
+\end{lemma}
+\begin{proof}
+Define $z_i := V_\lambda^{-1/2}x_i$. Because $V_\lambda\succeq\lambda I$ and $\|x_i\|_2\leq B$ almost surely, we know that $\|z_i\|_2\leq B/\sqrt{\lambda}$ almost surely.
+Note also that
+$$
+\mathbb E[z_iz_i^\top] = V_\lambda^{-1/2}\mathbb E[x_ix_i^\top]V_\lambda^{-1/2} = V_\lambda^{-1/2}V V_{\lambda}^{-1/2} = I - \lambda V_\lambda^{-1}.
+$$
+Because $\|V_\lambda^{-1}\|_\op\leq\lambda^{-1}$, we have that $\|\mathbb E[z_iz_i^\top]\|_\op\leq 1$. 
+Invoking \cite[Lemma 1]{oliveira2010sums}, we have 
+$$
+\Pr\left[\left\|\frac{1}{n}\sum_{i=1}^n z_iz_i^\top - \mathbb E[z_1z_1^\top]\right\|_\op >t\right]\leq 2\min\{d,n\}^2\cdot e^{-\frac{n(t-1)\lambda}{4B^2}}.
+$$
+Subsequently, with high probability
+$$
+\left\|\frac{1}{n}\sum_{i=1}^n z_iz_i^\top - \mathbb E[z_1z_1^\top]\right\|_\op \lesssim \frac{B^2\log n}{\lambda n} \leq \frac{1}{2},
+$$
+where the last inequlity holds if $\lambda\gtrsim B^2\log n/n$.
+Note that $\frac{1}{n}z_iz_i^\top = V_\lambda^{-1/2}\hat V V_{\lambda}^{-1/2}$. Subsequently, the above inequality implies
+$$
+ \frac{1}{2} I - \lambda V_\lambda^{-1} \preceq V_\lambda^{-1/2}\hat V V_\lambda^{-1/2} \preceq \frac{3}{2}I - \lambda V_\lambda^{-1}.
+$$
+Using Proposition \ref{prop:1}, we have
+$$
+\frac{1}{2}V_\lambda - \lambda I \preceq \hat V \preceq \frac{3}{2}V_\lambda - \lambda I.
+$$
+Therefore, 
+$$
+\frac{1}{2}V_\lambda \preceq \hat V_\lambda \preceq \frac{3}{2}V_\lambda.
+$$
+\end{proof}
+
+Now, using the lemma and Proposition \ref{prop:2}, we have that
+\begin{align*}
+\mathbb E[\Delta(x)|P] &= \left(\frac{1}{\sqrt{n}}+\sqrt{\lambda}\right) \mathbb E\left[\sqrt{x^\top\hat V_\lambda^{-1} x}|P\right]\\
+&\leq 2\left(\frac{1}{\sqrt{n}}+\sqrt{\lambda}\right) \mathbb E\left[\sqrt{x^\top V_\lambda^{-1} x}|P\right]\\
+&\leq 2\left(\frac{1}{\sqrt{n}}+\sqrt{\lambda}\right)\sqrt{\mathbb E[x^\top V_\lambda^{-1} x|P]}\\
+&= 2\left(\frac{1}{\sqrt{n}}+\sqrt{\lambda}\right)\sqrt{\langle V_\lambda^{-1},V\rangle}\\
+&= 2\left(\frac{1}{\sqrt{n}}+\sqrt{\lambda}\right)\cdot \sqrt{\sum_{i=1}^d\frac{\mu_i}{\mu_i+\lambda}},
+\end{align*}
+where $\mu_1,\cdots,\mu_d$ are eigenvalues of $V=\mathbb E[xx^\top]$.
+
+\textbf{Note: this analysis requires $\mathbb E[\varepsilon|X]=0$; that is, full exogeneity.}
+
+\subsection{Emprirical process analysis}
+
+There are many ways to construct the basic inequality, either from first-order KKT conditions or from minimizers of least squares.
+We are going to start from 
+$$
+(\hat\beta-\beta_0)^\top V(\hat\beta-\beta_0) \leq 2\left|\frac{1}{n}\sum_{i=1}^n \varepsilon_i x_i^\top(\hat\beta-\beta_0)\right|.
+$$
+For any vector $\phi$ let $\|\phi\|_K := \sqrt{\phi^\top K\phi}$. Then
+$$
+\|\hat\beta-\beta_0\|_V \leq 2\sup_{\phi: \|\phi\|_V\leq 1}\frac{1}{n}\sum_{i=1}^n \varepsilon_i x_i^\top\phi \lesssim \sqrt{\frac{d}{n}},
+$$
+where the second inequality is from concentration inequalities of self-normalized empirical process. Consequently, for any $x$,
+$$
+\big|x^\top(\hat\beta-\beta_0)\big| \leq \|x\|_{V^{-1}}\|\hat\beta-\beta_0\|_{V} \lesssim \sqrt{\frac{dx^\top V^{-1}x}{n}} =: \Delta(x).
+$$
+
+If you compare this with the $\Delta(x)$ in the previous section, you'll notice an extra $\sqrt{d}$ factor.
+This leads to $\Psi=\tilde O(d/\sqrt{n})$ rather than $\tilde O(\sqrt{d/n})$.
+
+With this extra $d$ factor, there are two good things about this argument:
+\begin{enumerate}
+\item It holds almost surely for any $x$.
+\item It only requires $\mathbb E[\varepsilon_t|x_t]=0$ so that $\sum_{i=1}^n\varepsilon_i x_i^\top\phi$ is a martingale difference sequence for any $\phi$. So $x_t$ can depend on $\varepsilon_{t-1}$.
+\item It is relatively easier to convert ``on-average'' error bounds to ``pointwise'' ones, by using the last Cauchy-Schwarz step.
+\end{enumerate}
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

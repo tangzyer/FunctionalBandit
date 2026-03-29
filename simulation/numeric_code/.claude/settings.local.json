@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdftotext:*)",
+      "Bash(python:*)",
+      "Bash(sort:*)",
+      "Bash(open:*)",
+      "Bash(source:*)",
+      "Bash(ls:*)",
+      "Bash(sysctl:*)",
+      "WebSearch",
+      "WebFetch(domain:projecteuclid.org)",
+      "WebFetch(domain:pmc.ncbi.nlm.nih.gov)",
+      "WebFetch(domain:gchagny.perso.math.cnrs.fr)",
+      "WebFetch(domain:www.semanticscholar.org)",
+      "WebFetch(domain:arxiv.org)",
+      "WebFetch(domain:rdrr.io)",
+      "WebFetch(domain:www.researchgate.net)",
+      "WebFetch(domain:hal.science)",
+      "WebFetch(domain:www.ceremade.dauphine.fr)",
+      "WebFetch(domain:people.eecs.berkeley.edu)",
+      "WebFetch(domain:www.esaim-ps.org)",
+      "WebFetch(domain:dspace.mit.edu)",
+      "WebFetch(domain:www.econstor.eu)",
+      "WebFetch(domain:bookdown.org)",
+      "WebFetch(domain:www.personal.soton.ac.uk)",
+      "WebFetch(domain:univ-rennes2.hal.science)"
+    ]
+  }
+}

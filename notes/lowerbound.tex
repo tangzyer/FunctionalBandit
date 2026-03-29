@@ -1,0 +1,335 @@
+\documentclass[11pt,a4paper]{article}
+
+% ========================
+% ESSENTIAL PACKAGES
+% ========================
+
+% Language and encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+
+% Math packages
+\usepackage{amsmath}        % Enhanced math environments
+\usepackage{amssymb}        % Additional math symbols
+\usepackage{amsthm}         % Theorem environments
+\usepackage{amsfonts}       % Additional math fonts
+\usepackage{mathtools}      % Extension to amsmath
+\usepackage{bm}             % Bold math symbols
+\usepackage{dsfont}         % Double-struck fonts (for sets like ℝ, ℕ)
+\usepackage{mathrsfs}       % Script fonts for math
+
+% Graphics and figures
+\usepackage{graphicx}       % Include graphics
+\usepackage{float}          % Better float placement
+\usepackage{subcaption}     % Subfigures
+\usepackage{tikz}           % Drawing diagrams
+\usepackage{pgfplots}       % Plotting
+\pgfplotsset{compat=1.18}
+
+% Page layout and formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}       % Custom headers and footers
+\usepackage{titlesec}       % Customize section titles
+\usepackage{enumitem}       % Customize lists
+\usepackage{parskip}        % Paragraph spacing
+
+% Colors and highlighting
+\usepackage{xcolor}
+\usepackage{mdframed}       % Framed environments
+\usepackage{tcolorbox}      % Colored boxes
+
+% Tables
+\usepackage{array}          % Extended array environments
+\usepackage{booktabs}       % Professional tables
+\usepackage{multirow}       % Multi-row cells
+
+% References and links
+\usepackage{hyperref}       % Hyperlinks
+\usepackage{cleveref}       % Smart cross-references
+
+% Additional useful packages
+\usepackage{cancel}         % Cancel terms in equations
+\usepackage{siunitx}        % SI units
+\usepackage{listings}       % Code listings (if needed)
+
+% ========================
+% CUSTOM COMMANDS
+% ========================
+
+% Common math sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+
+% Common operators
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\rank}{rank}
+%\DeclareMathOperator{\span}{span}
+%\DeclareMathOperator{\null}{null}
+
+% Shortcuts for common expressions
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+% Derivatives and integrals
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+\newcommand{\dv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+
+% ========================
+% THEOREM ENVIRONMENTS
+% ========================
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{exercise}{Exercise}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{assumption}{Assumptio}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{note}{Note}[section]
+
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\op}{\mathrm{op}}
+
+\newcommand{\mX}{\mathcal X}
+\newcommand{\mD}{\mathcal D}
+\newcommand{\bP}{\mathbb P}
+\newcommand{\lp}{L^2(\bP)}
+\newcommand{\lx}{L^2(\mX)}
+\newcommand{\ltwo}{L^2(\mX)}
+\newcommand{\ud}{\mathrm d}
+\newcommand{\mH}{\mathcal H}
+\newcommand{\mA}{\mathcal A}
+
+\newcommand{\diag}{\mathrm{diag}}
+
+% ========================
+% COLORED BOXES
+% ========================
+
+% Important theorem box
+\newtcolorbox{importantbox}{
+	colback=blue!5!white,
+	colframe=blue!75!black,
+	title=Important
+}
+
+% Warning/Note box
+\newtcolorbox{notebox}{
+	colback=yellow!10!white,
+	colframe=orange!75!black,
+	title=Note
+}
+
+% Example box
+\newtcolorbox{examplebox}{
+	colback=green!5!white,
+	colframe=green!75!black,
+	title=Example
+}
+
+% ========================
+% DOCUMENT SETUP
+% ========================
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\leftmark}
+
+% Title formatting
+\title{Functional Bandit Notes}
+\author{Your Name}
+\date{\today}
+
+% Hyperlink setup
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	citecolor=red
+}
+
+\begin{document}
+
+The main purpose of this document is to provide some insights into minimax rates in functional regression, from a lower bound perspective.
+
+For simplicity, assume we use the identity kernel. Let $\{\psi_i\}_{i=1}^{\infty}$ be an orthonormal basis of $L_2([0,1])$ that are eigenfunctions of the population covariance operator.
+Define the following two function classes:
+\begin{align*}
+\textstyle
+\Theta_2 &:= \{\beta\in L_2([0,1]): \sum_{j=1}^{\infty}\vartheta_j^2 =\sum_{j=1}^{\infty}\langle \beta,\psi_j\rangle^2\leq 1\};\\
+\Theta_1 &:= \{\beta\in\Theta_2: \sum_{j=1}^{\infty}|\vartheta_j| = \sum_{j=1}^{\infty}|\langle\beta,\psi_j\rangle| \leq 1\}.
+\end{align*}
+
+Let $P$ be a known distribution supported on $L_2([0,1])$ such that
+$$
+s_j := \mathbb E_P[\langle f,\psi_j\rangle^2] \asymp j^{-2r},\;\;\;\;\;\;\forall j\geq 1.
+$$
+In all our lower bound constructions, the distribution $P$ satisfies the following additional properties, though some or all of them may not be necessary for certain upper bound:
+\begin{enumerate}
+\item For $f\sim P$, $|\langle f,\psi_j\rangle| \lesssim j^{-2r}$ for all $j\geq 1$ almost surely;
+\item $s_j-s_{j+1}\gtrsim j^{-2r-1}$.
+\end{enumerate}
+
+Data are collected as $\mathcal D\{(f_i,y_i)\}_{i=1}^n$ where $f_1,\cdots,f_n\overset{i.i.d.}{\sim} P$ and $\mathbb E[y_i]=\langle f_i,\beta_0\rangle$.
+For $\Theta\in\{\Theta_1,\Theta_2\}$, 
+the first minimax rate we consider is the standard mean-square error:
+$$
+\mathfrak T_{mse}(\Theta) := \inf_{\hat\beta}\sup_{\beta_0\in\Theta} \mathbb E_{\beta_0}\left[\int \langle f,\hat\beta-\beta_0\rangle^2\ud P(f)\right],
+$$
+where $\mathbb E_{\beta_0}$ is over randomness in $\mathcal D$ under $\beta_0$.
+The second minimax rate we consider is the sup-norm error:
+$$
+\mathfrak T_{sup}(\Theta) := \inf_{\hat\beta}\sup_{\beta_0\in\Theta}\mathbb E_{\beta_0}\left[\sup_{f\in\mathrm{supp}(P)}\langle f,\hat\beta-\beta_0\rangle^2\right].
+$$
+Next, we say a map $\varphi:f\mapsto [a,b]$, itself being a random variable depending on $\mathcal D$, is an \emph{honest} confidence interval if it satisfies the following:
+$$
+\Pr_{\beta_0}\left[f\in \varphi(f)\right] \geq 0.95,\;\;\;\;\;\;\forall\beta_0\in\Theta,\;\;f\in\mathrm{supp}(P),
+$$
+where the randomness is over $\mathcal D$ under $\beta_0$, and $\varphi$ is a random variable depending on $\mathcal D$.
+Let $\Phi$ be the set of all honest confidence intervals. 
+The following minimax rate is concerning the MSE of honest confidence intervals:
+$$
+\mathfrak T_{CI}(\Theta) := \inf_{\varphi\in\Phi}\sup_{\beta_0\in\Theta}\mathbb E_{\beta_0}\left[\int \mu(\varphi(f))^2\ud P(f)\right],
+$$
+where $\mu(\varphi(f))$ is the Lesbesgue measure of $\varphi(f)$.
+
+Table \ref{tab:summary} summarizes minimax lower bounds for different cases.
+\begin{table}[h]
+\centering
+\caption{Summary of minimax lower bounds.}
+\label{tab:summary}
+\begin{tabular}{cccl}
+\hline
+Risk& Class& Lower bound& Matching upper bound and method\\ 
+\hline
+$\mathfrak T_{mse}$& $\Theta_2$& $n^{-2r/(2r+1)}$& KRR with $\lambda\asymp n^{-2r/(2r+1)}$\\
+$\mathfrak T_{sup}$& $\Theta_2$& $n^{-(2r-1)/(2r+1)}$& Unknown. Possibly KRR with suprema analysis\\
+$\mathfrak T_{CI}$& $\Theta_2$& $n^{-(2r-1)/2r}$& KRR with $\lambda = o(n^{-1})$\\
+$\mathfrak T_{mse}$& $\Theta_1$& $n^{-(2r+1)/(2r+2)}$& Unknown. Possibly trend filtering\\
+$\mathfrak T_{sup}$& $\Theta_1$& $n^{-r/(r+1)}$& Unknown. Possibly trend filtering\\
+$\mathfrak T_{CI}$& $\Theta_1$& $n^{-2r/(2r+1)}$& Anisotropic KRR\\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Lower bounds on $\mathfrak T_{mse}$}
+
+Using construction and techniques very similar to \cite{cai2012minimax}.
+Let $\Theta\in\Theta_2$ be such that $\theta_M=\theta_{M+1}=\cdots=\theta_{2M}=\pm 1/\sqrt{M}$. (The function is constructed as $\beta = \sum_{j=M}^{2M}\theta_j\psi_j$.)
+Let $\tilde\Theta\subseteq\Theta$ be selected such that $\ln|\tilde\Theta|\asymp M$ and for every $\theta,\theta'\in\Theta$, $\|\theta-\theta'\|_2\gtrsim \sqrt{M}$.
+For any distinct $\theta,\theta'\in\tilde\Theta$, we have
+\begin{align*}
+d_2(\theta,\theta') &= \int \langle f,\theta-\theta'\rangle^2\ud P(f)\gtrsim \sum_{j=M}^{2M} \frac{1}{M}\mathbb E[\langle f,\psi_j\rangle^2] \gtrsim \sum_{j=M}^{2M} \frac{j^{-2r}}{M} = M^{-2r}.
+\end{align*}
+On the other hand,
+\begin{align*}
+\mathrm{KL}(P_{\theta}\|P_{\theta'}) \lesssim n\mathbb E_P[\langle f,\theta-\theta'\rangle^2] \lesssim n\sum_{j=M}^{2M}\frac{1}{M}\cdot \mathbb E[\langle f,\psi_j\rangle^2]\lesssim \frac{n}{M}\sum_{j=M}^{2M}j^{-2r} = nM^{-2r}.
+\end{align*}
+Using Fano's equality, we can set $nM^{-2r}\ll \ln|\tilde\Theta|\asymp M$, meaning $M\asymp n^{1/(2r+1)}$. This leads to
+$$
+\mathfrak T_{mse}(\Theta_2) \gtrsim n^{-2r/(2r+1)}.
+$$
+
+For the case of $\Theta_1$, we must set $\theta_M=\cdots\theta_{2M}=\pm 1/M$ in order to make sure $\beta\in\Theta_1$. Using the same line of calculations, we have
+\begin{align*}
+d_2(\theta,\theta') &\gtrsim \sum_{j=M}^{2M} \frac{j^{-2r}}{M^2} = M^{-2r-1};\\
+\mathrm{KL}(Q_{\theta}\|Q_{\theta'}) &\lesssim n\sum_{j=M}^{2M}\frac{1}{M^2} j^{-2r} = nM^{-2r-1}.
+\end{align*}
+Equating $nM^{2r-1}$ with $M$ again we have $M=n^{1/(2r+2)}$. Hence
+$$
+\mathfrak T_{mse}(\Theta_1) \gtrsim n^{-(2r+1)/(2r+2)}.
+$$
+
+\subsection{Lower bounds on $\mathfrak T_{sup}$}
+
+We are going to replace $d_2$ in the above section with the following sup-norm metric (for $\Theta_2$ first):
+\begin{align*}
+d_{\infty}(\theta,\theta') &= \sup_{f\in\mathrm{supp}(P)}\langle f,\theta-\theta'\rangle^2 \gtrsim \sup_{f\in\mathrm{supp}(P)}\left(\sum_{j=M}^{2M}\frac{\langle f,\psi_j\rangle}{\sqrt{M}}\right)^2 \gtrsim \left(\sum_{j=M}^{2M}\frac{j^{-r}}{\sqrt{M}}\right)^2 \gtrsim M^{1-2r},
+\end{align*}
+where the second inequality is attained by considering $f\in\mathrm{supp}(P)$ such that $\mathrm{sgn}(\langle f,\psi_j\rangle) = \mathrm{sgn}(\theta_j)$.
+The KL part is the same, yielding $M\asymp n^{1/(1+2r)}$. Subsequently, 
+$$
+\mathfrak T_{sup}(\Theta_2) \gtrsim n^{-(2r-1)/(2r+1)}.
+$$
+
+For the case of $\Theta_1$, the sup-norm metric is calculated as 
+\begin{align*}
+d_{\infty}(\theta,\theta') &= \sup_{f\in\mathrm{supp}(P)}\langle f,\theta-\theta'\rangle^2 \gtrsim \sup_{f\in\mathrm{supp}(P)}\left(\sum_{j=M}^{2M}\frac{\langle f,\psi_j\rangle}{{M}}\right)^2 \gtrsim \left(\sum_{j=M}^{2M}\frac{j^{-r}}{{M}}\right)^2 \gtrsim M^{-2r}.
+\end{align*}
+Using $M\asymp n^{1/(2r+2)}$, we obtain
+$$
+\mathfrak T_{sup}(\Theta_2) \gtrsim n^{-(2r)/(2r+2)} = n^{-r/(r+1)}.
+$$
+
+\subsection{Lower bounds on $\mathfrak T_{CI}$}
+
+We are going to use arguments similar to \cite{cai2006adaptive}. Because $\varphi$ is honest, we have
+$$
+\Pr_0[0\in\varphi(f)] \geq 0.95, \;\;\;\;\;\;\forall f\in\mathrm{supp}(P),
+$$
+where the randomness is over $\mathcal D$ under the zero function $\beta_0=0$.
+
+Now consider an arbitrary $f\in\mathrm{supp}(P)$ and its corresponding $\theta(f)\in\Theta_2$, such that $\mathrm{sgn}(\theta(f)_j)=\mathrm{sgn}(\langle f,\psi_j\rangle)$.
+Let $\beta(f) =\sum_{j=M}^{2M}\theta(f)_j\psi_j$.
+It is easy to verify that
+$$
+a(f) := \langle f, \beta(f)\rangle \asymp \sum_{j=M}^{2M}\frac{j^{-r}}{\sqrt{M}}\asymp M^{-r+1/2}.
+$$
+Because $\varphi$ is honest, we have
+$$
+\Pr_{\beta(f)}[a\in\varphi(f)] \geq 0.95.
+$$
+
+Now, we upper bound the TV distance between $Q_0$ and $Q_{\theta(f)}$ as follows:
+\begin{align*}
+\mathrm{KL}(Q_0\|Q_{\beta(f)}) \lesssim nM^{-2r}.
+\end{align*}
+Equating the right-hand side of the above inequality with a small positive constant, meaning that $M\asymp n^{1/2r}$, by Pinskier's inequality we have
+$$
+\Pr_{0}[a\in\varphi(f)] \geq 0.9.
+$$
+Therefore,
+$$
+\Pr_{0}\left([0,a]\in\varphi(f)\right) = \Omega(1) \;\;\Longrightarrow \mathbb E_0\left[\mu(\varphi(f))^2\right] \gtrsim a^2 \gtrsim M^{-2r+1}.
+$$
+Because the above inequality holds for any $f\in\mathrm{supp}(P)$, we have
+$$
+\mathfrak T_{CI}(\Theta_2) \gtrsim n^{-(2r-1)/2r}. 
+$$
+
+For the case of $\Theta=\Theta_1$, simply replacing the asymptotic scalings on $a$ the KL divergence with
+$$
+a \asymp \sum_{j=M}^{2M}\frac{j^{-r}}{{M}}\asymp M^{-r}, \;\;\;\;\;\;\mathrm{KL}(Q_0\|Q_{\beta(f)}) \lesssim n M^{-2r-1}.
+$$
+Setting $M\asymp n^{1/(2r+1)}$, we obtain
+$$
+\mathfrak T_{CI}(\Theta_2) \gtrsim n^{-2r/(2r+1)}.
+$$
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

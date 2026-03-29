@@ -1,0 +1,514 @@
+\documentclass[11pt,a4paper]{article}
+
+% ========================
+% ESSENTIAL PACKAGES
+% ========================
+
+% Language and encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+
+% Math packages
+\usepackage{amsmath}        % Enhanced math environments
+\usepackage{amssymb}        % Additional math symbols
+\usepackage{amsthm}         % Theorem environments
+\usepackage{amsfonts}       % Additional math fonts
+\usepackage{mathtools}      % Extension to amsmath
+\usepackage{bm}             % Bold math symbols
+\usepackage{dsfont}         % Double-struck fonts (for sets like ℝ, ℕ)
+\usepackage{mathrsfs}       % Script fonts for math
+
+% Graphics and figures
+\usepackage{graphicx}       % Include graphics
+\usepackage{float}          % Better float placement
+\usepackage{subcaption}     % Subfigures
+\usepackage{tikz}           % Drawing diagrams
+\usepackage{pgfplots}       % Plotting
+\pgfplotsset{compat=1.18}
+
+% Page layout and formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}       % Custom headers and footers
+\usepackage{titlesec}       % Customize section titles
+\usepackage{enumitem}       % Customize lists
+\usepackage{parskip}        % Paragraph spacing
+
+% Colors and highlighting
+\usepackage{xcolor}
+\usepackage{mdframed}       % Framed environments
+\usepackage{tcolorbox}      % Colored boxes
+
+% Tables
+\usepackage{array}          % Extended array environments
+\usepackage{booktabs}       % Professional tables
+\usepackage{multirow}       % Multi-row cells
+
+% References and links
+\usepackage{hyperref}       % Hyperlinks
+\usepackage{cleveref}       % Smart cross-references
+
+% Additional useful packages
+\usepackage{cancel}         % Cancel terms in equations
+\usepackage{siunitx}        % SI units
+\usepackage{listings}       % Code listings (if needed)
+
+% ========================
+% CUSTOM COMMANDS
+% ========================
+
+% Common math sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+
+% Common operators
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\rank}{rank}
+%\DeclareMathOperator{\span}{span}
+%\DeclareMathOperator{\null}{null}
+
+% Shortcuts for common expressions
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+% Derivatives and integrals
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+\newcommand{\dv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+
+% ========================
+% THEOREM ENVIRONMENTS
+% ========================
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{exercise}{Exercise}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{assumption}{Assumptio}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{note}{Note}[section]
+
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\op}{\mathrm{op}}
+
+\newcommand{\mX}{\mathcal X}
+\newcommand{\mD}{\mathcal D}
+\newcommand{\bP}{\mathbb P}
+\newcommand{\lp}{L^2(\bP)}
+\newcommand{\lx}{L^2(\mX)}
+\newcommand{\ltwo}{L^2(\mX)}
+\newcommand{\ud}{\mathrm d}
+\newcommand{\mH}{\mathcal H}
+\newcommand{\mA}{\mathcal A}
+
+% ========================
+% COLORED BOXES
+% ========================
+
+% Important theorem box
+\newtcolorbox{importantbox}{
+	colback=blue!5!white,
+	colframe=blue!75!black,
+	title=Important
+}
+
+% Warning/Note box
+\newtcolorbox{notebox}{
+	colback=yellow!10!white,
+	colframe=orange!75!black,
+	title=Note
+}
+
+% Example box
+\newtcolorbox{examplebox}{
+	colback=green!5!white,
+	colframe=green!75!black,
+	title=Example
+}
+
+% ========================
+% DOCUMENT SETUP
+% ========================
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\leftmark}
+
+% Title formatting
+\title{Functional Bandit Notes}
+\author{Your Name}
+\date{\today}
+
+% Hyperlink setup
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	citecolor=red
+}
+
+\begin{document}
+
+The main purpose of this document is to give a technical summary of existing approaches towards (offline) functional regression,
+and remark on their strengths/weakness. When appropriate, I will also remark on possibilities to bandit problems (mostly confidence intervals).
+
+Let $\mX$ be a compact Euclidean set and $\mD=L^2(\mX)$ be the set of all square integrable functions on $\mX$.
+Let $\mathbb P$ be the distribution on $\mD$. The model is 
+$$
+y_i = \langle f_i, \beta_0\rangle + \varepsilon_i
+$$
+where $\{\varepsilon_i\}_{i=1}^n$ are centered, exogenous sub-Gaussian random variables, $\beta_0\in\mathcal F\subseteq \mD$ is an unknown regression model and $f_1,\cdots,f_N\overset{i.i.d.}{\sim}\mathbb P$.
+The inner product is taken with respect to the Lesbesgue measure on $\mX$:
+$$
+\langle f_i, \beta_0\rangle := \int_{\mX} f_i(u)\beta_0(u)\ud u.
+$$
+Sometimes, we will place additional assumptions on $\mathcal F$, or restrict the support of $\bP$.
+Errors are measured in 
+$$
+\|\hat \beta_n-\beta_0\|_{\lp}^2 := \int_{\mD} \langle f, \hat \beta_n-\beta_0\rangle^2\ud\bP(f).
+$$
+
+\section{KRR, classical setting (non-linear functional regression)}
+
+We consider the case where $\varphi_0:\mD\to\mathbb R$ is a functional such that $\varphi_0(f)=\langle f,\beta_0\rangle$ for some $\beta_0\in\mD$. 
+This approach has the potential to be extended to non-linear functionals.
+
+Let $K:\mD\times\mD\to\mathbb R_+$ be a PSD kernel. Some discussions below:
+\begin{enumerate}
+\item For example the additive sobolev kernel: for $f,g\in\mD$, $K(f,g)=\sum_{j=1}^{\infty} \rho_j k(f_j,g_j)$ where $k(\cdot,\cdot)$ is a Marten kernel and $f_j=\langle f,e_j\rangle$,
+where $\{e_j\}$ is an orthonormal basis in the Hilbert space $\mD$. This induces an RKHS on $\mD\to\mathbb R$ that is the Sobolev class with respect to the Frechet derivative.
+\item Define $K_f(\cdot) := K(f,\cdot)$ where $K_f:\mD\to\mathbb R_+$. There exists an RKHS $(\mH,\langle\cdot,\cdot\rangle_{\mH})$ such that 
+\begin{enumerate}
+\item $\mH$ is a class of functionals that map from $\mD$ to $\mathbb R$, containing $K_f$ for every $f\in\mD$;
+\item For every functional $\varphi\in\mH$ and every function $f\in\mD$, $\langle K_f,\varphi\rangle_{\mH} = \varphi(f)$. (The reproducing property).
+\end{enumerate}
+\item By Mercer's theorem, there exist $\{\phi_j\}_{j=1}^d\subseteq\mH$ and $\{\mu_j\}_{j=1}^d\in\mathbb R_{++}$ such that for every $j,k\in\mathbb N$ and $f\in\mD$, 
+$$
+\langle\phi_j,\phi_k\rangle_{\lp} = \delta_{jk},\;\;\;\;\langle\phi_j,\phi_k\rangle_{\mH} = \frac{\delta_{jk}}{\mu_j},\;\;\;\; \int_{\mD}K(f,\cdot)\phi_j(f)\ud\bP(f) \equiv \mu_j\phi_j(\cdot).
+$$
+where $\langle \phi,\varphi\rangle_{\lp} = \int_{\mD}\phi(f)\varphi(f)\ud\bP(f)$ for any functionals $\phi,\varphi\in\mD$.
+\end{enumerate}
+
+\subsection{Characterization of the KRR solution}
+The KRR formulation is
+$$
+\hat\varphi_\lambda := \arg\min_{\varphi\in\mH}\left\{ \frac{1}{n}\sum_{i=1}^n(y_i-\varphi(f_i))^2 + \lambda \langle\varphi,\varphi\rangle_{\mH}^2\right\}.
+$$
+Using the reproducing property, we have 
+$$
+\hat\varphi_\lambda := \arg\min_{\varphi\in\mH}\left\{ \frac{1}{n}\sum_{i=1}^n(y_i-\langle K_{f_i},\varphi\rangle_{\mH})^2 + \lambda \langle\varphi,\varphi\rangle_{\mH}^2\right\}
+$$
+Define the following operators that map $\mH$ to $\mH$:
+\begin{enumerate}
+\item $T := \mathbb E[K_f\otimes K_f] = \int_{\mD}K_f\otimes K_f\ud\bP(f)$, in the sense that $T(g)=\mathbb E[\langle K_f,g\rangle_{\mH}K_f]$ for every $g\in\mH$;
+\item $T_n := \frac{1}{n}K_{f_i}\otimes K_{fi}$, which is the empirical version of $T$.
+\end{enumerate}
+
+From KKT conditions, it holds that
+\begin{align*}
+\hat\varphi_\lambda 
+&= (T_n+\lambda I)^{-1} \frac{1}{n}\sum_{i=1}^n y_i K_{f_i} =  (T_n+\lambda I)^{-1} \frac{1}{n}\sum_{i=1}^n (\varphi_0(f_i)+\varepsilon_i) K_{f_i}\\
+&=  (T_n+\lambda I)^{-1} \frac{1}{n}\sum_{i=1}^n (\langle K_{f_i},\varphi_0\rangle_{\mH}+\varepsilon_i) K_{f_i}\\
+&= (T_n+\lambda I)^{-1} T_n \varphi_0 + (T_n+\lambda I)^{-1} \frac{1}{n}\sum_{i=1}^n\varepsilon_i K_{f_i}.
+\end{align*}
+
+\subsection{Some important properties of the covariance operator $T$}
+
+\begin{proposition} 
+$T=\sum_{j=1}^{\infty} \mu_j\phi_j\otimes\phi_j$, in the sense that for every functional $\varphi\in\mD$, $T(\varphi)=\sum_{j=1}^{\infty}\mu_j\langle\phi_j,\varphi\rangle_{\lp}\phi_j$.
+\end{proposition}
+\begin{proof}
+Note that
+$$
+T(\phi_j) = \mathbb E[\langle K_f,\phi_j\rangle_{\mH} K_f] \overset{(a)}{=} \mathbb E[\phi_j(f)K_f] = \int_{\mD} K(f,\cdot)\phi_j(f)\ud\bP(f) \overset{(b)}{=} \mu_j\phi_j,
+$$
+where Eq.~(a) is from the reproducing property and Eq.~(b) is from Mercer's theorem. 
+\end{proof}
+
+\begin{proposition}
+\label{prop:lp-lh}
+For every functional $\varphi\in\mH$, $\|\varphi\|_{\lp}^2 = \|T^{1/2}\varphi\|_{\mH}^2$.
+\end{proposition}
+\begin{proof}
+Let $\varphi=\sum_{j=1}^{\infty}\alpha_j\phi_j$. Then
+\begin{align*}
+\|T^{1/2}\varphi\|_{\mH}^2 &= \textstyle\langle\varphi, T\varphi\rangle_{\mH} = \langle\sum_j\alpha_j\phi_j, \sum_j \alpha_j T\phi_j\rangle_{\mH}  = \langle\sum_j \alpha_j\phi_j, \sum_j \alpha_j\mu_j\phi_j\rangle_{\mH}\\
+&= \sum_{j=1}^{\infty} \alpha_j^2 \mu_j\langle\phi_j,\phi_j\rangle_{\mH} = \sum_{j=1}^{\infty}\alpha_j^2 = \|\varphi\|_{\lp}^2,
+\end{align*}
+where the last equality holds because $\{\phi_j\}_j$ is an orthonormal basis in $\lp$.
+\end{proof}
+
+\subsection{Bias calculations at the population level}
+Define $\varphi_\lambda := (T+\lambda I)^{-1}T \varphi_0$. Let $\varphi_0 = \sum_j \theta_j \phi_j$. Then $\varphi_\lambda = \sum_j \frac{\theta_j\mu_j}{\mu_j+\lambda}\phi_j$. Therefore
+$$
+\varphi_\lambda-\varphi_0 = \sum_j \frac{\lambda}{\mu_j+\lambda} \theta_j\phi_j.
+$$
+We then have
+\begin{align*}
+\|\varphi_\lambda-\varphi_0\|_{\lp}^2 &= \sum_{j} \frac{\theta_j^2 \lambda^2}{(\mu_j+\lambda)^2} \leq \left(\sum_{j=1}^{\infty}\frac{\theta_j^2}{\mu_j}\right)\times \sup_{\mu>0}\frac{\lambda^2 \mu}{(\mu+\lambda)^2}
+\leq \lambda \|\varphi_0\|_{\mH}^2,
+\end{align*}
+where $\|\varphi_0\|_{\mH}^2 = \sum_{j=1}^{\infty} \theta_j^2/\mu_j$.
+
+{\color{blue}
+\paragraph{Observation.} Given a function $f\in\mD$, the error is 
+$$
+\big|\varphi_\lambda(f)-\varphi_0(f)\big| \leq \left|\sum_{j=1}^{\infty} \frac{\lambda\theta_j}{\mu_j+\lambda}\phi_j(f)\right|.
+$$
+We know everything except $\theta_j$. (Note: this assumes we know $T$, which is ``sort of'' justifiable by the abundance of offline data.) If we attempt to use Cauchy-Schwarz inequality here we would get
+$$
+\Delta_1(f) := \sqrt{\sum_{j=1}^{\infty}\frac{\lambda^2\theta_j^2}{(\mu_j+\lambda)^2}}\cdot \sqrt{\sum_{j=1}^{\infty}\phi_j(f)^2} \leq \sqrt{\lambda}\|\varphi_0\|_{\mH}\cdot \sqrt{\sum_{j=1}^{\infty}\phi_j(f)^2}.
+$$
+We then have
+$$
+\mathbb E[\Delta_1(f)^2] = \lambda\|\varphi_0\|_{\mH}^2\cdot \left(\sum_{j=1}^{\infty}\mathbb E[\phi_j(f)^2]\right) = \lambda \|\varphi_0\|_{\mH}^2,
+$$
+where the last inequality holds because $\mathbb E[\phi_j(f)^2] = \langle\phi_j,\phi_j\rangle_{\lp} = 1$.
+}
+
+{\color{red} Correction: $\sum_{j=1}^{\infty}\mathbb E[\phi_j(f)^2]$ is actually unbounded.}
+
+\subsection{From population to sample covariance}
+
+We will analyze $\mathbb E[\hat\varphi]-\varphi_\lambda$, with expectation taken over $\varepsilon$. This can be decomposed as
+\begin{align*}
+\mathbb E[\hat\varphi]-\varphi_\lambda &= [(T_n+\lambda I)^{-1}T_n - (T+\lambda I)^{-1} T]\varphi_0 \\
+&= (T_n+\lambda I)^{-1}(T_n-T)\varphi_0 + [(T_n+\lambda I)^{-1}T - (T+\lambda I)^{-1} T]\varphi_0\\
+&= (T_n+\lambda I)^{-1}(T_n-T)\varphi_0 + [(T_n+\lambda I)^{-1}(T+\lambda I) - I] (T+\lambda I)^{-1} T\varphi_0\\
+&= (T_n+\lambda I)^{-1}(T_n-T)\varphi_0 + [(T_n+\lambda I)^{-1}(T+\lambda I) - I]  \varphi_\lambda\\
+&= (T_n+\lambda I)^{-1}(T-T_n)(\varphi_\lambda-\varphi_0).
+\end{align*}
+
+For an operator $V:\mH\to\mH$, let $\|V\|_{\op(\mH)} := \sup_{\varphi\in\mH}\|V(\varphi)\|_\mH/\|\varphi\|_\mH$ denote the operator norm of this operator induced by $\|\cdot\|_{\mH}$. Then
+$$
+\|\mathbb E[\hat\varphi]-\varphi_\lambda\|_{\lp}^2 
+= \|T^{1/2} (T_n+\lambda I)^{-1}(T-T_n)(\varphi_\lambda-\varphi_0)\|_{\mH}^2.
+$$
+Using Eq.~(44) of \cite{caponnetto2007optimal}, we have with high probability that 
+$$
+\|\mathbb E[\hat\varphi]-\varphi_\lambda\|_{\lp}^2  \lesssim \tilde O(1)\times \left(\frac{\|\varphi_\lambda-\varphi_0\|_{\mH}^2}{\lambda n^2} + \frac{\|\varphi_\lambda-\varphi_0\|_{\lp}^2}{\lambda n}\right).
+$$
+
+\paragraph{Observations.} With the trivial bound of $\|\varphi_\lambda-\varphi_0\|_{\mH}=O(1)$ and $\|\varphi_\lambda-\varphi_0\|_{\lp}^2 \lesssim \lambda$ and $\lambda =n^{-2r/(2r+1)}$, 
+it holds that $\|\mathbb E[\hat\varphi]-\varphi_\lambda\|_{\lp} \lesssim 1/\sqrt{n}$. With target $O(T^{(r+1)/(2r+1)})$ regret we can set first-batch size to be $n = T^{(r+1)/(2r+1)}$, leading to
+estimation error $T^{-(r+1)/(4r+2)}$ and cumulative regret $\tilde O(T^{(3r+1)/(4r+2)})$. This is higher order for $r\leq 1$ but not so much for $r>1$.
+
+
+\subsection{Analysis of variance}
+
+We will now analyze $\hat\varphi-\mathbb E[\hat\varphi]$. We have that
+$$
+\hat\varphi-\mathbb E[\hat\varphi] = (T_n+\lambda I)^{-1}\frac{1}{n}\sum_{i=1}^n \varepsilon_i K_{f_i},
+$$
+where $\alpha_{ij} = \langle K_{f_i},\phi_j\rangle_{\lp}$. For every $v\in\mD$, we then have
+$$
+\big|\hat\varphi(v) -\mathbb E[\hat\varphi](v)\big| \lesssim \frac{1}{n}\sqrt{\sum_{i=1}^n [(T_n+\lambda I)^{-1}K_{f_i}](v)^2}=: \Delta_2(v).
+$$
+Using Eq.~(49) of \cite{caponnetto2007optimal} we can upper bound $\mathbb E[\Delta_2(v)^2] \lesssim \|\hat\varphi-\mathbb E[\hat\varphi]\|_{\lp}^2\lesssim 1/\lambda n$ provided that $\mu_j\asymp j^{-2r}$ and 
+$\lambda = n^{-2r/(2r+1)}$.
+
+\section{KRR, Tony Cai's approach}
+
+This approach is based on the works of \cite{yuan2010reproducing,cai2012minimax}. It only applies to linear functional regression $\varphi_0(f)=\langle f,\beta_0\rangle$ and has some kernel alignment problems;
+however it requires simpler kernels and might be more intuitive. In the remainder of this section, we drop measure notation in integrations if the integration is carried out in the standard Lesbesgue measure. We also drop inner product subscripts if it refers to the standard inner product in Hilbert space $\lx$: $\langle f,g\rangle = \int_{\mX}f(x)g(x)\ud x$.
+
+The important difference is that the kernel $K(\cdot,\cdot)$ is now defined on $\mX\times \mX$ instead of $\mD\times \mD$. This gives rise to an RKHS $\mH\subseteq\mD$ equipped with inner product $\langle\cdot,\cdot\rangle_{\mH}$, such that for every $x\in\mX$ and $f\in\mH$, $\langle K_x,f\rangle_{\mH}=f(x)$, where $K_x(\cdot)=K(x,\cdot)$ is a function in $\mD$.
+Because we don't have a distribution on $\mX$, this forces us to apply Mercer's theorem on the Lesbesgue measure on $\mX$ to obtain basis $\{\phi_j\}_{j=1}^{\infty}\subseteq\mH$ satisfying the following:
+$$
+\langle\phi_j,\phi_k\rangle = \delta_{jk},\;\;\;\; \langle\phi_j,\phi_k\rangle_{\mH} = \frac{\delta_{jk}}{\rho_j}, \;\;\;\; \int_{\mX}K(x,\cdot)\phi_j(x)\ud x = \rho_j\phi_j.
+$$
+
+\subsection{Characterization of the KRR solution}
+
+Omitting intercept terms, the KRR solution admits the form of 
+$$
+\hat\beta = \arg\min_{\beta\in\mH}\left\{\frac{1}{n}\sum_{i=1}^n (y_i-\langle f_i,\beta\rangle)^2 +\lambda \|\beta\|_{\mH}^2\right\}.
+$$
+
+Because $\{\phi_j\}$ is an orthonormal basis on $\lx$, we may define an operator $L_{K^{1/2}}:\mD\to\mD$ as 
+$$
+L_{K^{1/2}}(f) = \sum_{j=1}^{\infty}\sqrt{\alpha_j}\phi_j,\;\;\;\;\;\;\forall f = \sum_{j=1}^{\infty}\alpha_j\phi_j\in\lx.
+$$
+Suppose $\beta_0 = \sum_j\theta_j\phi_j$ such that $\|\beta\|_{\mH}^2 = \sum_j \theta_j^2/\rho_j$. Define $\tilde\beta_0 := L_{K^{-1/2}}\beta_0$ such that $\beta_0 = L_{K^{1/2}}\tilde\beta_0$.
+It is easy to verify that $\|\tilde\beta_0\|_2^2 = \|\beta_0\|_{\mH}^2$. This also shows that $\mH = L_{K^{1/2}}\lx$.
+We then have the following equivalent formulation
+\begin{align*}
+\check\beta &= \arg\min_{\beta\in\lx}\left\{\frac{1}{n}\sum_{i=1}^n (y_i-\langle f_i,L_{K^{1/2}}\beta\rangle)^2 + \lambda \|\beta\|_2^2\right\}\\
+&= \arg\min_{\beta\in\lx}\left\{\frac{1}{n}\sum_{i=1}^n (y_i-\langle \tilde f_i,\beta\rangle)^2 + \lambda \|\beta\|_2^2\right\}
+\end{align*}
+such that $\tilde f_i=L_{K^{1/2}}f_i$ and $\hat\beta = L_{K^{1/2}}\check\beta$.
+
+The population and empirical covariance are defined as following:
+\begin{enumerate}
+\item $T = \mathbb E[\tilde f\otimes \tilde f] = \int_{\mD} \tilde f\otimes \tilde f\ud\bP(f)$, with the understanding that $Tv=\mathbb E[\langle\tilde f,v\rangle\tilde f]$ for every $v\in\lx$.
+\item $T_n = \frac{1}{n}\sum_{i=1}^n \tilde f_i\otimes\tilde f_i$.
+\end{enumerate}
+
+We then have
+\begin{align*}
+\check\beta &= (T_n+\lambda I)^{-1}\frac{1}{n}\sum_{i=1}^n y_i \tilde f_i = (T_n+\lambda I)^{-1}\frac{1}{n}\sum_{i=1}^n (\langle\tilde f_i,\tilde\beta_0\rangle + \varepsilon_i)\tilde f_i\\
+&= (T_n+\lambda I)^{-1} T_n \tilde\beta_0 + (T_n+\lambda I)^{-1}\frac{1}{n}\sum_{i=1}^n\varepsilon_i\tilde f_i.
+\end{align*}
+
+\subsection{Some important properties and covariance alignment}
+
+From definition, $T=\mathbb E[\tilde f\otimes \tilde f] = L_{K^{1/2}}CL_{K^{1/2}}$ where $C=\mathbb E[f\otimes f]$. By spectral theorem there exists an orthonormal basis $\{\psi_j\}_j$ on $\lx$ and
+eigenvalues $\{s_j\}$ such that
+$$
+T = \sum_{j=1}^{\infty} s_j\psi_j\otimes\psi_j.
+$$
+Note that, because we no longer have Mercer's theorem, $\{\psi_j\}$ and $\{\phi_j\}$ may not be the same: and they can both be different from eigenfunctions of $C$. 
+Under some conditions it might be possible to derive the spectral decay rate of $\{s_j\}$, which governs the minimax rate in this class.
+
+We still have the following proposition that is similar to Proposition \ref{prop:lp-lh}.
+\begin{proposition}
+For every $\beta\in\lx$, $\mathbb E[\langle f,L_{K^{1/2}}\beta\rangle^2] = \|T^{1/2}\beta\|_2^2$.
+\end{proposition}
+\begin{proof}
+$\mathbb E[\langle f,L_{K^{1/2}}\beta\rangle^2] = \beta^\top L_{K^{1/2}}CL_{K^{1/2}}\beta = \beta^\top T\beta = \|T\beta\|_2^2.$
+\end{proof}
+
+\subsection{Analysis of population bias}
+Let $\tilde\beta_\lambda = (T+\lambda I)^{-1}T\tilde\beta_0$. Then
+\begin{align*}
+&\mathbb E[\langle f,L_{K^{1/2}}(\tilde\beta_\lambda-\tilde\beta_0)\rangle^2]= \|T^{1/2}(\tilde\beta_\lambda-\tilde\beta_0)\|_2^2 \leq \|T^{1/2}[(T+\lambda I)^{-1}T-I]\|_\op^2\|\tilde\beta_0\|_2^2\\
+&= \lambda^2 \|T^{1/2}(T+\lambda I)^{-1}\|_\op^2\|\tilde\beta_0\|_2^2 = \lambda^2\|\tilde\beta_0\|_2^2\cdot \sup_{\mu>0}\frac{\mu}{(\mu+\lambda)^2} = \lambda\|\tilde\beta_0\|_2^2.
+\end{align*}
+
+\paragraph{Observation.} Fix $f\in\mD$ and recall that $\beta_0 = L_{K^{1/2}}\tilde\beta_0$. Then 
+\begin{align*}
+&\big|\langle f,L_{K^{1/2}}(\tilde\beta_\lambda-\tilde\beta_0)\rangle\big| = \big|\langle f, L_{K^{1/2}}[(T+\lambda I)^{-1}T - I]\tilde\beta_0\rangle\big|
+= \lambda \big|\langle f, L_{K^{1/2}}(T+\lambda I)^{-1}\tilde\beta_0\rangle\big|\\
+&\leq \|f\|_2\cdot \lambda \sqrt{\langle\beta_0,(T+\lambda I)^{-2}\beta_0\rangle}.
+\end{align*}
+
+{\color{red} Let $\tilde\beta_0 =\sum_{j=1}^{\infty} \vartheta_j\psi_j$. The exact error formula is
+$$
+\big|\langle f,L_{K^{1/2}}(\tilde\beta_\lambda-\tilde\beta_0)\rangle\big| = \lambda \sqrt{\sum_{j=1}^{\infty} \frac{\vartheta_j^2\alpha_j^2,}{(s_j+\lambda)^2}},
+$$
+with the understanding that $\alpha_j=\langle L_{K^{1/2}}f,\psi_j\rangle$. We know $\sum_j\vartheta_j^2,\sum_j\alpha_j^2<+\infty$. If we further assume $K$ and $C$ commute, then $\sum_j\alpha_j^2/\rho_j<+\infty$
+because $L_{K^{1/2}}f\in\mH$ because $\alpha_j=\sqrt{\rho_j}a_j$ where $f=\sum_{j=1}^{\infty} a_j\psi_j$ and $\|f\|_2^2=\sum_j a_j^2$. It also holds that $\mathbb E[\alpha_j^2]=s_j$.
+}
+
+{\color{blue}
+Suppose $\beta_0=\sum_{j=1}^{\infty}\theta_j\psi_j$.
+We wish to show
+\begin{align*}
+\langle\beta_0, (T+\lambda I)^{-2}\beta_0\rangle &= \sum_{j=1}^{\infty} \frac{\theta_j^2}{(s_j+\lambda)^2} \leq \sqrt{\sum_{j=1}^{\infty}\frac{\theta_j^2}{s_j}}\cdot \sup_{s>0}\sqrt{\frac{s}{(s+\lambda)^2}} \leq O(\sqrt{\lambda}).
+\end{align*}
+This requires $\langle\beta_0, T^{-1}\beta_0\rangle$ to be bounded, which is unlikely because $T$ typically has faster decay than $\beta_0$.
+What we know is $\sum_{j=1}^{\infty}\theta_j^2/\rho_j < +\infty$. When covariance align, $s_j=\rho_j\mu_j$ where $\mu_j$ is the eigenvalues of $C$.
+}
+
+{\color{magenta}
+What is correct:
+$$
+\sum_{j=1}^{\infty}\frac{\vartheta_j^2\mathbb E[\alpha_j^2]}{(s_j+\lambda)^2} \leq \left(\sum_{j=1}^{\infty}\vartheta_j^2\right)\sup_{s>0}\frac{s}{(s+\lambda)^2}.
+$$
+
+What is loose: 
+$$
+\mathbb E\left[\sum_{j=1}^{\infty}\frac{\vartheta_j^2\alpha_j^2}{(s_j+\lambda)^2}\right]
+\leq \left(\sum_{j=1}^{\infty}\vartheta_j^2\right)\mathbb E\left[\max_j\frac{\alpha_j^2}{(s_j+\lambda)^2}\right]
+$$
+If you do 
+$$
+\mathbb E\left[\max_j\frac{\alpha_j^2}{(s_j+\lambda)^2}\right]\leq \mathbb E\left[\sum_{j=1}^{\infty}\frac{\alpha_j^2}{(s_j+\lambda)^2}\right] = \sum_{j=1}^{\infty}\frac{s_j}{(s_j+\lambda)^2}
+$$
+ you lose.
+}
+
+\subsection{Analysis of bias between population and empirical covariance}
+It holds that
+$$
+\mathbb E[\check\beta]-\tilde\beta_\lambda = (T_n+\lambda I)^{-1}(T-T_n)(\tilde\beta_\lambda-\tilde\beta_0).
+$$
+
+{\color{red}
+With analysis of \cite{caponnetto2007optimal} (see also Sec.~1.4 in this note) and slightly revising the steps leading towards Eq. (39) in \cite{caponnetto2007optimal}, we should be able to establish that $\|(T+\lambda I)^{1/2}(\mathbb E[\check\beta]-\tilde\beta_\lambda)\|_2\lesssim 1/\sqrt{n}$.
+This requires a different analysis from \cite{cai2012minimax}, which couples the variance term together with a contraction argument and only shows $o_P(1)$ beyond the correct rate.
+}
+
+\paragraph{Observation.} Assume the $1/\sqrt{n}$ rate holds. Then for every $f\in\mD$, 
+$$
+\big|\langle f, L_{K^{1/2}}(\mathbb E[\check\beta]-\tilde\beta)\rangle\big| \leq \frac{\sqrt{\tilde f^\top (T+\lambda I)^{-1} \tilde f}}{\sqrt{n}} =: \Delta_2(f),
+$$
+where $\tilde f = L_{K^{1/2}}f$. Note that $\tilde f^\top (T+\lambda I)^{-1}\tilde f = \sum_{j=1}^{\infty} \frac{\langle\tilde f, \psi_j\rangle^2}{s_j+\lambda}$. Then
+\begin{align*}
+\mathbb E[\Delta_2(f)^2] &= \frac{1}{n}\sum_{j=1}^{\infty} \frac{\mathbb E[\langle\tilde f,\psi_j\rangle^2]}{s_j+\lambda} = \frac{1}{n}\sum_{j=1}^{\infty} \frac{s_j}{s_j+\lambda} \lesssim \frac{1}{\lambda^{1/2r} n}.
+\end{align*}
+
+\subsection{Analysis of variance}
+We have
+$$
+\check\beta - \mathbb E[\check\beta] = (T_n+\lambda I)^{-1}\frac{1}{n}\sum_{i=1}^n\varepsilon_i \tilde f_i.
+$$
+For any given $v\in\mathcal D$, 
+\begin{align*}
+&\big|\langle v,\check\beta-\mathbb E[\check\beta]\rangle\big| \leq \frac{1}{n}\sqrt{\sum_{i=1}^n \langle(T_n+\lambda I)^{-1}\tilde f_i,v\rangle^2}=:\Delta_3(v).
+\end{align*}
+We should then have the correct rate on the variance part.
+
+\section{Some extensions of the bandit model}
+
+Possible extensions to the bandit model, to distinguish it from \cite{simchi2022bypassing} which does not require honest, point-wise confidence intervals.
+
+\subsection{Continuous action spaces} The results of \cite{simchi2022bypassing} must have polynomial dependency on the size of a finite action space.
+With the active elimination framework, it is possible to do continuous action spaces (e.g. prices in $[p_{\min},p_{\max}]$) under additional assumptions.
+
+Let $\mA$ be the action space. For context $x_t$ and action $a_t\in\mA$, let $f_t = f(x_t,a_t)\in\mD$ be the contextual function where $f$ is a known feature map.
+Below is an assumption that I suggests.
+\begin{assumption}
+Let $\mu_A$ be a probability measure on $\mA$. For every context $x$ and any $\epsilon>0$, let $\mA(\epsilon;x) := \{a\in\mA: r(a,x)\geq \sup_{a\in\mA} r(a,x)-\epsilon\}\subseteq\mA$
+be the ``level set'' consisting of all $\epsilon$-suboptimal actions. 
+There exists a universal constant $\kappa<+\infty$ such that for every $\epsilon>0$ and every context $x$, 
+$$
+\frac{\mu(\mA(\epsilon;x))}{\mu(\mA(\epsilon/4;x))} \leq \kappa.
+$$
+Note that the number 4 is arbitrary and can be replaced by anything strictly greater than 1.
+\end{assumption}
+
+\paragraph{Observation.} Suppose $\mA$ is finite and let $\mu_A$ be the counting measure on $\mA$. Then Assumption holds with $\kappa\leq |\mA|$.
+
+\subsection{Margin conditions} 
+
+It is possible to impose the following ``margin conditions''. The standard margin condition applies only to two arms (i.e.~$K=2$) but it might be generalizable.
+Let $\beta^1,\beta^2\in\mD$ be the regression functions associated with the two arms, and $\Delta_\beta = \beta^1-\beta^2\in\mD$.
+
+\begin{assumption}
+For some $\nu>0$ and small $h>0$, it holds for every $\epsilon>0$ that
+$$
+\Pr[|\langle f,\Delta_\beta\rangle|\leq\epsilon] \leq \left(\frac{\epsilon}{h}\right)^{\nu}.
+$$
+\end{assumption}
+
+Existing analysis, such as \cite{goldenshluger2013linear} and many follow-up works (for a non-parametric counterpart, see \cite{hu2022smooth}) show that with such assumptions regret is better.
+However, existing analysis usually assume certain ``non-degeneracy'' conditions akin to identifiability or lower bound on $\lambda_{\min}$ for which kernel methods don't have.
+Some preliminary analysis shows that regret is still better, but may not attain the optimal rate. 
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}
