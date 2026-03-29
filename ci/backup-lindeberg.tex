@@ -1,0 +1,620 @@
+\documentclass[11pt,a4paper]{article}
+
+% ========================
+% ESSENTIAL PACKAGES
+% ========================
+
+% Language and encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+
+% Math packages
+\usepackage{amsmath}        % Enhanced math environments
+\usepackage{amssymb}        % Additional math symbols
+\usepackage{amsthm}         % Theorem environments
+\usepackage{amsfonts}       % Additional math fonts
+\usepackage{mathtools}      % Extension to amsmath
+\usepackage{bm}             % Bold math symbols
+\usepackage{dsfont}         % Double-struck fonts (for sets like ℝ, ℕ)
+\usepackage{mathrsfs}       % Script fonts for math
+
+% Graphics and figures
+\usepackage{graphicx}       % Include graphics
+\usepackage{float}          % Better float placement
+\usepackage{subcaption}     % Subfigures
+\usepackage{tikz}           % Drawing diagrams
+\usepackage{pgfplots}       % Plotting
+\pgfplotsset{compat=1.18}
+
+% Page layout and formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}       % Custom headers and footers
+\usepackage{titlesec}       % Customize section titles
+\usepackage{enumitem}       % Customize lists
+\usepackage{parskip}        % Paragraph spacing
+
+% Colors and highlighting
+\usepackage{xcolor}
+\usepackage{mdframed}       % Framed environments
+\usepackage{tcolorbox}      % Colored boxes
+
+% Tables
+\usepackage{array}          % Extended array environments
+\usepackage{booktabs}       % Professional tables
+\usepackage{multirow}       % Multi-row cells
+
+% References and links
+\usepackage{hyperref}       % Hyperlinks
+\usepackage{cleveref}       % Smart cross-references
+
+% Additional useful packages
+\usepackage{cancel}         % Cancel terms in equations
+\usepackage{siunitx}        % SI units
+\usepackage{listings}       % Code listings (if needed)
+
+\usepackage{authblk}
+
+\usepackage[authoryear]{natbib}
+
+% ========================
+% CUSTOM COMMANDS
+% ========================
+
+% Common math sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+
+% Common operators
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\rank}{rank}
+%\DeclareMathOperator{\span}{span}
+%\DeclareMathOperator{\null}{null}
+
+% Shortcuts for common expressions
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+% Derivatives and integrals
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+\newcommand{\dv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+\renewcommand{\bar}{\overline}
+
+\newcommand{\vct}{\boldsymbol}
+\newcommand{\tr}{\mathrm{tr}}
+
+% ========================
+% THEOREM ENVIRONMENTS
+% ========================
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{exercise}{Exercise}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{assumption}{Assumptio}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{note}{Note}[section]
+
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\op}{\mathrm{op}}
+
+\newcommand{\mX}{\mathcal X}
+\newcommand{\mD}{\mathcal D}
+\newcommand{\bP}{\mathbb P}
+\newcommand{\lp}{L^2(\bP)}
+\newcommand{\lx}{L^2(\mX)}
+\newcommand{\ltwo}{L^2(\mX)}
+\newcommand{\ud}{\mathrm d}
+\newcommand{\mH}{\mathcal H}
+\newcommand{\mA}{\mathcal A}
+
+\newcommand{\diag}{\mathrm{diag}}
+
+\newcommand{\mI}{\mathcal I}
+
+% ========================
+% COLORED BOXES
+% ========================
+
+% Important theorem box
+\newtcolorbox{importantbox}{
+	colback=blue!5!white,
+	colframe=blue!75!black,
+	title=Important
+}
+
+% Warning/Note box
+\newtcolorbox{notebox}{
+	colback=yellow!10!white,
+	colframe=orange!75!black,
+	title=Note
+}
+
+% Example box
+\newtcolorbox{examplebox}{
+	colback=green!5!white,
+	colframe=green!75!black,
+	title=Example
+}
+
+% ========================
+% DOCUMENT SETUP
+% ========================
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\leftmark}
+
+
+% Hyperlink setup
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	citecolor=red
+}
+
+\title{Honest and Adaptive Pointwise Confidence Intervals in Linear Functional Regression: An Anisotropic Kernel Ridge Regression Approach}
+\author[1]{Paromita Dubey \footnote{Author names listed in alphabetical order.}}
+\author[2]{Zhiyuan Tang}
+\author[2]{Yining Wang}
+\affil[1]{Marshall Business School, University of Southern California}
+\affil[2]{Naveen Jindal School of Management, University of Texas at Dallas}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Abstract here.
+\end{abstract}
+
+\section{Introduction}
+
+We consider the classical model of linear functional regression with data $\{X_i,Y_i\}_{i=1}^n$, where $X_1,\cdots,X_n\sim P_X$ are independently and identically distributed \emph{functions} 
+whose domain is a non-empty compact interval $I\subseteq\mathbb R$, and $\{Y_i\}_{i=1}^n$ are scalar response variables, modeled by
+\begin{equation}
+\mathbb E[Y_i|X_i] = \eta_0(X_i) := \gamma_0 + \int_I X_i(t)\beta_0(t)\ud t,
+\label{eq:model}
+\end{equation}
+where $\gamma_0\in\mathbb R$ is the intercept term and $\beta_0: I\to\mathbb R$ is the linear functional, both being unknown parameters.
+Many well-known methods have been proposed to estimate $\gamma_0$ and $\beta_0$ from data, such as functional principal component analysis (fPCA) approaches \citep[Chapter 8]{ramsay2005functional},
+\citep{cai2006prediction} and methods based on reproducing kernel Hilbert spaces \citep{yuan2010reproducing,cai2012minimax}.
+
+In this paper, we consider the question of constructing \emph{pointwise} confidence intervals on $\eta_0(x)$ which are valuable in quantifying the uncertainty in estimates of the functional model
+when it is applied to a future data curve $x$. We study the construction of \emph{honest} confidence intervals, which are functions $\varphi$ mapping a data curve $x:I\to\mathbb R$ to a compact interval $\varphi(x)\subseteq\mathbb R$
+such that
+\begin{equation}
+\liminf_{n\to\infty}\inf_{\eta_0\in\Theta} \Pr\left[\eta_0(x)\in\varphi(x)\right] \geq 1-\alpha,\;\;\;\;\;\;\forall x\in\mathrm{supp}(P_X).
+\label{eq:honest-ci}
+\end{equation}
+where $\alpha\in(0,1)$ is a pre-determined significance level,
+$\supp(P_X)$ is the support of $P_X$, $\Theta$ is a fixed and known function class and the randomness in Eq.~(\ref{eq:honest-ci}) is over $\{(X_i,Y_i)\}_{i=1}^n$.
+To understand how \emph{adative} an honest confidence interval is, we further study the worst-case mean-squared widths of constructed intervals
+\begin{equation}
+\sup_{\eta_0\in\Theta}\mathbb E_{\eta_0} \left[\int_{\supp(P_X)}\big|\varphi(x)\big|^2\ud P_X(x)\right],
+\label{eq:adaptive}
+\end{equation}
+where $|\varphi(x)|$ is the Lesbesgue measure of the output interval $\varphi(x)$. We are particularly interested in how the above worst-case risk converges to zero as $n\to\infty$,
+and how it compares with the mean-squared prediction errors
+$$
+\sup_{\eta_0\in\Theta}\mathbb E_{\eta_0} \left[\int_{\supp(P_X)}\int_I [x(t)(\hat\eta_n(t)-\eta_0(t)]^2\ud t\ud P_X(x)\right]
+$$
+for classical fPCA or RKHS estimators $\hat\eta$ of $\eta_0$.
+
+\subsection{Our contributions}
+
+\subsection{Related works}
+
+\subsection{Notations}
+
+For two sequences of real numbers $\{a_n\}$ and $\{b_n\}$, we write $a_n\lesssim b_n$, or equivalently $a_n=O(b_n)$, if there exists a numerical constant $C$ such that $|a_n|\leq C|b_n|$ for all $n$.
+We write $a_n\gtrsim b_n$ or $a_n=\Omega(b_n)$ if $b_n\lesssim a_n$, and $a_n\asymp b_n$ or $a_n=\Theta(b_n)$ if both $a_n\lesssim b_n$ and $a_n\gtrsim b_n$ hold.
+We denote $L_2(I):=\{x: I\to\mathbb R: \int_I x(t)^2\ud t<+\infty\}$ as the class of all square integrable functions on $I$.
+For two functions $x,z\in L_2(I)$, $\langle x,z\rangle$ denotes the standard inner product of $L_2(I)$; that is, $\langle x,z\rangle = \int_I x(t)z(t)\ud t$.
+
+\section{Functional regression via kernel ridge regression}
+
+In this section, we give an overview of an reproducing kernel Hilbert space (RKHS) approach towards linear functional regression, following the seminal works of \cite{cai2012minimax} which also lays the foundation of 
+methodological and theoretical contributions of this paper.
+To clarify, all results in this section are relatively well-known in the literature, and we are summarizing them for the purpose of completeness only.
+
+Let $K:I\times I\to\mathbb R$ be a real, symmetric, square integrable, and non-negative definite function, known as the \emph{kernel function}.
+There then exists a reproducing kernel Hilbert space $\mH\subseteq L_2(I)$ associated with inner product $\langle\cdot,\cdot\rangle_{\mH}$
+such that the following reproducing property holds for any $f\in\mH$:
+$$
+f(t) = \langle K(t,\cdot), f\rangle_{\mH}\;\;\;\;\;\;\forall t\in I.
+$$
+Assuming $\beta_0\in\mH$. Then a standard kernel ridge regression (KRR) approach to estimate $\alpha_0,\beta_0$ from $\{X_i,Y_i\}_{i=1}^n$ is to solve the following penalized optimization problem
+\begin{equation}
+\hat\gamma_n,\hat\beta_n \in \arg\min_{\gamma\in\mathbb R,\beta\in\mH} \left\{\frac{1}{n}\sum_{i=1}^n (Y_i-\gamma-\langle X_i,\beta\rangle)^2 + \lambda_n \|\beta\|_\mH^2\right\},
+\label{eq:krr}
+\end{equation}
+where $\lambda_n>0$ is a penalization parameter.
+Let $\bar X=\frac{1}{n}\sum_{i=1}^n X_i$ and $\bar Y=\frac{1}{n}\sum_{i=1}^n Y_i$ be the sample averages. It is easy to verify that $\hat\gamma_n=\bar Y$ and 
+\begin{equation}
+\hat\beta_n\in\arg\min_{\beta\in\mH}\left\{\frac{1}{n}\sum_{i=1}^n (Y_i'-\langle X_i',\beta\rangle)^2 + \lambda_n\|\beta\|_\mH^2\right\}
+\label{eq:krr-nointercept}
+\end{equation}
+where $Y_i'=Y_i-\bar Y$ and $X_i'=X_i-\bar X$.
+
+\subsection{Reduction to an optimization problem in $L_2(I)$}
+
+The work of \cite{cai2012minimax} makes the observation that Eq.~(\ref{eq:krr-nointercept}) can be equivalently reformulated into an infinite-dimensional optimization problem
+involving the standard inner product and norm of $L_2(I)$ only, which is helpful for implementation and theoretical analysis purposes.
+We summarize here how such equivalence is built below.
+
+By Mercer theorem, there exists an orthonormal basis $\{\phi_j\}_{j=1}^{\infty}$ of $L_2(I)$
+and a sequence of non-increasing, strictly positive real numbers $\rho_1\geq\rho_2\geq\cdots$ such that $\phi_j\in\mH$ for all $j$, and furthermore
+$$
+\langle\phi_j,\phi_k\rangle = \int_I \phi_j(t)\phi_k(t)\ud t = \delta_{jk},\;\;\;\;\;\langle\phi_j,\phi_k\rangle_{\mH}= \frac{\delta_{jk}}{\rho_j},\;\;\;\;\;\;\int_I K(t,\cdot)\phi_j(t)\ud t=\rho_j\phi_j.
+$$
+where $\delta_{jk}=\vct 1\{j=k\}$ is the Kronecker delta notation.
+Note that because $\mH$ is known, $\{\phi_j,\rho_j\}_{j=1}^{\infty}$ are also known.
+Following notations in \citep{cai2012minimax}, we define linear operator $L_{K^{1/2}}:L^2(I)\to L^2(I)$ and its inverse operator $L_{K^{-1/2}}$ as follows:
+$$
+L_{K^{1/2}}(\phi_j) = \sqrt{\rho_j}\phi_j,\;\;\;\;\;\; L_{K^{-1/2}}(\phi_j) = \frac{1}{\sqrt{\rho_j}}\phi_j,\;\;\;\;\;\forall j\geq 1.
+$$
+In other words, for any $f=\sum_{j=1}^{\infty}\alpha_j\phi_j\in L^2(I)$ such that $\sum_j\alpha_j^2<+\infty$, $L_{K^{1/2}}(f)=\sum_{j=1}^{\infty}\alpha_j\sqrt{\rho_j}\phi_j$
+and therefore $L_{K^{1/2}}f\in\mH$ because $\sum_{j=1}^{\infty}\langle L_{K^{1/2}}f,\phi_j\rangle^2/\rho_j <+\infty$.
+In fact, \citep[Proposition 2]{yuan2010reproducing} shows that for $f\neq 0$ and $L_{K^{1/2}}f\neq 0$, $f\in L^2(I)$ if and only if $L_{K^{1/2}}f\in\mH$ and furthermore $\int_I f(t)^2\ud t=\|f\|_2^2=\|L_{K^{1/2}}f\|_\mH^2$.
+The optimal solution $\hat\beta_n$ in Eq.~(\ref{eq:krr-nointercept}) can then be expressed as $\hat\beta_n = L_{K^{1/2}}\hat\theta_n$, where
+\begin{equation}
+\hat\theta_n \in \arg\min_{\theta\in L_2(I)}\left\{\frac{1}{n}\sum_{i=1}^n (Y_i'-\langle L_{K^{1/2}}X_i', \theta\rangle^2 + \lambda_n\|\theta\|_2^2\right\},
+\label{eq:krr-nointercept-l2}
+\end{equation}
+where $\|\theta\|_2^2 =\int_I \theta(t)^2\ud t$ is the standard squared $L_2$ norm on $I$.
+For brevity, we will also use the notation of $Z_i' = L_{K^{1/2}}X_i'$ throughout this paper.
+
+\subsection{Kernel ridge regression via spectral decomposition}
+
+The infinite-dimensional optimization problem in Eq.~(\ref{eq:krr-nointercept-l2}) can be reduced to a finite-dimensional problem and efficiently solved
+using Gram matrices, known as the kernel trick. In this section, we show an alternative characterization of $\hat\theta_n$, representing it as a smoothed version of functional PCA
+which is useful motivating our anisotropic estimators later.
+
+Let
+$$
+\hat T_n := \frac{1}{n}\sum_{i=1}^n Z_i'\otimes Z_i'
+$$
+be the sample covariance operator, where $Z_i'=L_{K^{1/2}}X_i'$. By the spectral theorem, there exists orthonormal $\{\hat\psi_j\}_{j=1}^n$ in $L_2(I)$ and $\hat s_1\geq \hat s_2\geq\cdots\geq \hat s_n\geq 0$ such that
+$$
+\hat T_n = \sum_{j=1}^n \hat s_j\hat \psi_j\otimes\hat \psi_j.
+$$
+The estimator $\hat\theta_n$ can then be expressed as
+\begin{equation}
+\hat\theta_n = (\hat T_n+\lambda_n I)^{-1}\frac{1}{n}\sum_{i=1}^n Y_i'Z_i' = \frac{1}{n}\sum_{i=1}^n Y_i'\sum_{j=1}^{\infty}\frac{\hat\nu_j(Z_i')}{\hat s_j+\lambda}\hat\psi_j,
+\label{eq:krr-nointercept-fpca}
+\end{equation}
+where $\hat\nu_j(Z_i') = \langle Z_i', \hat\psi_j\rangle=\int_I Z_i'(t)\hat\psi_j(t)\ud t$.
+
+\section{Assumptions}
+
+In this section we list and discuss assumptions that we impose throughout this paper. For some results, additional assumptions are needed: 
+we will remark on them when such additional assumptions are introduced specifically for selected theorems or lemmas.
+
+We first introduce mild regularity conditions to make sure the problem is well-posed.
+\begin{enumerate}
+\item[(A1)] Noise variables $\varepsilon_i:=Y_i-\eta_0(X_i)$ are centered, independent, homoskedastic with variance $\sigma_\varepsilon^2<+\infty$, and satisfies $\Pr[|\varepsilon_i|>t]\leq 2e^{-C_\varepsilon t^2/2}$
+for some $C_\varepsilon<+\infty$ and all $t>0$;
+\item[(A2)] $\beta_0\in\mH$ and $\|\beta_0\|_\mH\leq 1$, which is equivalent to $\|\theta_0\|_2=\|L_{K^{-1/2}}\beta_0\|_2 =(\int_I \theta_0(t)^2\ud t)^{1/2} \leq 1$.
+\item[(A3)] For $x\sim P_X$, $\|L_{K^{1/2}}x\|_2= (\int_I (L_{K^{1/2}}x)(t))^2\ud t)^{1/2}\leq 1$ almost surely. We also assume that $x\neq 0$ and $L_{K^{1/2}}x\neq 0$ almost surely, to avoid degenerate situations.
+\end{enumerate}
+
+We remark that in Assumptions (A2) and (A3) we use one as the upper bounds to $\|\beta_0\|_\mH$ and $\|x\|_2$ for convenience only. Our constructed honest confidence bands do not require such knowledge
+and they remain valid with 1 being replaced by any other numerical constants.
+
+We use $\Theta_2(\mH)$ to denote the class of all regression functionals $\beta_0$ that satisfy (A2). Note that $\Theta_2(\mH)$ depends on the selection of the RKHS $\mH$, but not on the covariate distribution $P_X$.
+
+Let $Z:=L_{K^{1/2}}X$ be a random function and $P_Z$ be the distribution of $Z$, which is induced by both $P_X$ and $K$. Consider the population covariance operator
+$$
+T := \mathbb E_{P_Z}\left[Z\otimes Z\right].
+$$
+By the spectral theorem, there exists an orthonormal basis $\{\psi_j\}_{j=1}^{\infty}$ of $L_2(I)$ and $s_1\geq s_2\geq\cdots\geq 0$ such that
+\begin{equation}
+T = \sum_{j=1}^{\infty} s_j\psi_j\otimes\psi_j.
+\label{eq:specT}
+\end{equation}
+Note that, in general, because the population covariance operator $T$ is unknown, $\{\psi_j,s_j\}$ are also unknown.
+
+The following assumptions on imposed directly on the structure of $\{\psi_j\}_j$ and $\{s_j\}_j$.
+\begin{enumerate}
+\item[(B1)] There exists numerical constants $r>0$ and $0<c_s\leq C_s<+\infty$ such that $c_s j^{-2r}\leq s_j\leq C_sj^{-2r}$ for all $j\geq 1$;
+\item[(B2)] There exists a numerical constant $C_p<+\infty$ such that for every $j,k\geq 1$, $\mathbb E[\langle Z,\psi_j\rangle^2\langle Z,\psi_k\rangle^2] \leq C_p\times \mathbb E[\langle Z,\psi_j\rangle^2]\times \mathbb E[\langle Z,\psi_k\rangle^2]= C_ps_js_k$;
+\item[(B3)] There exists numerical constants $\kappa\in[0,1/4)$ and $C_\nu<+\infty$ such that for every $j\geq 1$, $|\langle Z,\psi_j\rangle| \leq \sqrt{s_j}\cdot n^{\kappa}$ almost surely.
+\end{enumerate}
+
+We remark that, in Assumption (B3), the smaller $\kappa$ the stronger the assumption is. For the strongest version of $\kappa=0$, it essentially assumes $|\langle Z,\psi_j\rangle|\lesssim j^{-r}$,
+which coincides with coefficient decay assumptions adopted in many fPCA analysis.
+{\color{red}In particular, the results in \cite{cai2006prediction} shows that in this case ($\kappa=0$ in (B3)) fPCA achieves an MSE rate of $n^{-(2r-1)/(2r+1)}$ assuming no decay of $|\langle\theta_0,\psi_j\rangle|$.}
+
+\section{Confidence intervals via isotropic under-smoothing}
+
+As a warm-up exercise and a backup method with minimal assumptions, we first consider honest confidence intervals constructed by \emph{under-smoothing} an isotropic kernel ridge estimator.
+Let $\{\lambda_n\}_{n=1}^{\infty}$ be a sequence of positive penalty parameters that satisfies
+\begin{equation}
+\lambda_n n\log^2 n \to 0,\;\; \lambda_n n^{1-\delta}\to \infty\;\;\;\;\;\;\text{as}\;\;n\to\infty
+\label{eq:lambdan-1}
+\end{equation}
+for any $\delta>0$.
+Let $\hat\gamma_n = \bar Y$ and $\hat\beta_n=L_{K^{1/2}}\hat\theta_n$ where 
+$$
+\hat\theta_n = (\hat T_n+\lambda_n I)^{-1}\frac{1}{n}\sum_{i=1}^n Y_i'Z_i',
+$$
+with $Y_i'=Y_i-\bar Y$, $Z_i'=L_{K^{1/2}}(X_i-\bar X)$ and $\hat T_n=\frac{1}{n}\sum_{i=1}^n Z_i'\otimes Z_i'$.
+This is an \emph{under-smoothed} kernel ridge regression estimator with $\lambda_n=o(n^{-1})$, while the optimal penalty parameter choice for estimating $\eta_0$ in mean-squared errors under $P_X$
+is $\lambda_n\asymp n^{-2r/(2r+1)}$, per results in \cite{cai2012minimax}.
+
+For a test function $x$ in the support $P_X$, an honest and adaptive confidence interval of $\eta(x)$ at significance level $\alpha\in(0,1)$ is constructed as
+$$
+\varphi(x) = [\hat\eta_n(x)-\tau_{\alpha/2}\hat\sigma_n(L_{K^{1/2}}x),\;\; \hat\eta_n(x)+\tau_{\alpha/2}\hat\sigma_n(L_{K^{1/2}}x)]
+$$
+where $\tau_{\alpha/2}$ is the $(1-\alpha/2)$-quantile of the standard Normal distribution, and
+$$
+\hat\eta_n(x) = \hat\gamma_n + \int_I x(t)\hat\beta_0(t)\ud t,\;\;\;\;\;\;\hat\sigma_n(z) = \frac{\sigma_\varepsilon}{\sqrt{n}}\sqrt{\langle z, (\hat T_n+\lambda_n I)^{-1}z\rangle}.
+$$
+%To facilitate our analysis, we also introduce the following quantity $\tilde z_n(z)$ defined as
+%$$
+%\tilde\sigma_n(z) := \frac{\sigma_\varepsilon}{\sqrt{n}}\sqrt{\langle z, (\hat T_n+\lambda_n I)^{-1}\hat T_n(\hat T_n+\lambda_n I)^{-1}z\rangle},
+%$$
+%which is smaller than $\hat\sigma_n(z)$ almost surely.
+
+\subsection{Validity and rates of convergence}
+
+\begin{theorem}
+Suppose Assumptions (A1), (A2), (B1), (B2), (B3) hold where (B3) holds for some $\kappa<1$. Suppose also that Eq.~(\ref{eq:lambdan-1}) holds. Then 
+for any $x\in\supp(P_X)$, conditioned on the event that
+\begin{equation}
+\liminf_{n\to\infty}\inf_{\beta_0\in\Theta_2(\mH)} \Pr[\eta_0(x)\in\varphi(x)] \geq 1-\alpha\;\;\;\;\;\;\forall x\in\supp(P_X).
+\label{eq:simple-validity}
+\end{equation}
+Furthermore, as $n\to\infty$, 
+\begin{equation}
+\sup_{\beta_0\in\Theta_2(\mH)}\mathbb E_{\eta_0}\left[\int_{\supp(P_X)}\big|\varphi(x)\big|^2\ud P_X(x)\right]\lesssim n^{-\frac{2r-1}{2r}+\delta}
+\label{eq:simple-validity}
+\end{equation}
+for any $\delta>0$.
+\label{thm:simple}
+\end{theorem}
+
+\begin{remark}
+If $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed random variables, then Eq.~(\ref{eq:simple-validity}) in Theorem \ref{thm:simple}) holds without assuming (B3).
+\end{remark}
+
+
+\subsection{Minimax optimality}
+
+\begin{theorem}
+Fix arbitrary $\alpha\in(0,1)$, $r>0$ and $\kappa=0$. There exists a distribution $P_X$ satisfying Assumptions (A1), (A3), (B1), (B2), and (B3), such that for any $\varphi$ satisfying Eq.~(\ref{eq:honest-ci})
+with respect to the constructed $P_X$ and $\Theta_2(\mH)$, it holds that
+$$
+\sup_{\beta_0\in\Theta_2(\mH)} \mathbb E_{\beta_0}\left[\int_{\supp(P_X)}\big|\varphi(x)\big|^2\ud P_X(x)\right] \gtrsim n^{-\frac{2r-1}{2r}}.
+$$
+\label{thm:simple-lb}
+\end{theorem}
+
+\section{Confidence intervals via anisotropic under-smoothing}
+
+Let
+$$
+\hat\theta_n = (\hat T_n+\Lambda_n)^{-1}\frac{1}{n}\sum_{i=1}^n Y_i' Z_i'
+$$
+where $\Lambda_n$ is a self-adjoint covariance operator of the form
+$$
+\Lambda_n = \sum_{j=1}^n \lambda_{nj}\hat\psi_j\otimes\hat\psi_j
+$$
+for some $\{\lambda_{nj}\}_{j=1}^n\geq 0$, and the entire $\Lambda_n$ depends only on $\{Z_i'\}_{i=1}^n$ but not $Y_i'$.
+For the purpose of this section, we adopt the choice of 
+$$
+\lambda_{nj} = \sqrt{\hat s_j\lambda_n}.
+$$
+
+{\color{blue}
+Intuition: the squared bias term, after Cauchy-Schwarz, is
+\begin{align*}
+\sum_{j=1}^n \hat\nu_j(z)^2\frac{\lambda_{nj}^2}{(s_j+\lambda_{nj})^2} = \sum_{j=1}^n \lambda_n \frac{\hat\nu_j(z)^2}{(\sqrt{\hat s_j}+\sqrt{\lambda_n})^2}.
+\end{align*}
+
+the variance term is
+\begin{align*}
+\frac{1}{n}\sum_{i=1}^n\langle z, (\hat T_n+\Lambda_n)^{-1}Z_i\rangle^2 &= \langle z, (\hat T_n+\Lambda_n)^{-1}\hat T_n(\hat T_n+\Lambda_n)^{-1}z\rangle\\
+&= \sum_{j=1}^n \hat\nu_j(z)^2\frac{\hat s_j}{(\hat s_j+\lambda_{nj})^2} = \sum_{j=1}^n \frac{\hat\nu_j(z)^2}{(\sqrt{\hat s_j}+\sqrt{\lambda_n})^2}.
+\end{align*}
+}
+
+\section{More adaptive intervals with anisotropic KRR}
+
+
+\section{Proofs}
+
+For brevity we assume $\mathbb E[x]=0$, $\gamma_0=0$ and $X_i'=X_i$ throughout all proofs, which is conventional in the analysis of linear functional regression in the literature \citep{cai2012minimax,yuan2010reproducing}.
+For all \emph{lower bound} proofs, we also assume $L_{K^{1/2}}=L_{K^{-1/2}}$ is the identity operator to simplify the proofs.
+
+
+
+\subsection{Some important technical lemmas}
+
+We first establish a few technical lemmas which are important to our proof of later results.
+\begin{lemma}
+Suppose Assumptions (A1) and (A3) hold. Suppose Assumption (B3) holds for some $\kappa<1/2$, and $\lambda_n$ satisfies Eq.~(\ref{eq:lambdan-1}). Then there exists a constant $n_0\in\mathbb N$ depending only on $\kappa<1/2$ such that for all $n\geq n_0$, with probability at least $1-n^{-1}$,
+$$
+\frac{1}{2}(T+\lambda_n I)\preceq \hat T_n+\lambda_n I\preceq 2(T+\lambda_n I)
+$$
+where $\hat T_n=\frac{1}{n}\sum_{i=1}^n Z_i\otimes Z_i$, $T=\mathbb E[Z\otimes Z]$, $Z_i=L_{K^{1/2}}X_i$, $Z=L_{K^{1/2}}Z$, and for two self-adjoint operators $A,B$, $A\preceq B$ if $\langle x,Ax\rangle\leq \langle x, Bx\rangle$
+for any square integrable on function $x:I\to\mathbb R$.
+\label{lem:empirical-population-cov}
+\end{lemma}
+
+We remark that similar versions of Lemma \ref{lem:empirical-population-cov} have appeared, in different forms, in classical analysis of kernel ridge regression estimators and RKHS approaches for linear functional regression.
+See e.g.~the upper bound on $\mathcal S_2(\lambda,z)$ in \citep{caponnetto2007optimal}, the second inequality in the proof of Theorem 5 in \citep{smale2007learning}, or Lemma 2 in \citep{cai2012minimax}.
+Nevertheless, in our applications the choice of $\lambda_n$ is significantly smaller than conventional choices (for inference purposes), and when $\lambda_n = o(n^{-1})$ existing arguments cannot be directly applied,
+without additional conditions such as Assumption (B3) for some $\kappa<1/2$. Therefore, we give the complete proof of Lemma \ref{lem:empirical-population-cov} below for our purposes.
+
+\begin{proof}[Proof of Lemma \ref{lem:empirical-population-cov}.]
+We use Hoeffding's inequality for bounded self-adjoint operators, as developed and stated in \citep{minsker2017some}.
+For every $i\in[n]$, define
+$$
+W_i := (T+\lambda_n I)^{-1/2}Z_i = (T+\lambda_n I)^{-1/2}L_{K^{1/2}}Z_i.
+$$
+This gives rise to
+\begin{align}
+\frac{1}{n}\sum_{i=1}^n W_i\otimes W_i &= (T+\lambda_n I)^{-1/2}\hat T_n (T+\lambda_n I)^{-1/2};\label{eq:epcov-0}\\
+\mathbb E[W_i\otimes W_i] &= (T+\lambda_n I)^{-1/2} T (T+\lambda_n I)^{-1/2}, \;\;\;\;\;\;\forall i\in[n]\label{eq:epcov-0half}.
+\end{align}
+
+By Assumption (B3), it holds almost surely that 
+\begin{align}
+\|W_i\otimes W_i\|_\op&=\left\|\sum_{j,k=1}^{\infty}\frac{\langle Z_i,\psi_j\rangle\langle Z_i,\psi_k\rangle}{\sqrt{s_j+\lambda_n}\sqrt{s_k+\lambda_n}}\psi_j\otimes\psi_k\right\|_\op\nonumber\\
+&\leq \max_{j,k\geq 1}s_j^{-1/2}s_k^{-1/2}|\langle Z_i,\psi_j\rangle|\langle Z_i,\psi_k\rangle|\leq n^{2\kappa}.
+\label{eq:proof-epcov-1}
+\end{align}
+
+Let 
+$$
+A_n := \sum_{i=1}^n\mathbb E[(W_i\otimes W_i)^2] =n\times\sum_{j,k=1}^{\infty}\frac{\mathbb E[\langle Z,Z\rangle\langle Z,\psi_j\rangle\langle Z,\psi_k\rangle]}{(s_j+\lambda_n)(s_k+\lambda_n)}\psi_j\otimes \psi_k.
+$$
+It is easy to verify that $\|A_n\|_\op \geq n\mathbb E[\langle Z,\psi_1\rangle^4]/(s_1+\lambda_n)=ns_1^2/(s_1+\lambda_n)\geq c_sn/2$ for sufficiently large $n$. 
+On the other hand, Because $\langle Z,Z\rangle\leq 1$ almost surely thanks to Assumption (A3), it holds that
+\begin{equation}
+\tr(A_n) \leq n\times \sum_{j=1}^{\infty} \frac{s_j}{(s_j+\lambda_n)^2} \lesssim n^{(2r+1)/r},
+\label{eq:proof-epcov-2}
+\end{equation}
+where the last inequality holds because $s_j\asymp j^{-2r}$ thanks to Assumption (A1), and $\lambda_n\gtrsim n^{-2}$.
+Invoking \citep[Theorem 3.1]{minsker2017some}, it holds with probability $1-n^{-1}$ that
+\begin{align*}
+\left\|\frac{1}{n}\sum_{i=1}^n W_i\otimes W_i-\mathbb E[W_i\otimes W_i]\right\|_\op &\lesssim n^{-\frac{1-2\kappa}{2}}\log n = o(1). 
+\end{align*}
+Subsequently, incorporating Eqs.~(\ref{eq:epcov-0},\ref{eq:epcov-0half}), the above inequality implies
+$$
+\left\|(T+\lambda_n)^{-1/2}(T-\hat T_n)(T+\lambda_n^{-1/2})\right\|_\op = o(1).
+$$
+This proves Lemma \ref{lem:empirical-population-cov}, by selecting $n_0$ sufficiently large such that the right-hand side of the above inequality is upper bounded by $1/2$.
+\end{proof}
+
+\begin{lemma}
+Assume Assumption (A1) holds and $\lambda_n$ are chosen such that Eq.~(\ref{eq:lambdan-1}) holds. Let $\varepsilon_i = Y_i - \langle X_i,\beta_0\rangle$. If \emph{either} one of the following conditions are satisfied:
+\begin{enumerate}
+\item $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed, or
+\item Assumption (B3) holds for some $\kappa<1/4$;
+\end{enumerate}
+then for every $x\in\supp(P_X)$ and $z=L_{K^{1/2}}x$, as $n\to\infty$, 
+$$
+\frac{1}{\tilde\sigma_n(z)\sqrt{n}}\sum_{i=1}^n \varepsilon_i g(z,Z_i)\;\;\overset{d}{\to}\;\; \mathcal N(0,1),
+$$
+where $Z_i=L_{K^{1/2}}X_i$, $g(z,Z)=\langle z,(\hat T_n+\lambda_n I)^{-1}Z\rangle$ and $\tilde\sigma_n(z)^2 = n^{-1}\sum_{i=1}^n \sigma_\varepsilon^2g(z,Z_i)^2$.
+\label{lem:clt}
+\end{lemma}
+
+\begin{proof}[Proof of Lemma \ref{lem:clt}.]
+It is easy to see that $\sum_{i=1}^n\varepsilon_i g(z,Z_i)$ is the sum of $n$ independent, centered random variables with $\varsigma_n^2 = \mathbb E[(\sum_{i=1}^n\varepsilon_ig(z,Z_i))^2] = n\tilde\sigma_n(z)^2$.
+If $\{\varepsilon_i\}_{i=1}^n$ are independently distributed Normal random variables then the lemma obviously holds.
+
+When $\{\varepsilon_i\}_{i=1}^n$ are not necessarily Normally distributed, 
+we will verify Linderberg's condition for central limit theorem of independently but not identically distributed random variables.
+
+If not explicitly mentioned, all probabilities and expectations are conditioned on $\{Z_i\}_{i=1}^n$ in the rest of this proof.
+Fix arbitrary $\chi>0$. Because $\frac{1}{n}\sum_{i=1}^ng(z,Z_i)^2 = \tilde\sigma_n(z)^2/\sigma_\varepsilon$,
+we know that for all but $m\leq 2/(\chi^2\sigma_\varepsilon^2)$ samples (denoted as $\mI\subseteq[n]$ such that $|\mI|=m$), 
+$$
+\big|g(z,Z_i)\big| \leq \frac{1}{2}\chi \sqrt{n}\tilde\sigma_n(z),\;\;\;\;\;\;\forall i\notin\mI.
+$$
+Because $z\neq 0$, Lemma \ref{lem:empirical-population-cov} implies that $\tilde\sigma_n(z)\overset{p}{\to} \langle z, T^{-1} z\rangle >0$ and therefore, applying Assumption (A1), it holds 
+with probability $1-O_P(n^{-1})$ over the randomness of $\{Z_i\}_{i=1}^n$ that
+\begin{equation}
+\Pr\left[\big|\varepsilon_i g(z,Z_i)\big| \geq \chi \varsigma_n\right] \lesssim \exp\{-\Omega(n)\},\;\;\;\;\;\;\forall i\notin \mI
+\label{eq:proof-clt-1}
+\end{equation}
+where in the $\Omega(\cdot)$ notation we hide dependency on $\chi$ and $\langle z,T^{-1}z\rangle$, both strictly positive constants independent of $n$ and $\{Z_i\}$.
+
+{\color{red}
+On the other hand, Assumptions (A3), (B3) and Lemma \ref{lem:empirical-population-cov} imply that, with probability $1-O_P(T^{-1})$ over the randomness of $\{Z_i\}_{i=1}^n$, 
+\begin{equation}
+g(z,Z_i)^2 = O_P(n^{4\kappa}),\;\;\;\;\;\;\forall i\in[n].
+\label{eq:proof-clt-2}
+\end{equation}
+Combining Eqs.~(\ref{eq:proof-clt-1},\ref{eq:proof-clt-2}), we obtain with probability $1-O_P(n^{-1})$ over the randomness of $\{Z_i\}_{i=1}^n$ that
+\begin{align*}
+\frac{1}{\varsigma_n^2}\sum_{i=1}^n \mathbb E\left[(\varepsilon_ig(z,Z_i)^2\big| |\varepsilon_ig(z,Z_i)|>\chi\varsigma_n\right] &\leq \frac{1}{n\tilde\sigma_n(z)^2}\left[\frac{2}{\chi^2\sigma_\varepsilon^2}e^{-\Omega(n)} + O(n^{4\kappa}) \right]\to 0
+\end{align*}
+as $n\to\infty$. This verifies the Lindeberg's condition for central limit theorem.
+}
+\end{proof}
+
+
+\subsection{Proof of Theorem \ref{thm:simple}}
+
+We are now ready to prove Theorem \ref{thm:simple}.
+With $Y_i=\langle X_i,\beta_0\rangle+\varepsilon_i = \langle Z_i,\theta_0\rangle+\varepsilon_i$, it holds that
+$$
+\hat\theta_n = (\hat T_n+\lambda_n I)^{-1}\hat T_n\theta_0 + \frac{1}{n}\sum_{i=1}^n\varepsilon_i (\hat T_n+\lambda_n I)^{-1}Z_i.
+$$
+Subsequently,
+\begin{align}
+\hat\theta_n-\theta_0 &= \underbrace{-\lambda_n (\hat T_n+\lambda_n I)^{-1}\theta_0}_{=: b_n} + \underbrace{\frac{1}{n}\sum_{i=1}^n\varepsilon_i(\hat T_n+\lambda_n I)^{-1}Z_i}_{=:v_n}.
+\end{align}
+
+For any test function $x\in\supp(P_X)$, let $z=L_{K^{1/2}}x=\sum_{j=1}^{n}\hat\nu_j\hat\psi_j$, where $\hat\nu_j=\langle z,\hat\psi_j\rangle$.
+Let also $\hat\vartheta_j = \langle\theta_0,\hat\psi_j\rangle$.
+Slightly abusing notations by denoting $b_n(z) := \langle b_n,z\rangle = \int_I b_n(t)z(t)\ud t$, we have that
+\begin{align}
+\big|b_n(z)\big| &= \lambda_n\left|\left\langle(\hat T_n+\lambda_n I)^{-1}\sum_{j=1}^n\hat\vartheta_j\hat\psi_j, \sum_{j=1}^n\hat\nu_j\hat\psi_j\right\rangle\right|
+= \lambda_n \left|\sum_{j=1}^n \frac{\hat\nu_j\hat\vartheta_j}{\hat s_j+\lambda_n}\right|\label{eq:proof-simple-1}\\
+&\leq \lambda_n \sqrt{\sum_{j=1}^n\hat\vartheta_j^2}\sqrt{\sum_{j=1}^n\frac{\hat\nu_j^2}{(\hat s_j+\lambda_n)^2}}\label{eq:proof-simple-2}\\
+&\leq \sqrt{\lambda_n}\cdot \sqrt{\langle z,(\hat T_n+\lambda_n I)^{-1}z\rangle} \leq ??.\label{eq:proof-simple-3}
+\end{align}
+In the above derivations, Eq.~(\ref{eq:proof-simple-1}) holds because $\{\hat\psi_j\}_{j=1}^n$ is orthonormal with respect to $L_2(I)$ and $\hat T_n=\sum_{j=1}^n\hat s_j\hat\psi_j\otimes\hat\psi_j$;
+Eq.~(\ref{eq:proof-simple-2}) holds by the Cauchy-Schwarz inequality;
+Eq.~(\ref{eq:proof-simple-3}) holds by noting that $\lambda_n/(\sqrt{\hat s_j+\lambda_n})\leq\sqrt{\lambda_n}$ for all $j$, and furthermore
+$$
+\langle z, (\hat T_n+\lambda_n I)^{-1}z\rangle = \left\langle\sum_{j=1}^n\hat\nu_j\hat\psi_j, \sum_{j=1}^n\frac{\hat\nu_j}{\hat s_j+\lambda_n}\hat\psi_j\right\rangle = \sum_{j=1}^n\frac{\hat\nu_j^2}{\hat s_j+\lambda_n}.
+$$
+
+We next analyze the term involving $v_n$ on an arbitrary test function $x\in\supp(P_X)$ with $z=L_{K^{1/2}}x=\sum_{j=1}^n\hat\nu_j\hat\psi_j$, where $\hat\nu_j=\langle z,\hat\psi_j\rangle$.
+Let $v_n(z)=\langle v_n,z\rangle = \int_I v_n(t)z(t)\ud t$. We have that
+$$
+v_n(z) = \frac{1}{n}\sum_{i=1}^n \varepsilon_i \langle z, (\hat T_n+\lambda_n I)^{-1}Z_i\rangle.
+$$
+Note that $v_n(z)$ is \emph{pivotal}, meaning that it does not depend on the unknown $\beta_0\in\Theta_2(\mH)$ or $\theta_0=L_{K^{1/2}}\beta_0$.
+It should also be noted that $\langle z,(\hat T_n+\lambda_n I)^{-1}Z_i\rangle$ are independent of $\{\varepsilon_i\}_{i=1}^n$.
+{\color{red}Using central limit theorem with Lyapnov conditions}, it holds that 
+\begin{equation}
+\sqrt{n}\hat\sigma_n(z)^{-1}v_n(z) \;\;\overset{d}{\to}\;\; \mathcal N(0,1)
+\label{eq:proof-simple-4}
+\end{equation}
+where
+$$
+\hat\sigma_n(z)^2 = \frac{1}{n}\sum_{i=1}^n \langle z,(\hat T_n+\lambda_n I)^{-1}Z_i\rangle^2 = \langle z, (\hat T_n+\lambda_n I)^{-1}\hat T_n(\hat T_n+\lambda_n I)^{-1} z\rangle.
+$$
+Using Slutsky's theorem and the condition that $\lambda_n n\to 0$, Eq.~(\ref{eq:proof-simple-4}) implies
+$$
+\sqrt{n}\hat\sigma_n(z)^{-1}\left(b_n(z)+v_n(z)\right)\;\;\overset{d}{\to}\;\;\mathcal N(0,1).
+$$
+Because the above convergence in distribution holds for any $z$ and $\beta_0\in\Theta_2(\mH)$, we have proved the honesty of our constructed confidence intervals as stipulated in Eq.~(\ref{eq:simple-validity}) of Theorem \ref{thm:simple}.
+
+\bibliographystyle{apalike}
+\bibliography{refs}
+
+\end{document}

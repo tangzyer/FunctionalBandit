@@ -1,0 +1,1276 @@
+%% Author template for Operations Reseacrh (opre) for articles with no e-companion (EC)
+%% Mirko Janc, Ph.D., INFORMS, mirko.janc@informs.org
+%% ver. 0.95, December 2010
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\documentclass[mnsc]{informs3aa}
+\documentclass[mnsc]{informs3aa} % current default for manuscript submission
+
+%\usepackage[draft]{showkeys}
+%\usepackage[final]{showkeys}
+\usepackage{subfigure}
+%\usepackage{fontenc}
+%\SingleSpacedXI
+\OneAndAHalfSpacedXI % current default line spacing
+%\OneAndAHalfSpacedXII
+%%\DoubleSpacedXII
+%%\DoubleSpacedXII
+%\DoubleSpacedXI
+
+% If hyperref is used, dvi-to-ps driver of choice must be declared as
+%   an additional option to the \documentclass. For example
+%\documentclass[dvips,opre]{informs3}      % if dvips is used
+%\documentclass[dvipsone,opre]{informs3}   % if dvipsone is used, etc.
+
+%%% OPRE uses endnotes. If you do not use them, put a percent sign before
+%%% the \theendnotes command. This template does show how to use them.
+\usepackage{endnotes}
+%\let\footnote=\endnote
+\let\enotesize=\normalsize
+\def\notesname{Endnotes}%
+\def\makeenmark{$^{\theenmark}$}
+\def\enoteformat{\rightskip0pt\leftskip0pt\parindent=1.75em
+	\leavevmode\llap{\theenmark.\enskip}}
+% need these part to display table
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{etex}
+\usepackage{multirow}
+\usepackage{array}%,booktabs}%,arydshln}
+\usepackage{bbm}
+\newcommand\VRule[1][\arrayrulewidth]{\vrule width #1}
+\usepackage[title]{appendix}
+\usepackage{makecell}
+\usepackage{enumitem}
+
+
+
+\newtheorem{fact}{Fact}
+
+% Private macros here (check that there is no clash with the style)
+\newcommand{\betazero}{\beta^{(0)}}
+\newcommand{\betaone}{\beta^{(1)}}
+\newcommand{\betaa}{\beta^{(a)}}
+\newcommand{\tildebetazero}{\tilde\beta^{(0)}}
+\newcommand{\tildebetaone}{\tilde\beta^{(1)}}
+\newcommand{\tildebetaa}{\tilde\beta^{(a)}}
+\newcommand{\decayC}{C}
+\newcommand{\LKernel}{\bL_{K^{1/2}}}
+\newcommand{\Reg}{\mathrm{Reg}}
+% Common math sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+
+
+% Common operators
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\rank}{rank}
+
+%\DeclareMathOperator{\span}{span}
+%\DeclareMathOperator{\null}{null}
+
+% Shortcuts for common expressions
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+% Derivatives and integrals
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+\newcommand{\dv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+%original format
+%\topmargin 0truein
+%\textwidth 6.0truein
+%\textheight 8.0truein
+%\oddsidemargin 0.2in
+%\evensidemargin 0.2in
+\renewcommand{\baselinestretch}{1.25}
+\newcommand{\vc}[1]{\mbox{\boldmath $#1$}}
+\newcommand{\tb}[1]{\textrm{\footnotesize #1}}
+
+%\def\theequation{\arabic{equation}}
+%\def \bn {\hfill \\ \smallskip\noindent}
+%\newcommand{\nnub}{\nonumber}
+\newcommand{\bJ}{\bold{J}}               %% bold n (vector)
+\newcommand{\bI}{\bold{I}}      
+\newcommand{\bj}{\mbox{\boldmath$j$}}               %%
+\newcommand{\bve}{\mbox{\boldmath$e$}}    
+\newcommand{\by}{\mbox{\boldmath$y$}}
+\newcommand{\bY}{\mbox{\boldmath$Y$}}          %%
+\newcommand{\bw}{\mbox{\boldmath$w$}}               %%
+\newcommand{\bR}{\bold{R}}
+\newcommand{\bSigma}{\bold{\Sigma}}
+\newcommand{\br}{\mbox{\boldmath$r$}}
+\newcommand{\bu}{\mbox{\boldmath$u$}}
+\newcommand{\bT}{\bold{T}}
+\newcommand{\bA}{\bold{A}}
+\newcommand{\bB}{\bold{B}}
+\newcommand{\bK}{\bold{K}}
+\newcommand{\bZ}{\bold{Z}}
+\newcommand{\bQ}{\bold{Q}}
+\newcommand{\bL}{\bold L}
+\newcommand{\ms}{\text{ms}}
+\newcommand{\idty}{\mathbf{1}}
+%\newcommand{\bSigma}{\bold \Sigma}
+\newcommand{\bLambda}{\bold{\Lambda}}
+%\newcommand{\bR}{\bold{R}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+%\newcommand{\be}{\mbox{\boldmath$e$}}
+\newcommand{\bx}{{\bf x}}
+\newcommand{\T}{\mbox{\scriptsize{T}}}
+\newcommand{\HH}{\mbox{\scriptsize{H}}}
+%\newcommand{\C}{\mbox{$\mathbf C$}}
+\newcommand{\ii}{\mbox{\boldmath $i$}}
+\newcommand{\re}{\mbox{\rm Re }}
+\newcommand{\im}{\mbox{\rm Im }}
+\newcommand{\vct}{\boldsymbol }
+\newcommand{\mat}{\mathbf }
+\newcommand{\med}{\mathrm{med}}
+\def\sr{\mathfrak{r}}
+\def\sn{\mathfrak{n}}
+\def\ci{\mathrm{CI}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\kl}{\mathrm{KL}}
+
+\newcommand{\mP}{\mathcal P}
+
+\newcommand{\ud}{\mathrm{d}}
+\newcommand{\sd}{\mathsf{d}}
+
+\newcommand{\regret}{\mathrm{Regret}}
+
+\newcommand{\err}{\mathrm{err}}
+
+\newcommand{\mA}{\mathcal A}
+\newcommand{\mG}{\mathcal G}
+\newcommand{\mB}{\mathcal B}
+\newcommand{\mT}{\mathcal T}
+\newcommand{\mF}{\mathcal F}
+\newcommand{\mJ}{\mathcal J}
+\newcommand{\mQ}{\mathcal Q}
+\newcommand{\mL}{\mathcal L}
+%%%%%%%%
+%\newtheorem{theorem}{Theorem}%[section]
+%\newtheorem{assumption}[theorem]{Assumption}
+%\newtheorem{definition}[theorem]{Definition}
+%\newtheorem{condition}{Condition}[section]
+%\newtheorem{cor}[theorem]{Corollary}
+%\newtheorem{property}[theorem]{Property}
+%\newtheorem{lemma}{Lemma}
+%\newtheorem{prop}{Proposition}
+%\newtheorem{rem}{Remark}
+%\newtheorem{example}{Example}
+%\newtheorem{corollary}[theorem]{Corollary}
+%\newtheorem{conjecture}{Conjecture}[section]
+%%%
+\def\smskip{\par\vskip 5 pt}
+
+\def\la{\langle}
+\def\ra{\rangle}
+\newcommand{\eps}{\varepsilon}
+
+%\def\pn{\par\smallskip\noindent}
+\def\QED{\hfill \quad{\bf Q.E.D.}\medskip}
+
+\newcommand{\cov}{\mathrm{Cov}}
+%
+%%%%%%%%%%%
+\newcommand{\epc}{\hspace{1pc}}
+\newcommand{\KK}{{\cal K}}
+\newcommand{\al}{\alpha}
+\newcommand{\bna}{\mbox{\boldmath $\nabla$}}
+\newcommand{\tr}{\mbox{\rm tr}\, }
+\newcommand{\sign}{\mbox{\rm sign}\, }
+\newcommand{\Prob}{\mbox{\rm Prob}\, }
+\newcommand{\ex}{{\bf\sf E}}
+\newcommand{\BigO}[1]{\ensuremath{\operatorname{O}\bigl(#1\bigr)}}
+
+\newcommand{\sR}{\mathfrak R}
+
+\newcommand{\chen}[1]{{\bf \color{blue}#1}}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\diag}{\mathrm{diag}}
+
+\newcommand{\rev}{\mathrm{Rev}}
+
+%\newcommand{\reg}{\mathrm{Regret}}
+\newcommand{\sgn}{\mathrm{sgn}}
+\newcommand{\clip}{\mathrm{clip}}
+\newcommand{\indi}{\mathbbm{1}}
+\newcommand{\tth}{\text{th}}
+
+
+\usepackage{amsbsy, amsfonts, amsgen, amsmath, amsopn, amssymb, amstext,
+	amsxtra, bezier, color, enumitem, graphicx, latexsym, verbatim,
+	pictexwd, supertabular, url, dsfont,leftidx, mathrsfs, appendix, setspace}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+
+% Natbib setup for author-year style
+\usepackage{natbib}
+\bibpunct[, ]{(}{)}{,}{a}{}{,}%
+\def\bibfont{\small}%
+\def\bibsep{\smallskipamount}%
+\def\bibhang{24pt}%
+\def\newblock{\ }%
+\def\BIBand{and}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Hyperref setup
+\usepackage[colorlinks=true,bookmarks=false,urlcolor=blue, citecolor=blue,linkcolor=blue,bookmarksopen=false,draft=false]{hyperref}
+\usepackage{cleveref}
+\crefname{assumption}{Assumption}{Assumptions}
+%\renewcommand*{\theHsection}{\thesection}
+%\renewcommand{\theHfigure}{\theHsection.\arabic{figure}}
+
+
+\usepackage{xcolor}
+\usepackage{epstopdf}
+\usepackage{wrapfig}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+\renewcommand{\bar}{\overline}
+\renewcommand{\check}{\widecheck}
+\newcommand{\red}{\color{red}}
+\newcommand{\blue}{\color{blue}}
+
+\definecolor{DSgray}{cmyk}{0,1,0,0}
+\newcommand{\Authornote}[2]{{\small\textcolor{DSgray}{\sf$<<<${  #1: #2
+			}$>>>$}}}
+\newcommand{\Authormarginnote}[2]{\marginpar{\parbox{2cm}{\raggedright\tiny
+			\textcolor{DSgray}{#1: #2}}}}
+\newcommand{\wnote}[1]{{\Authornote{Wang}{#1}}}
+\newcommand{\xnote}[1]{{\Authornote{Xi}{#1}}}
+
+\newcommand{\mM}{\mathcal M}
+\newcommand{\mO}{\mathcal O}
+\newcommand{\mN}{\mathcal N}
+\newcommand{\mX}{\mathcal X}
+\newcommand{\mC}{\mathcal C}
+\newcommand{\mU}{\mathcal U}
+\newcommand{\mE}{\mathcal E}
+\newcommand{\mD}{\mathcal D}
+\newcommand{\mH}{\mathcal H}
+\newcommand{\pre}{\mathrm{pre}}
+\newcommand{\post}{\mathrm{post}}
+\newcommand{\trt}{\mathrm{trt}}
+\newcommand{\ctr}{\mathrm{ctr}}
+
+
+\newcommand{\cost}{\mathrm{Cost}}
+
+\algnewcommand{\LineComment}[1]{\State \(\triangleright\) #1}
+
+
+%% Setup of theorem styles. Outcomment only one.
+%% Preferred default is the first option.
+\TheoremsNumberedThrough     % Preferred (Theorem 1, Lemma 1, Theorem 2)
+%\TheoremsNumberedByChapter  % (Theorem 1.1, Lema 1.1, Theorem 1.2)
+\ECRepeatTheorems
+
+%% Setup of the equation numbering system. Outcomment only one.
+%% Preferred default is the first option.
+\EquationsNumberedThrough    % Default: (1), (2), ...
+%\EquationsNumberedBySection % (1.1), (1.2), ...
+
+% In the reviewing and copyediting stage enter the manuscript number.
+\MANUSCRIPTNO{} % When the article is logged in and DOI assigned to it,
+%   this manuscript number is no longer necessary
+
+%%%%%%%%%%%%%%%%
+\begin{document}
+	%%%%%%%%%%%%%%%%
+	
+	% Outcomment only when entries are known. Otherwise leave as is and
+	%   default values will be used.
+	%\setcounter{page}{1}
+	%\VOLUME{00}%
+	%\NO{0}%
+	%\MONTH{Xxxxx}% (month or a similar seasonal id)
+	%\YEAR{0000}% e.g., 2005
+	%\FIRSTPAGE{000}%
+	%\LASTPAGE{000}%
+	%\SHORTYEAR{00}% shortened year (two-digit)
+	%\ISSUE{0000} %
+	%\LONGFIRSTPAGE{0001} %
+	%\DOI{10.1287/xxxx.0000.0000}%
+	
+	% Author's names for the running heads
+	% Sample depending on the number of authors;
+	% \RUNAUTHOR{Jones}
+	% \RUNAUTHOR{Jones and Wilson}
+	% \RUNAUTHOR{Jones, Miller, and Wilson}
+	% \RUNAUTHOR{Jones et al.} % for four or more authors
+	% Enter authors following the given pattern:
+	%\RUNAUTHOR{Chen and Smichi-Levi and Wang}
+	
+	% Title or shortened title suitable for running heads. Sample:
+	% \RUNTITLE{Bundling Information Goods of Decreasing Value}
+	% Enter the (shortened) title:
+	\RUNTITLE{}
+	
+	% Full title. Sample:
+	% \TITLE{Bundling Information Goods of Decreasing Value}
+	% Enter the full title:
+	\TITLE{Online Decision-Making with Functional Covariates}
+	
+	
+	% Block of authors and their affiliations starts here:
+	% NOTE: Authors with same affiliation, if the order of authors allows,
+	%   should be entered in ONE field, separated by a comma.
+	%   \EMAIL field can be repeated if more than one author
+	
+	\ARTICLEAUTHORS{%
+		%\vspace{.1in}
+%		\AUTHOR{Sentao Miao \thanks{Author names listed in alphabetical order,}}
+%		\AFF{Leeds School of Business, University of Colorado at Boulder, Boulder, CO 80309, USA\\
+%		sentao.miao@colorado.edu}
+%		\AUTHOR{Zhiyuan Tang\thanks{Author names listed in alphabetical order,}}
+%		\AFF{Naveen Jindal School of Management, University of Texas at Dallas, Richardson, TX 75080, USA\\
+%		zhiyuan.tang@utdallas.edu}
+%		\AUTHOR{Yining Wang}
+%		\AFF{Naveen Jindal School of Management, University of Texas at Dallas, Richardson, TX 75080, USA\\
+%		yining.wang@utdallas.edu}
+		% Enter all authors
+	} %
+	
+	
+	\ABSTRACT{
+	}
+	
+	\KEYWORDS{}
+	
+	%\HISTORY{Submitted November, 2019.}
+	
+	\date{}
+	
+	\maketitle
+	\section{Introduction}
+	\section{Problem formulation}
+	\subsection{Notations}
+	Let $\mathcal{H}$ be a separable Hilbert space with inner product 
+	$\langle \cdot, \cdot \rangle_{\mH}$ and norm $\norm{\cdot}_{\mH}$. Specifically, let
+	$\mL^2[0,1]$ be the space of square-integrable functions on $[0,1]$ with inner product 
+	\(
+	\langle f,g \rangle = \int_0^1 f(t) g(t)\,dt,  f,g \in \mL^2[0,1],
+	\)
+	and norm $\norm{f} = \langle f,f \rangle^{1/2}$. An operator on a Hilbert space $\mathcal{H}$ is a linear map $\mathbf{T}:\mathcal{H}\to\mathcal{H}.$ 
+	We denote linear operators on $\mathcal{H}$ by bold uppercase letters such as $\mathbf{T}, \mathbf{A}, \mathbf{B}$. Specifically, let $\idty$ denote the identity operator on $\mL^2[0,1].$ For two functions $f,h$ in $\mL^2[0,1],$ let $f\otimes h$ denote the rank-one operator defined by \((f\otimes h)g=\langle f,g\rangle h.\) An operator $\mathbf{T}$ is called \emph{self-adjoint} if $\langle f, \mathbf{T} g \rangle = \langle \mathbf{T} f, g \rangle$ for all $f,g \in \mathcal{H}$. A self-adjoint operator $\mathbf{T}$ is said to be \emph{positive semidefinite} (PSD) if $\langle f, \mathbf{T} f \rangle \geq 0$ for all $f \in \mathcal{H}$, in which case we write $\mathbf{T} \succeq 0$. Given two self-adjoint operators $\mathbf{A}$ and $\mathbf{B}$, we say that $\mathbf{A}$ \emph{dominates} $\mathbf{B}$, written $\mathbf{A} \succeq \mathbf{B}$, if $\langle f, \mathbf{A} f \rangle \geq \langle f, \mathbf{B} f \rangle$ for all $f \in \mathcal{H}$, equivalently $\mathbf{A} - \mathbf{B} \succeq 0$. Let \(R : [0,1] \times [0,1] \to \mathbb{R}\) be a symmetric, square-integrable, nonnegative-definite function. We define the associated \emph{integral operator} \(\bL_R\colon \mL^2[0,1] \to \mL^2[0,1]\) by
+	\[
+	(\bL_R f)(s) = \int_0^1 R(s, t)\, f(t)\, dt, 
+	\quad \forall f \in \mL^2[0,1], \; s \in [0,1].
+	\]
+	For convenience, we will write the composition $\bL_{A}\bL_B$ of two integral operators $\bL_A$ and $\bL_B$ as $\bL_{AB}.$
+	For two sequences $\{a_T\},\{b_T\}$, we write $a_T\lesssim b_T$ or $a_T=O(b_T)$ (and equivalently $b_T\gtrsim a_T$ or $b_T=\Omega(a_T)$)
+	if $\limsup_{T\to\infty} |a_T|/|b_T| < +\infty$.
+\subsection{The decision-making model}
+Consider the following sequential decision making model with two arms. At each time step $t\in[T],$ nature draws a covariate $X_t\in\mX\subseteq\mL^2[0,1]$ from a centered distribution $\mF$ on $\mL^2[0,1].$ 
+The decision maker then chooses an action $a_t\in[m]$ and observes the corresponding reward:
+\begin{equation}\label{model: reward}
+	y_t=\langle \beta^{(a_t)}, X_t\rangle+\varepsilon_t,
+\end{equation}
+where $\varepsilon_t$ is a $\sigma^2-$subgaussian noise variable and  $\betaa,a\in[m]$ are functional coefficients in $\mL^{2}[0,1].$ 
+We assume that the covariate sequence $X_1,X_2,\ldots, X_T$ and the noise sequence $\varepsilon_1,\ldots,\varepsilon_T$ are all independent with each other.
+
+Let $\mathcal{G}_{t}=\{(X_s,a_s,y_s):1\le s\le t\}$ denote the available history up to time $t$.  
+A (possibly randomized) policy $\pi=\{\pi_t\}_{t=1}^T$ is a sequence of decision rules where each decision rule $\pi_t$ is a map from $\mathcal{G}_{t-1}\times\mathcal{X}$ to a probability distribution on $\{0,1\}:$
+at round $t$, given $(\mathcal{G}_{t-1},X_t)$, the policy $\pi_t$ selects an action $a_t$ by sampling from $\pi_t(\mathcal{G}_{t-1},X_t)$.  
+Deterministic policies are the special case where $\pi_t$ assigns all probability mass to a single action.  
+For each covariate $X_t$, the optimal action is
+\[
+a_t^*(X_t) = \arg\max_{a\in[m]} \langle \beta^{(a)}, X_t \rangle,
+\]
+which maximizes the expected reward given $X_t$.  
+The regret of a policy $\pi$ up to horizon $T$ is
+\begin{equation}\label{def: regret}
+	\Reg_\pi(T)
+	= \mathbb{E}\!\left[\sum_{t=1}^T
+	\big(\langle \beta^{(a_t^*(X_t))},X_t\rangle
+	- \langle \beta^{(a_t)},X_t\rangle\big)\right]
+\end{equation}
+where the expectation is taken over the randomness of $\pi.$
+That is, the regret $\Reg_{\pi}(T)$ is the expected cumulative loss in reward incurred by following $\pi$ instead of always playing the optimal action.
+The decision-maker's goal is to design a policy $\pi$ to minimize $\Reg_\pi(T).$
+\subsection{The reproducing kernel Hilbert space (RKHS) framework}
+In this paper, we adopt the reproducing kernel Hilbert space (RKHS) framework from \cite{cai2012minimax}, which assumes that $\betaa,a\in[m]$ reside in some RKHS. Formally, let $K:[0,1]\times[0,1]\to\mathbb{R}$ be a real, symmetric, square-integrable, and nonnegative definite function. Every such kernel $K$ defines a Hilbert space of functions, denoted by $\mathcal{H}_K$, with inner product denoted by $\langle \cdot, \cdot \rangle_{\mathcal{H}_K}$. The inner product is chosen so that the \emph{reproducing property} holds:
+\[
+f(s) = \langle f, K(s,\cdot) \rangle_{\mathcal{H}_K}, 
+\quad \forall f \in \mathcal{H}_K, \, s \in [0,1].
+\]
+Throughout this paper, we impose the following assumption:
+\begin{assumption}\label{asmp:RKHS}
+	The functional coefficients $\betaa$ belong to an RKHS $\mathcal{H}_K$ associated with some kernel $K$ for all $a\in[m].$ Without loss of generality, we assume $\norm{(\bL_{K^{1/2}})^{-1}\betaa}_2\leq 1$ for all $a\in[m].$
+\end{assumption}
+At a high level, the kernel $K$ characterizes the complexity of estimating coefficients $\betaa,a\in[m]$. A smoother kernel restricts the RKHS to simpler functions, making the estimation problem easier, while a more flexible kernel increases the difficulty of estimation. Typical choices include the polynomial kernel $K(s,t)=(1+st)^d,$ whose RKHS consists of polynomials of degree at most $d$; the Gaussian (RBF) kernel $K(s,t)=\exp\!\left(-\tfrac{(s-t)^2}{2\sigma^2}\right),$ whose RKHS contains very smooth (analytic) functions; and Sobolev-type kernels, which generate Sobolev spaces of functions with a specified number of square-integrable derivatives. Other kernels, such as the Brownian or Matérn family, can be introduced in the same way. 
+
+%It is worth noting that in the functional regression literature, assumptions on the regularity or complexity of the coefficients are always required. Without a regularity constraint, one could place most of the coefficient into directions that are rarely “seen” in the covariates, where the signal is too weak relative to noise, making estimation and prediction essentially impossible. A common way to impose regularity is via functional principal component analysis (FPCA), in which coefficients are expanded in data-driven eigenfunctions of the covariance operator. While FPCA is effective for dimension reduction, its basis depends on the distribution \(\mF\) of the covariates. In contrast, the RKHS framework provides a fixed function space determined by the kernel, which encodes regularity and allows structural assumptions on the coefficients to be imposed independently of the data. Therefore, we adopt the RKHS framework in this paper. RKHS framework also has other advantages compared to FPCA, and we will bring them up shortly.
+
+%Under the RKHS framework, without loss of generality, we assume that there exists unique $\tildebetaa\in\mL^2[0,1]$ for all $a\in[m]$ such that
+%\[\betaa = \LKernel \tildebetaa.\]
+%and let $b=\max_{a\in[m]}\norm{\tildebetaa}.$
+Following \cite{cai2012minimax}, we assume for now that the kernel $K$ is known exactly a priori. In \Cref{sec: model_selection}, we also discuss the problem where $K$ is only known to belong to a given family of kernels. 
+
+
+
+
+%[Remarks on RKHS framework versus FPCA framework]
+\subsection{Assumptions on covariate distribution $\mF$}\label{subsec: context_assumptions}
+In this section, we introduce the key assumptions on the covariate distribution $\mathcal{F}$. We first assume that the functional covariates $X$ is subgaussian.
+\begin{assumption}[Sub-Gaussianity]\label{asmp:sub-gaussian}
+	We assume $X\sim \mF$ is $\boldsymbol\Sigma$-subgaussian, where $\boldsymbol\Sigma$ is a self-adjoint, positive semidefinite operator. Concretely, for every $f \in \mL^2[0,1]$, the scalar random variable $\langle X, f \rangle$ is 	\(\langle f, \boldsymbol\Sigma f \rangle\)-subgaussian.
+	
+\end{assumption}
+Assumption~\ref{asmp:sub-gaussian} guarantees that covariate $X$ concentrates in a sub-Gaussian way with covariance proxy \(\boldsymbol\Sigma\).
+In the finite-dimensional contextual bandit setting, an analogous assumption is commonly imposed [need to cite something here]: the covariate $x \in \mathbb{R}^d$ is assumed to have a finite sub-Gaussian norm $\sigma_X^2$. Such concentration properties allow for tight control of confidence intervals in prediction, which in turn leads to minimax-optimal regret bounds. In our functional setting, we extend this assumption by employing a positive semidefinite operator $\boldsymbol\Sigma$ as the covariance proxy, thereby capturing the tail behavior along different directions in the functional covariate space. 
+
+It has been established in \cite{cai2012minimax} that the difficulty of the reward prediction task depends jointly on the kernel $K$ and on the covariate distribution $\mathcal{F}$. To formalize this interaction, we define the transformed covariate
+\[
+\tilde{X}_t = \bL_{K^{1/2}}\,X_t,\qquad \forall t\in[T],
+\]
+and denote its distribution by $\tilde{\mathcal{F}}$.  It is straightforward to see that $\tilde X\sim\tilde{\mF}$ is also subgaussian with proxy
+\[\tilde{\bSigma} := \bL_{K^{1/2}}\bSigma\bL_{K^{1/2}}.\]
+We next introduce an additional assumption that specifies how the ``energy'' of $\tilde{\bSigma}$ is distributed across its spectrum. By the spectral theorem, there exists a sequence of positive eigenvalues $\sigma_1\geq \sigma_2\ge \ldots > 0$ and a set of orthonormalized eigenfunctions $\phi_1,\phi_2,\ldots$ such that
+\[\tilde{\bSigma}= \sum_{k=1}^{\infty}\sigma_k \phi_k\otimes\phi_k.\]
+We have the following assumption on the decaying rates of $s_k.$
+
+\begin{assumption}\label{asmp: decay}
+	There exists $r>1/2$ such that $\sigma_k=O(k^{-2r}).$ Without loss of generality, we further assume that the largest eigenvalue $\sigma_1\leq 1.$
+\end{assumption}
+
+Assumption~\ref{asmp: decay} requires the eigenvalues $\{\sigma_k\}$ of $\tilde{\bSigma}$ to decay at a polynomial rate $k^{-2r}$, and thus characterizes how the ``energy'' of the covariance proxy $\tilde{\bSigma}$ is distributed across its spectrum. A larger value of $r$ indicates that most of the energy is concentrated in the first few eigenfunctions, whereas a smaller $r$ implies that the energy is more spread out across many directions. This characterization plays a crucial role in functional analysis in the sense that it enables us to effectively reduce the infinite-dimensional covariate space to its most ``significant'' directions.  In \Cref{subsec: regret_rate}, we will show explicitly how the parameter $r$ influences the minimax regret rate.
+
+We further note that Assumption~\ref{asmp: decay} is consistent with the standard decay condition in RKHS analysis, which is the weakest assumption of its kind, to the best of our knowledge. Concretely speaking, Assumption~\ref{asmp: decay} only requires that the eigenvalues $\sigma_k$ decay sufficiently fast.  By contrast, the FPCA literature typically imposes two stronger requirements. First, the eigenvalues must satisfy $\sigma_k \asymp k^{-2r}$, i.e., they are required to decay at a fixed polynomial rate. Second, FPCA assumes a separation (or ``no clustering'') condition, meaning that consecutive eigenvalues are sufficiently separated to ensure identifiability of the associated eigenfunctions. Both of these conditions are substantially stronger than Assumption~\ref{asmp: decay}.
+
+As a concluded remark of this section,
+Assumption~\ref{asmp:sub-gaussian} and Assumption~\ref{asmp: decay} are satisfied simultaneously for a wide range of distributions $\mF$ (and the corresponding $\tilde{\mF}$).
+In particular, when $X\sim\mF$ is a Gaussian process with covariance kernel $C,$ Assumption~\ref{asmp:sub-gaussian} is satisfied with $\bSigma=\bL_{C},$ and $\tilde{\bSigma}$ is always decaying with some positive rate $r.$ In this case, Assumption~\ref{asmp: decay} coincides with the eigenvalue decay condition for $\tilde{\bSigma}=\bL_{K^{1/2}CK^{1/2}}$ stated in Theorem~2 of \cite{cai2012minimax}. Beyond the Gaussian process setting, many other distributions also satisfy Assumptions~\ref{asmp:sub-gaussian} and \ref{asmp: decay}. For instance, Lipschitz transformations of Gaussian processes, as well as mixtures of Gaussian processes, remain sub-Gaussian, and therefore continue to fall within our framework.
+\section{The decision-making algorithm based on point-wise confidence intervals}
+In this section, we introduce the decision-making algorithms for the problem formulated in the previous section. We first present an action elimination framework based on effective point-wise confidence intervals. We then discuss how to construct such confidence intervals via kernel ridge regression estimators under additional spectral dominance assumptions. We further introduce the margin condition and demonstrate how it enables a faster regret rate. Finally, we establish that the regret rate achieved by our algorithms is minimax optimal.
+\subsection{An action elimination framework for online decision-making}
+We first introduce a general action elimination framework, the \(\mathtt{RegCB.Elimination}\) algorithm.  The framework is first proposed by \cite{foster2018practical} and is later utilized in many different contextual bandit settings. In \Cref{alg:elim} we present a simplified version adapted by \cite{li2024optimal}, which utilizes an offline oracle that takes samples as inputs and output confidence intervals for each (covariate, action) pair. 
+	\begin{algorithm}[h]
+	\caption{The action elimination with offline oracle (\(\mathtt{RegCB.Elimination}\))}
+	\label{alg:elim}
+	\begin{algorithmic}[1]
+\State \textbf{Algorithm parameters}: Time horizon $T,$ offline oracle $\mO$ with failure probability \(\delta=m^{-1}T^{-3}.\)
+\State Initialize: \(\hat \beta^{(a)}_1\gets 0,\;\;\forall a\in\{0,1\};\) \(\Delta^{(a)}_1(X)\gets \Delta_0\) from oracle $\mO,$ \(\forall X\in\mX,a\in\{0,1\}\) 
+\For{each epoch $\tau=1,2,\ldots$ until $T$ time periods have elapsed}
+\For{$t$ in the next $n_\tau=2^\tau$ periods}
+\State Observe the functional covariate $X_t\sim\mF;$
+\State Eliminate the inferior actions: \(\mA_t \gets \{a:\langle X_t,\hat\beta^{(a)}_\tau\rangle+\Delta^{(a)}_\tau(X_t)\geq \max_{a\in[m]}\langle X_t,\hat\beta^{(a)}_\tau\rangle-\Delta^{(a)}_\tau(X_t)\}\)
+\State Choose an action uniformly at random: \(a_t\gets \mathrm{Uniform}(\mA_t);\)
+\State Observe the reward $y_t=\langle \beta^{(a_t)}, X_t\rangle+\varepsilon_t;$
+\EndFor
+\State Update the estimations $\beta^{(a)}_{\tau+1}$ and $\Delta_{\tau+1}^{(a)}(\cdot)$ for $a\in[m]$ by feeding the samples $\{(X_i,a_i,y_i),i\in[2^{\tau-1}+1, 2^\tau]\}$ into the oracle $\mO;$
+\EndFor
+	\end{algorithmic}
+\end{algorithm}
+
+Algorithm~\ref{alg:elim} takes the time horizon $T$ and an offline oracle $\mO$ as inputs. The offline oracle $\mO$ is a black-box procedure that takes a collection of samples as input and outputs an estimator $\hat{\beta}^{(a)}$ and point-wise confidence radius $\Delta^{(a)}(\cdot):\mX\to\RR^+$ satisfying
+\begin{equation}\label{ineq: oracle}
+\abs{\langle X,\hat\beta^{(a)}\rangle-\langle X,\beta^{(a)}\rangle} \leq \Delta^{(a)}(X)
+\end{equation}
+with probability at least $1-\delta$ for all $X\in\mathcal{X}$ and $a\in[m].$ That is, the oracle $\mO$ guarantees that the true reward $\langle X,\betaa\rangle$ lies in the confidence interval $[\langle X,\hat\beta^{(a)}\rangle-\Delta^{(a)}(X),\langle X,\hat\beta^{(a)}\rangle+\Delta^{(a)}(X)]$ with high probability for all $X\in\mX,a\in[m].$ Specifically, when there is no samples available, the oracle $\mO$ outputs a $\Delta_0$ such that 
+\begin{equation}\label{ineq:oracle_deltazero}
+\abs{\langle X,\betaa\rangle}\leq
+\Delta_0
+\end{equation}
+with probability higher than $1-\delta$ for all $a\in[m].$
+
+The algorithm then first devide the whole horizon into $\mO(\log T)$ geometric epochs where each epoch has $2^\tau,\tau\in\NN$ time periods. At the beginning of epoch $\tau,$ that is, at the end of last epoch $\tau-1,$ the algorithm calls the oracle $\mathcal{O}$ to update the estimator $\hat{\beta}_\tau^{(a)}$ and point-wise confidence radius $\Delta_{\tau}^{(a)}(\cdot):\mathcal{X}\to \mathbb{R}^+$ for each action $a\in\{0,1\}$ by taking in the samples \((X_t, y_t, a_t),t\in[2^{\tau-1}+1,2^\tau]\) collected in epoch $\tau-1.$
+And then, for each time period in epoch $\tau,$ upon observing the functional covariate $X_t,$ the algorithm will decide whether to eliminate some actions for that covariate. We know that with high probability, the maximum reward is at least $\max_{a\in[m]} \langle X_t,\hat\beta^{(a)}_\tau-\Delta^{(a)}(X_t)\rangle.$ Thus we eliminate the actions whose upper confidence bounds cannot reach this value; i.e., we eliminate the actions that have no potential in being the best action given covariate $X_t.$
+%If for some action $a\in[m],$ the estimated reward's lower confidence bound $\langle X_t,\hat{\beta}_{\tau}^{(a)}\rangle-\Delta_\tau^{(a)}(X_t)$ is greater than all of its competing actions' reward's upper confidence bounds  $\langle X_t,\hat{\beta}_{\tau}^{(a')}\rangle+\Delta_\tau^{(a')}(X_t),$ we say that action $a$ dominates other actions. In such a case, and the algorithm ``eliminate'' the inferior action by simply choosing the dominated action $a$ in this case. When there is no such dominated action, i.e., when \(\abs{\langle X_t,\hat{\beta}_\tau^{(0)}\rangle-\langle X_t,\hat{\beta}_\tau^{(1)}\rangle}<\Delta_\tau^{(0)}(X_t)+\Delta_\tau^{(1)}(X_t),\) 
+After eliminating such actions from the whole action set $[m]$, the algorithm chooses an action from the rest of the actions uniformly at random.
+
+Compared to other decision-making algorithms such as \(\mathtt{OFUL}\) in \cite{abbasi2011improved} and \(\mathtt{FALCON}\) in \cite{simchi2022bypassing}, the \(\mathtt{RegCB.Elimination}\) framework offers several advantages. First of all, in the finite action setting, \(\mathtt{OFUL}\) is suboptimal in covariate dimensions, while \(\mathtt{RegCB.Elimination}\) achieves tight dependency to the covariate dimension. This superior dimension dependence is particularly important in the functional setting we consider, as the effective dimension of functional covariates will grow with sample size and cannot be neglected. Additionally, \(\mathtt{OFUL}\) updates confidence intervals in a fully online manner which creates complex dependencies among samples. The \(\mathtt{RegCB.Elimination}\) framework  instead uses an offline oracle with i.i.d. samples within each epoch and thus is simpler for analysis. On the other hand, although \(\mathtt{FALCON}\) also employs an offline oracle and achieves optimal regret in finite-action low-dimensional linear contextual bandits, it does not adapt to margin conditions since its offline oracle only calculates estimation error on the population level. The \(\mathtt{RegCB.Elimination}\) algorithm uses a point-wise confidence interval oracle \(\mathcal{O}\) that enables margin-adaptive exploration, yielding improved regret when favorable margin conditions hold (see \Cref{thm: regret-strong-dominance}).
+
+Let $\tau_0$ denote the total number of epochs executed when Algorithm~\ref{alg:elim} exits, and let $\mT_\tau$ denote the set of time periods in epoch $\tau.$
+We now present a theorem stating that the regret achieved by the \(\mathtt{RegCB.Elimination}\) framework is actually tied to the width of the confidence intervals generated by the offline oracle $\mO.$
+\begin{theorem}\label{thm:elimregret}
+	Suppose that \Cref{asmp:RKHS,asmp:sub-gaussian,asmp: decay} hold. The regret of the \(\mathtt{RegCB.Elimination}\) framework in Algorithm~\ref{alg:elim} satisfies
+	\[\begin{aligned}
+	\mathbb{E}\left[\Reg_{\text{Alg.~\ref{alg:elim}}}(T)\right]\leq\mO\bigg(\sum_{\tau=2}^{\tau_0}2^\tau\sum_{a\in[m]}\mathbb{E}\Big[\big(\Delta_{\tau}^{(a)}(X)+\Delta_{\tau}^{(a^*(X))}(X)\big)&\\
+	\cdot\indi\big\{0<\abs{\langle X,\beta^{(a^*(X))}-\beta^{(a)}\rangle}< 2\Delta_\tau^{(a)}(X)&+2\Delta_\tau^{(a^*(X))}(X)\big\}\Big]\bigg)+\mO(1).
+	\end{aligned}\]
+\end{theorem}
+%Theorem~\ref{thm:elimregret} characterizes how the regret depends on the confidence radius $\Delta_\tau^{(a)}$ in each epoch $\tau.$ Concretely, the expected regret incurred in epoch $\tau$ is dominated by the epoch length $2^\tau$ multiplied by $\sum_{a\in[m]}\mathbb{E}_{X\sim\mF}[\Delta_{\tau}^{(a)}(X)]$ up to a constant factor. The expected regret incurred in the first epoch is $\mO(1).$ The key observation is that, with high probability, the optimal action $a^*(X_t)$ is never eliminated for any $t\in[T],$ so regret is only incurred on covariates where the gap between the optimal and chosen actions is within the confidence radius.
+
+
+\subsection{The confidence interval oracle $\mO$ for functional regression}
+With Algorithm~\ref{alg:elim} and Theorem~\ref{thm:elimregret}, we are in the place to provide an $\mO$ such that it is valid, i.e., \eqref{ineq:oracle_deltazero} and \eqref{ineq: oracle} holds. 
+
+Assuming \Cref{asmp: decay,asmp:RKHS,asmp:sub-gaussian}, it is straightforward to derive the following choice of $\Delta_0$ by the sub-gaussianity of covariate $X:$
+\begin{lemma}\label{lem: delta_0}
+	Suppose that \Cref{asmp: decay,asmp:RKHS,asmp:sub-gaussian} holds. We have \eqref{ineq:oracle_deltazero} holds with 
+	$\Delta_0 \asymp b\log \delta $
+	with probability greater than $1-\delta$ for all $a\in[m].$
+	\end{lemma}
+In the remaining part of this section, we will introduce the the roughness regularization estimators as well as the confidence interval associated with the estimator to serve as the oracle $\mO.$ The roughness regularization is widely used in nonparametric function estimation (see, e.g., \cite{ramsay2005functional}) and is employed in RKHS framework in \cite{YuanCai2010RKHSFLR,cai2012minimax}. Formally, suppose that our oracle $\mO$ takes samples of the form $\{(X_i,y_i,a_i),i\in[n]\}$. The oracle then estimates each of the functional coefficient $\betaa$ respectively with the following roughness regularization method with a common regularized paramter $\lambda_n:$
+\begin{equation}\label{eq: kernelregression}
+	\hat{\beta}^{(a)}=\argmin_{\beta\in\mH_{K}}\sum_{i=1}^n \indi\{a_i=a\}\left(y_i-\langle {X}_i,\beta\rangle\right)^2+\lambda_n \norm{\beta}_{\mH_K}^2,\;\;\forall a\in[m].
+\end{equation}
+
+For any $a\in[m]$, $\hat\beta^{(a)}$ minimizes an objective with two terms. 
+The first term, $\sum_{i=1}^n \mathbf{1}\{a_i=a\}\big(y_i-\langle X_i,\beta\rangle\big)^2$, is the total squared loss and measures the fit of $\beta$ to the observations with action $a$. 
+The second term is a regularization term, $\lambda_n\|\beta\|_{\mathcal H_K}^2$, that penalizes the squared RKHS norm of $\beta$. By penalizing the RKHS norm, this term penalizes energy in high-frequency modes; therefore, a smaller value of $\lambda_n\|\beta\|_{\mathcal H_K}^2$ corresponds to a smoother coefficient function $\beta$. 
+Accordingly, the tuning parameter $\lambda_n$ sets the balance between how closely the model fits the observed data and how smooth the coefficient function is. The optimal value of $\lambda_n$ to achieve best trade-off is governed by the decaying rate $r$ of the population covariance operator as we will show later in Theorem~\ref{thm: regret_weakdominance}.
+
+Unlike functional principal component analysis (FPCA), which truncates the expansion to a finite number of eigenfunctions, the roughness regularization in \eqref{eq: kernelregression} smoothly downweights higher-order eigenfunctions rather than discarding them entirely. This avoids the need to choose a truncation level, which requires strong separation conditions on the eigenvalues and becomes highly sensitive when eigenvalues are closely clustered or tied. We refer readers to \cite{cai2006prediction,cai2012minimax} for more detailed discussion.
+We also note that although \eqref{eq: kernelregression} needs to minimize an objective on a infinite-dimensional space, the solution of \eqref{eq: kernelregression} must be linear in $X_i,$ and thus the final solution can be obtained by optimizing over the $\RR^n$ space. We refer the readers to \cite{YuanCai2010RKHSFLR} for the implementation details.
+
+With the estimators $\hat\beta^{(a)},a\in[m]$ in hands, we shall now consider constructing the suitable confidence radius $\Delta^{(a)}(X)$ for each pair $(X,a)\in\mX\times [m]$ given the estimations $\hat\beta^{(a)}.$ 	Before we introduce the specific forms of $\Delta(\cdot)$, we first introduce two additional assumptions regarding spectral dominance of the second-moment operator. For any $a\in[m],$ let
+\[\mU^{(a)}=\left\{{X}\in\mX: \langle  X,\beta^{(a)}\rangle > \langle  X,\beta^{(a')}\rangle,\forall a'\not =a\right\}\]
+denote the set of covariates $X$ such that $a^*(X)=a,$ for all actions $a\in[m].$ Moreover let $M^{(a)}$ denote the second-moment kernel of the transformed covariate $\tilde X=\bL_{K^{1/2}}X$ for $X\in\mU^{(a)},a\in[m].$ That is, let
+\[M^{(a)}(s,u)=\mathbb{E}_{X\sim\mF}\left[\tilde X(s)\tilde X(u)\indi\{X\in\mU^{(a)}\}\right].\]
+We introduce the following two different assumptions on the dominance relationship between $\bL_{M^{(a)}},a\in[m]$ and the transformed covariance proxy $\tilde\bSigma.$
+\begin{assumption}[Weak dominance]\label{asmp: weak-dominance}
+	There exist constants $c_{\mathrm{w}}>0$ and $\mu>0$ such that \[\tilde\bSigma+\mu \idty\preceq c_{\mathrm{w}}(\bL_{M^{(a)}}+\mu\idty),\;\;\forall a\in[m].\]
+\end{assumption}
+%\begin{assumption}[Strong dominance]\label{asmp: strong-dominance}
+%	There exists a constant $c_{\mathrm{s}}>0$ such that \[\bSigma\preceq c_{\mathrm{s}}\bL_{M^{(a)}},\;\;\forall a\in[m].\]
+%\end{assumption}
+%
+%Both of Assumption~\ref{asmp: weak-dominance} and Assumption~\ref{asmp: strong-dominance} impose some dominance relationship between the second-moment operator on the optimal region $\bL_{M^{(a)}}$ and the population covariance proxy $\bSigma.$ However, Assumption~\ref{asmp: weak-dominance} only requires that $\bSigma+\mu\idty$ is dominanted by $\bL_{M^{(a)}}+\mu\idty$ up to a constant factor for some $\mu>0,$ while Assumption~\ref{asmp: strong-dominance} requires strict dominance to $\bSigma$ for $\bL_{M^{(a)}}.$ It is not hard to see that Assumption~\ref{asmp: strong-dominance} can actually imply Assumption~\ref{asmp: weak-dominance}, and thus is indeed a stronger assumption. To see that from a more intuitive perspective, let us consider a simple case where all of $\bL_{M^{(a)}},a\in[m]$ and $\bSigma$ share the same eigenfunctions. In that case, Assumption~\ref{asmp: weak-dominance} and Assumption~\ref{asmp: strong-dominance} actually requires the dominance between the corresponding eigenvalues of $\bL_{M^{(a)}}$ and $\bSigma$ for all $a\in[m].$ However, Assumption~\ref{asmp: strong-dominance} requires the dominance of infinite number of eigenvalues, while Assumption~\ref{asmp: weak-dominance} only requires the dominance for those eigenvalues larger than $\mu.$ Therefore, by adding a regularization operator $\mu\idty,$ Assumption~\ref{asmp: weak-dominance} impose dominance relationship only for a subset of eigenvalues, and thus is weaker than the strong dominance assumption in Assumption~\ref{asmp: strong-dominance}.
+
+The spectral dominance assumption in \Cref{asmp: weak-dominance} extend the minimum-eigenvalue condition commonly imposed on the covariate covariance within optimal regions in finite-dimensional bandit models~\citep{linearresponsebandit,bastani2020online,MaoTangWang2025}. In finite dimensional settings, this condition guarantees the local identifiability of arm-specific coefficients. In contrast, in the functional setting, the coefficients $\betaa,a\in[m]$ cannot be fully identified from finitely many samples. The goal thus shifts from estimating entire coefficient functions to recovering the principal eigendirections of the global covariance operator that capture the dominant covariate variation. \Cref{asmp: weak-dominance} ensures that the covariate distributions restricted to the optimal regions, $\mathcal{U}^{(a)}$, still span these leading directions of the overall distribution $\mathcal{F}$. To understand that from a concrete viewpoint, suppose that $\tilde\bSigma$ and $\bL_{M^{(a)}}$ share same eigenfunctions for all $a\in[m].$ Then \Cref{asmp: weak-dominance} is equivalent to requiring that the eigenvalues of $\tilde\bSigma$ larger than $\mu$ should be dominated by the corresponding eigenvalues of $\bL_{M^{(a)}}$ (up to constant factor). Consequently, estimators trained on samples from the optimal regions remain informative for predicting rewards across all covariates.
+
+
+\Cref{asmp: weak-dominance} is automatically satisfied when the covariate process $X \sim \mF$ is Gaussian. More generally, it holds whenever the covariate distribution allocates sufficient probability mass across the optimal regions $\mU^{(a)}$, so that these regions collectively preserve the leading eigendirections of the population covariance $\tilde\bSigma$.
+
+
+We now construct the confidence radius $\Delta^{(a)}(\cdot)$ with the estimators $\hat\beta^{(a)}$ for $a\in[m]$ when Assumption~\ref{asmp: weak-dominance} holds. We introduce the following notation. Recall that the oracle $\mO$ takes samples $\{(X_i,y_i,a_i),i\in[n]\}$ as input. Let $\tilde X_i=\bL_{K^{1/2}}X_i$ denote the transformed covariates. Define the regularized empirical second-moment operator and the regularized optimal-region second-moment operator
+\begin{equation}\label{eq: hatT_and_Tstar}
+\hat\bT_{\lambda_n}^{(a)}=\frac{1}{n}\sum_{i=1}^n \indi\{a_i=a\}\tilde X_i\otimes \tilde X_i +\lambda_n \idty,\qquad \bT_{\lambda_n}^{*(a)}=\bL_{M^{(a)}}+\lambda_n\idty,\quad\forall a\in[m].
+\end{equation}
+The following lemma shows an important property of $\hat\bT_{\lambda_n}^{(a)},$ which tells it dominates the optimal-region operator $\bT_{\lambda_n}^{*(a)}$ up to a constant factor.
+\begin{lemma}\label{lem: empirical_dominance}
+	Suppose that \Cref{asmp:RKHS,asmp:sub-gaussian,asmp: decay} hold and that \Cref{asmp: weak-dominance} holds with $\mu=\lambda_n.$ For any $a\in[m],$ $\delta\in(0,1),$ if \eqref{ineq: oracle} holds, then there exists a constant $c>0$ depending on $c_{\mathrm{w}}$ and $m$ such that when $(c\log(T/\delta)/n)^{2r}\leq\lambda_n,$
+	\[\frac{1}{2m} \bT_{\lambda_n}^{*(a)}\preceq\hat\bT_{\lambda_n}^{(a)}\]
+	with probability greater than $1-\delta/T.$
+\end{lemma}
+This property guarantees that the $\Delta^{(a)}(\cdot)$ in the following lemma is valid with high probability.
+\begin{lemma}\label{lem: weak-dominance-interval}
+Suppose that \Cref{asmp:RKHS,asmp:sub-gaussian} hold and that \Cref{asmp: weak-dominance} holds with $\mu=\lambda_n.$ For any $a\in[m],$ if \[\frac{1}{2m} \bT_{\lambda_n}^{*(a)}\preceq \hat\bT_{\lambda_n}^{(a)},\]then \eqref{ineq: oracle} holds with
+	\[\Delta^{(a)}(X)\asymp \sqrt{\lambda_n\log(T/\delta) }+\sqrt{\frac{\log (T/\delta)}{n}\langle \bL_{K^{1/2}}X,
+\left(	\hat\bT_{\lambda_n}^{(a)}\right)^{-1}\bL_{K^{1/2}}X\rangle}\]
+	with probability higher than $1-\delta/T$ for all $X$ and $a\in[m]$ when $(c\log(T/\delta)/n)^{2r}\leq\lambda_n,$  where $c$ is the constant from Lemma~\ref{lem: empirical_dominance}.
+\end{lemma}
+
+Lemma~\ref{lem: weak-dominance-interval} shows the choice of $\Delta^{(a)}(\cdot)$ to serve as the oracle $\mO$ such that \eqref{ineq: oracle} holds with high probability for any $a\in[m].$
+We now compare the results in Lemma~\ref{lem: weak-dominance-interval} with some similar results on prediction error in current functional regression literature. \cite{cai2006prediction} studies a similar offline problem that aims to predict $\langle X,\betaa \rangle$ for some given $X$ and provides an upper bound on the prediction error via the FPCA method. However, their results only apply for smooth $X$; i.e., $X$ such that the corresponding coefficients under population eigenfunctions are also decaying. This assumption is stringent for the problem we are considering, as our covariates $X\in\mX$ only have decaying eigenvalues for the population covariance, and for single covariate $X$ it can well be non-smooth. Many other literature, such as \cite{cai2012minimax}, only provides the upper bound on population error rather than point-wise error, and cannot be adapted in our setting.
+
+The proof of Lemma~\ref{lem: weak-dominance-interval} is provided in \Cref{sec: proof_weak_dominance_interval}. It establishes separate upper bounds for the prediction bias and variance.
+Given the empirical dominance in \Cref{lem: empirical_dominance}, the prediction bias is uniformly controlled over all covariates $X \in \mX$ with high probability, which is crucial for attaining a minimax-optimal regret bound. The variance bound follows directly from standard concentration arguments on the noise terms~\citep{cai2012minimax}.
+
+%\begin{lemma}\label{thm: strong-dominance-interval}
+%Suppose that Assumption~\ref{asmp: strong-dominance} holds with some $c_{\mathrm{s}}>0.$  We have \eqref{ineq: oracle} holds with
+%	\[\Delta^{(a)}(X)\asymp \sqrt{\lambda_n}\log\delta+\sqrt{\frac{\log \delta}{n}\Tr\left(\bT^{1/2}\left(	\hat\bT_{\lambda_n}^{(a)}\right)^{-1}\bT^{1/2}\right)}\]
+%	with probability higher than $1-\delta$ for all $X,$ for $a\in[m].$
+%\end{lemma}
+\subsection{Regret rate under oracle $\mO.$}\label{subsec: regret_rate}
+In this subsection, we shall present the regret of our Algorithm~\ref{alg:elim} using the oracle $\mO$ we just introduced. 
+With Theorem~\ref{thm:elimregret} and Lemma~\ref{lem: weak-dominance-interval}, it is straightforward to derive the following theorem on the cumulative expected regret.
+\begin{theorem}\label{thm: regret_weakdominance}
+	Suppose that \Cref{asmp:sub-gaussian,asmp:RKHS,asmp: decay} hold. Choose $\lambda_n\asymp (\log(mT)/n)^{2r/(2r+1)}$ in \eqref{eq: kernelregression} and suppose that \Cref{asmp: weak-dominance} holds with $\mu=\lambda_T.$ Using oracle $\mO$ defined in \cref{eq: kernelregression,ineq:oracle_deltazero,ineq: oracle}, the regret of Algorithm~\ref{alg:elim} satisfies
+		\[\mathbb{E}\left[\Reg_{\text{Alg.~\ref{alg:elim}}}(T)\right]\leq \tilde{\mO}\left(T^{\frac{r+1}{2r+1}}\right).\]
+\end{theorem}
+Theorem~\ref{thm: regret_weakdominance} gives the upper bound on the expected cumulative regret under the optimal choice of $\lambda_n\asymp (\log(mT)/n)^{2r/(2r+1)},$ which balances the bias and variance terms in the confidence radius from Lemma~\ref{lem: weak-dominance-interval}. As we will show in the next theorem, the regret rate of $\tilde\mO(T^{(r+1)/(2r+1)})$ cannot be further improved in the sense that for any policy, there always exists a ``bad'' problem instance such that the regret is at least of this order. Thus, the upper bound in Theorem~\ref{thm: regret_weakdominance} is minimax optimal.
+\begin{theorem}\label{thm: general_lower}
+	We have
+	\[\inf_{\pi}\sup \regret_{\pi}(T)\geq \Omega(T^{\frac{r+1}{2r+1}}),\]
+	where the infimum is taken over all admissible policies $\pi$ and the supremum is taken over all problem instances such that \Cref{asmp:sub-gaussian,asmp: weak-dominance,asmp:RKHS,asmp: decay} hold.
+	
+\end{theorem}
+%The proof of the lower bound in Theorem~\ref{thm: general_lower} is done in a similar manner as the proof of Theorem~3 in \cite{cai2012minimax}, where the lower bound on the regret is connected to the lower bound of the offline prediction error. The details are deferred to the appendix.
+
+If we further restrict the problem class by imposing the following margin condition, a
+tighter regret bound holds. Let 
+\[\Delta(X)=\langle X,\beta^{(a^*(X))}\rangle-\max_{a'\not=a^*(X)}\langle X,\betaa\rangle,\forall X\in\mX\]
+denote the margin value of covariate $X;$ i.e., the difference between the maximum reward and the second-maximum reward. The following assumption characterizes how $\Delta(X)$ is distributed around $0.$
+
+\begin{assumption}\label{asmp: margin_condition}
+	There exists $c_m>0$ and $\alpha\in(0,1+1/r)$\footnote{We restrict to $\alpha\in(0,1+1/r)$ because for $\alpha\geq 1,$ the regret in Theorem~\ref{thm: regret-strong-dominance} reduces to $\tilde\mO(\log T),$ matching the finite-dimensional rate and rendering the functional structure immaterial.} such that
+	\[\mathbb{P}_{X\sim\mF}\left[0<\Delta(X)<h\right]\leq c_m h^{\alpha}.\]
+\end{assumption}
+The margin condition in Assumption~\ref{asmp: margin_condition} quantifies the probability that the suboptimality gap $\Delta(X)$ is small, with the exponent $\alpha$ governing the decay rate. A larger $\alpha$ implies that more probability mass is concentrated away from the decision boundary $\Delta(X)=0,$ making it easier to distinguish optimal actions and leading to a faster regret rate. The margin condition is widely adopted in finite-dimensional contextual bandits (see, e.g., \citet{linearresponsebandit,bastani2020online}), and Assumption~\ref{asmp: margin_condition} extends it naturally to the functional setting.
+
+To utilize the margin condition in Assumption~\ref{asmp: margin_condition},
+we will also need the following dominance assumption which is a bit stronger than the dominance assumption in Assumption~\ref{asmp: weak-dominance}.
+\begin{assumption}[Strong dominance]\label{asmp: strong-dominance}
+	There exists a constant $c_{\mathrm{s}}>0$ such that \[\tilde\bSigma\preceq c_{\mathrm{s}}\bL_{M^{(a)}},\;\;\forall a\in[m].\]
+\end{assumption}
+\Cref{asmp: strong-dominance} strengthens \Cref{asmp: weak-dominance} by removing the regularization offset $\mu\idty.$ This stronger condition is needed to uniformly bound the variance term in the confidence radius of \Cref{lem: weak-dominance-interval} over all $X \in \mX$, which is required to exploit the margin condition.
+\begin{theorem}\label{thm: regret-strong-dominance}
+	Suppose that \Cref{asmp: decay,asmp:RKHS,asmp:sub-gaussian,asmp: strong-dominance,asmp: margin_condition} hold. Using oracle $\mO$ defined in \Cref{eq: kernelregression}, \Cref{ineq:oracle_deltazero} and \Cref{ineq: oracle} and choosing $\lambda_n\asymp (\log(mT)/n)^{2r/(2r+1)}$ in \eqref{eq: kernelregression} yields
+	\[\mathbb{E}\left[\Reg_{\text{Alg.~\ref{alg:elim}}}(T)\right]\leq \tilde\mO\left(T^{\frac{r+1-r\alpha}{2r+1}}\right).\]
+\end{theorem}
+
+Theorem~\ref{thm: regret-strong-dominance} shows that with the stronger dominance assumption and the margin condition, a faster regret rate of $\tilde\mO(T^{(r+1-r\alpha)/(2r+1)})$ can indeed be achieved. The proof of Theorem~\ref{thm: regret-strong-dominance} is similar to the proof of Theorem~\ref{thm: regret_weakdominance} and is provided in \Cref{sec: proof_regret_strong_dominance}. At a high level,  the margin condition can help us govern the indicator $\indi\left\{0<\abs{\langle X,\beta^{(a^*(X))}-\beta^{(a)}\rangle}< 2\Delta_\tau^{(a)}(X)+2\Delta_\tau^{(a^*(X))}(X)\right\}$ in the regret decomposition in Theorem~\ref{thm:elimregret}, and thus leads to a smaller regret rate.
+
+\section{Model selection of kernel $K$}\label{sec: model_selection}
+In the previous section, we assumed that the choice of kernel $K$ and its associated RKHS $\mH_K,$ is known as a priori. However, such exact knowledge of $K$ is often hard to obtain in practice. For example, we may well assume that the functional coefficients $\betaa,a\in[m]$ belong to some Sobolev space, but it is hard to know the smoothness level of such a Sobolev space. If we just choose a rough $\mH_K$ that is excessively large to contain all $\betaa,$ the decision-making algorithm may suffer from degraded performance, as the decaying rate $r$ in Assumption~\ref{asmp: decay} can be too conservertive for this choice of rough Sobolev space. 
+However, if $\mH_K$ is chosen to be too smooth to contain the true functional coefficients $\betaa$, then we are taking the risk that the theoretical guarantees of the algorithm no longer hold.
+Therefore, when $\mH_K$ is not known exactly, it is important to select a $\mH_K$ as small as possible such that Assumption~\ref{asmp:RKHS} holds. In this section, we will introduce the problem of selecting suitable RKHS while making online decisions and present a decision-making algorithm that can select optimal kernel in a kernel families in an online manner.
+
+\subsection{Problem formulation and assumptions}
+Formally, consider the following decision-making problem. Suppose that we have access to a family of $l$ nested RKHS, denoted by $\mathcal{G}=\{\mH_{K_1},\mH_{K_2},\ldots,\mH_{K_l}\}$, where $\mH_{K_1}\subseteq\mH_{K_2}\subseteq\ldots\subseteq\mH_{K_l}$ and $\betaa\in\mH_{K_1}$ for all $a\in[m]$. We define the ``optimal'' RKHS in this family as
+\begin{equation}\label{def:optimal_RKHS}
+	\mH_{K_{s^*}} = \inf\{\mH\in\mG:\betaa\in\mH,\ \forall a\in[m]\},
+\end{equation}
+that is, $	\mH_{K_{s^*}}$ is the smallest space in $\mG$ that contains all the functional coefficients. Ideally, when $s^*$ is known, we can use Algorithm~\ref{alg:elim} for online decision making and achieve the optimal regret rate. However, here we shall consider a practical setting where we don't know the index of the optimal RKHS $s^*.$
+Our goal is still minimizing the regret defined in \eqref{def: regret}.
+A concrete example arises when each $\betaa$ belongs to a Sobolev space of unknown smoothness. 
+Specifically, we can construct $\mG$ such that $\mH_{K_s},s\in[l]$ denote the Sobolev RKHS of order $s>0$, consisting of functions whose $s$-th derivatives are square-integrable. While we do not know the smoothness of the RKHS that contains each $\betaa,$ we aim to design a decision-making algorithm that can adapt to different level of smoothness within the RKHS family $\mG.$
+
+We continue to adopt \Cref{asmp:sub-gaussian} from \Cref{subsec: context_assumptions} which assumes that covariate $X$ is sub-gaussian with covariance proxy $\bSigma$. For the model selection problem we consider, we shall assume that each kernel $K_s,s\in[k]$ is associtaed with a decaying rate $r_s.$ Let \[\tilde{\bSigma}_s=\bL_{K_s^{1/2}}\bSigma\bL_{K_s^{1/2}}\]
+denote the transformed covariance proxy associated with kernel $K$ and $\sigma_k^s$ denote the $k^{\tth}$ largest eigenvalue of $\tilde\bSigma_s.$ We have the following assumption.
+\begin{assumption}\label{asmp: decay_model}
+	For each $s\in[l],$ there exists $r_s>1/2$ such that $\sigma_k^s=\mO(k^{-2r_s}).$
+\end{assumption}
+Specifically, for the model selection problem we consider, we also introduce the followimg dominance assumption:
+\begin{assumption}\label{asmp: dominance_outside_margin}
+	There exist $h>0$ and a constant $c_{\mathrm{o}}>0$ such that for all $a\in[m],$
+	\[\bSigma\preceq c_{\mathrm{o}}\,\mathbb{E}_{X\sim\mF}\!\left[\indi\{X\in\mU^{(a)}_{h}\}\,X\otimes X\right],\]
+where
+\[\mU^{(a)}_h = \left\{X\in\mX\mid \langle X,\betaa\rangle-\max_{a'\not=a}\langle X,\beta^{(a')}\rangle>h\right\}.\]
+\end{assumption}
+[Some explanations about this assumption]
+
+\subsection{A decision-making algorithm for kernel selection}
+We now present our decision-making algorithm for model selection in Algorithm~\ref{alg:model_slct}. Algorithm~\ref{alg:model_slct} adapt an action elimination framework similar to Algorithm~\ref{alg:elim}, but is specifically taylored for the need of model selection. 
+	\begin{algorithm}[htbp]
+	\caption{The model selection algorithm for functional bandit}
+	\label{alg:model_slct}
+	\begin{algorithmic}[1]
+		\State \textbf{Algorithm parameters}: Time horizon $T,$ RKHS family $\mG=\{\mH_{K_s},s\in[l]\},$ gap parameter $h;$ regularization parameters $\lambda_{s,t},s\in[l], t\in[t_0+1,T];$ 
+		\State Initialize: failure probability $\delta=m^{-1}T^{-3};$
+		\For{$t$ in first $t_0=\tilde\mO(h^{-(2+1/r_1)})$ time periods}
+		\State Randomly explore: \(a_t\gets \mathrm{Uniform}([m]);\)
+		\EndFor
+		\State Initialize the estimations $\hat\beta^{(a)}_{s,t_0+1}$ for each model $s\in[l]$ by feeding the samples $\{(X_i,a_i,y_i),i\in[t_0]\}$ into \eqref{eq: kernelregression} with $\lambda_n=\lambda_{s,t_0}$, $K=K_s$;
+		\State Initialize confidence radius: \[\Delta^{(a)}_{s,t_0+1}(X)\asymp  \sqrt{\lambda_{t_0} }\log(1/\delta)+\sqrt{\frac{\log (1/\delta)}{t_0}}\langle \bL_{K_{s}^{1/2}}X, 
+		\left(	\hat\bT_{s,t_0}^{(a)}\right)^{-1}\bL_{K_s^{1/2}}X\rangle,\forall X\in\mX, a\in[m],s\in[l],\]where \[\hat\bT_{s,t_0}^{(a)}=\frac{1}{t_0}\sum_{i=1}^{t_0} \indi\{a_i=a\} \bL_{K_s^{1/2}}X_i\otimes \bL_{K_s^{1/2}} X_i+\lambda_{t_0}\idty,\forall a\in[m],s\in[l];\]
+		\For{$t$ in the remaining $t-t_0$ periods}
+		\State Observe the functional covariate $X_t\sim\mF;$
+		\If{\(\max_{a\in[m]}\langle X_t,\hat\beta^{(a)}_{1,t_0+1}\rangle\geq \max_{a'\in[m],a'\not=a}\langle X_t,\hat\beta^{(a)}_{1,t_0+1}\rangle+\delta,\)}
+		\State Chooses the myopic optimal action: $a_t\gets \argmax_{a\in[m]}\langle X_t,\hat\beta^{(a)}_{1,0}\rangle$
+		\Else
+		\State Calculate the good arms set for each model: \(\mA_t^s\gets \left\{a:\langle X_t,\hat\beta^{(a)}_{s,t}\rangle+\Delta^{(a)}_{s,t}\geq \max_{a\in[m]}\langle X_t,\hat\beta^{(a)}_{s,t}\rangle-\Delta^{(a)}_{s,t}\right\},\forall s\in[l].\)
+		\State Find the smallest non-empty action intersection set: \(s_t\gets\max\{s\in[l], \bigcap_{i=1}^s \mA_t^i \not=\emptyset\};\)
+		\State Choose an action uniformly at random: \(a_t\gets \mathrm{Uniform}(\mA_t^{s_t});\)
+		\EndIf
+		\State Observe the reward $y_t=\langle \beta^{(a_t)}, X_t\rangle+\varepsilon_t;$
+		\State Update the estimations $\hat\beta^{(a)}_{s,t+1}$ by feeding the samples $\{(X_i,a_i,y_i),i\in[t]\}$ into \eqref{eq: kernelregression} with $\lambda_n=\lambda_t,K=K_s$ for all $a\in[m],s\in[l]$;
+		\State Update the confidence radius \[\Delta^{(a)}_{s,t+1}(X)\asymp  \sqrt{\lambda_{s,t} }\log(1/\delta)+\sqrt{\frac{\log (1/\delta)}{t}}\langle \bL_{K_{s}^{1/2}}X,
+		\left(	\hat\bT_{s,t}^{(a)}\right)^{-1}\bL_{K_s^{1/2}}X\rangle,\forall X\in\mX, a\in[m],s\in[l],\] where \[\hat\bT_{s,t}^{(a)}=\frac{1}{t}\sum_{i=1}^{t} \indi\{a_i=a\} \bL_{K_s^{1/2}}X_i\otimes \bL_{K_s^{1/2}} X_i+\lambda_{s,t}\idty,\forall a\in[m],s\in[l];\]
+		\EndFor
+	\end{algorithmic}
+\end{algorithm}
+Algorithm~\ref{alg:model_slct} executes in the following way. The algorithm will first random explore for $t_0=\tilde\mO(h^{-(2+1/r_1)})$ rounds. And then, the algorithm  initializes the estimators and confidence radius based on samples collected in the random exploration phase \emph{for each} model $s\in[l]$. That is, without knowing the true model, we still calculate a pseudo estimator and confidence radius for each of the model in the family $\mG.$ 
+
+
+Then, for the remaining $t-t_0$ rounds, the algorithm will calculate a ``good'' arm set for each model upon observing the covariate $X_t$ using the psuedo estimators for each arm $a\in[m].$ Compared to Algorithm~\ref{alg:elim}, where the true model is assumed to be known, Algorithm~\ref{alg:model_slct} can no longer choose an action by constructing a good action set for a specific model. Instead, Algorithm~\ref{alg:model_slct} constucts ``pseudo'' good arm set for each model $s\in[l].$ Similar to the elimination process in Algorithm~\ref{alg:elim}, for each model $s\in[l],$ we eliminate the actions whose upper confidence bounds cannot reach the largest lower confidence bound, $\max_{a\in[m]} \langle X_t,\hat\beta^{(a)}_t\rangle-\Delta^{(a)}_{s,t}.$ After specifying the good arm set $\mA_t^s$ for each model $s\in[l],$ the algorithm then find the largest model index $s$ in \([l],\) such that the intersection of the good arm set for model $\mH_{K_1}$ to model $\mH_{K_{s}},$ is not empty. And then the algorithm will choose an action from this non-empty intersection uniformly at random.
+
+The idea of action elimination in Algorithm~\ref{alg:model_slct} is similar to that in Algorithm~\ref{alg:elim}. However, Algorithm~\ref{alg:model_slct} is different in several ways. First of all, Algorithm~\ref{alg:model_slct} has an explicit random exploration phase while Algorithm~\ref{alg:elim} does not. This random exploration step is to exploit the dominance outside margin assumption in Assumption~\ref{asmp: dominance_outside_margin} and thus is not required in Algorithm~\ref{alg:elim} when Assumption~\ref{asmp: dominance_outside_margin}  is not imposed. It also allows us to identify the optimal action for covariates $X$ such that the associated margin $|\Delta(X)|$ is larger than $\delta$ in Algorithm~\ref{alg:model_slct}.
+Second, Algorithm~\ref{alg:model_slct} uses a uniform confidence radius over all $X\in\mX,$ rather than the covariate-dependent radius in Algorithm~\ref{alg:elim}. This simplification is needed because the algorithm compares good arm sets across models, and a covariate-dependent radius would make such comparisons intractable.
+Third, Algorithm~\ref{alg:model_slct} does not require the geometric batch structure of Algorithm~\ref{alg:elim}. As we show in the proof of \Cref{lem: empirical_dominance_model_slct}, the algorithm's greedy step produces i.i.d.\ samples without explicit batching.
+
+
+
+%Compared to other model selection algorithm in bandit literature, such as CORRAl \citep{agarwal2017corralling} or EXP3 \citep{pacchiano2020model}, our model selection algorithm in Algorithm~\ref{alg:model_slct} is different in the aspect that it is based on action elimination rather than a master algorithm that aggregates base learners. 
+%For CORRAL or EXP3 type selection algorithm, to achieve optimal regret, they will need to know the regret rate of the optimal model, while our model selection does not require such knowledge. Thus, our model selection algorithm is more practical in the functional regression setting we consider, since it is nearly impossible to learn the optimal regret rate without knowing the RKHS $\mH_{K_{s^*}}.$
+
+\subsection{Regret analysis of decision-making algorithm with kernel selection}
+The following theorem shows the regret of Algorithm~\ref{alg:model_slct}.
+\begin{theorem}\label{thm: model_slct_thm}
+Suppose that \Cref{asmp:sub-gaussian,asmp: dominance_outside_margin,asmp: decay} hold. Using oracle $\mO$ defined in \eqref{eq: kernelregression}, \eqref{ineq:oracle_deltazero} and \eqref{ineq: oracle} and choosing $\lambda_{s,t}\asymp (\log(lmT)/t)^{2r_s/(2r_s+1)}$ for all $t\in[t_0+1,T],s\in[l],$ the regret of Algorithm~\ref{alg:model_slct} satisfies
+\[\mathbb{E}[\regret_{Alg.~\ref{alg:model_slct}}(T)] = \tilde\mO\left(T^{\frac{r_{s^*}+1}{2r_{s^*}+1}}\right) .\]
+\end{theorem}
+Theorem~\ref{thm: model_slct_thm} shows that by optimally balancing bias and variance for each model, Algorithm~\ref{alg:model_slct} achieves an expected regret of order $\tilde\mO(T^{(r_{s^*}+1)/(2r_{s^*}+1)}),$ which matches the regret rate achieved by Algorithm~\ref{alg:elim} when $\mH_{K_{s^*}}$ is known in hindsight.
+ Therefore, Algorithm~\ref{alg:elim} effectively chooses the right model, in the sense that the minimax regret rate is still achieved when the optimal model is not known. 
+ 
+ To optimally balance the bias and variance for each of the model, the algorithm need to know $r_s$ for each model $s\in[l].$ That is often possible to achieve, since $r_s$ is the decaying rate of $\bL_{K_s^{1/2}}\bSigma\bL_{K_s^{1/2}},$ and we know $\bL_{K_s^{1/2}}$ for each $s\in[l].$ In contrast, many model selection bandit algorithms such as CORRAL \citep{agarwal2017corralling} requires the regret rate of the optimal model to tune its hyperparameters which is not practical in our setting: without knowing $K_{s^*},$ it is almost impossible to know the decaying rate of the eigenvalues for the operator $\bL_{K_{s^*}}\bSigma\bL_{K_{s^*}},$ neither the corresponding optimal regret rate $T^{(r_{s^*}+1)/(2r_{s^*}+1)}.$ Our model selection algorithm is thus more practically applicable  in functional setting.
+ \begin{remark}
+ 	Remark on the margin condition can also improve the regret rate
+ \end{remark}
+	\bibliography{ref}
+	\bibliographystyle{ormsv080}
+	\newpage	
+	%% Here starts the e-companion (EC)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\theHlemma}{EC.\arabic{lemma}}
+\ECSwitch
+\newcommand{\hatTlamba}{\hat{\bold{T}}_{\lambda_n}^{(a)}}
+\newcommand{\hatT}{\hat{\bold{T}}_n^{(a)}}
+\ECHead{Omitted proofs}
+\section{Proof of Lemma~\ref{lem: empirical_dominance}}
+Fix any $a\in[m].$ Recall that $\hatTlamba=\hatT+\lambda_n\idty$ where $\hatT=\frac{1}{n}\sum_{i=1}^n\indi\{a_i=a\}\tilde X_i\otimes\tilde X_i.$ Let \[\bT_{\lambda_n}^{(a)}=\mathbb{E}[\indi\{a_1=a\}\tilde X_1\otimes\tilde X_1]+\lambda_n\idty\] denote the population counterpart of $\hatTlamba.$ 
+We first show that $\hat\bT_{\lambda_n}^{(a)}$ concentrates around its population 
+counterpart $\bT_{\lambda_n}^{(a)}$ via \Cref{lem: empirical_dominance_general}.
+To this end, we show that the algorithm's sampling of arm $a$ inherits sufficient mass from the region where $a$ is optimal to verify the dominance condition \eqref{eq: dominance_condition} in \Cref{lem: empirical_dominance_general}.
+
+Define the good action set for each sample $i$ as \[\mA_i=\{a:\langle X_i,\hat\beta_\tau^{(a)}\rangle+\Delta_\tau^{(a)}(X_i)\geq \max_{a'\in[m]}\langle X_i,\hat\beta_\tau^{(a')}\rangle-\Delta_\tau^{(a')}(X_i)\},\] analogous to line~6 of Algorithm~\ref{alg:elim}. By the algorithm design, when \eqref{ineq: oracle}  holds, the optimal arm $a^*(X_i)$ is included in $\mA_i.$ To see this, note that \eqref{ineq: oracle}  gives
+\[\langle X,\hat\beta_\tau^{(a^*)}\rangle+\Delta_\tau^{(a^*)}(X) \geq \langle X,\beta^{(a^*)}\rangle\geq \langle X,\beta^{(a)}\rangle\geq \langle X,\hat\beta_\tau^{(a)}-\Delta_\tau^{(a)}(X)\rangle,\forall a\in[m],\forall X \in \mX\]
+where the first and the last inequality uses triangle inequality with \eqref{ineq: oracle} and the second inequality is given by the optimality of $a^*.$
+Since $a^*(X_i)$ remains in $\mA_i$ and the algorithm selects $a_i$ uniformly from at most $m$ actions, action $a$ is sampled with probability at least $1/m$ whenever it is the optimal arm. Consequently we have
+\begin{align}
+	\bT^{(a)} := \mathbb{E}\left[\indi\{a_i=a\}\tilde X_i\otimes\tilde X_i\right]
+	&\succeq \mathbb{E}\left[\indi\{a_i=a, a^*(\tilde X_i)=a\}\tilde X_i\otimes\tilde X_i\right]\nonumber\\
+	&\succeq \frac{1}{m}\mathbb{E}\left[\indi\{ a^*(\tilde X_i)=a\}\tilde X_i\otimes\tilde X_i\right]\nonumber\\
+	&=\frac{1}{m} \bL_{M^{(a)}}. \label{xxx}
+\end{align}
+
+By \Cref{asmp:sub-gaussian}, $\indi\{a_i=a\}\tilde X_i$ is $\tilde\bSigma$-sub-Gaussian.
+We verify the dominance condition \eqref{eq: dominance_condition} with $\bSigma_0=\bT^{(a)},$ $\bSigma_{\mathrm{proxy}}=\tilde\bSigma,$ and $\lambda=\lambda_n.$ Recall from \eqref{eq: hatT_and_Tstar} that $\bT_{\lambda_n}^{*(a)}=\bL_{M^{(a)}}+\lambda_n\idty.$ By \Cref{asmp: weak-dominance} with $\mu=\lambda_n,$ \begin{equation}\label{dom: Tastara}
+\tilde\bSigma+\lambda_n\idty\preceq c_{\mathrm{w}}(\bL_{M^{(a)}}+\lambda_n\idty)= c_{\mathrm{w}}\bT_{\lambda_n}^{*(a)}.
+\end{equation}
+By~\eqref{xxx}, $\bL_{M^{(a)}}\preceq m\bT^{(a)},$ so $\bT_{\lambda_n}^{*(a)}=\bL_{M^{(a)}}+\lambda_n\idty\preceq m\bT^{(a)}+\lambda_n\idty\preceq m\bT_{\lambda_n}^{(a)}.$ Therefore,
+\begin{equation}\label{eq: dominance_condition_applied}
+\tilde\bSigma+\lambda_n\idty\preceq c_{\mathrm{w}} m\,\bT_{\lambda_n}^{(a)}=c_{\mathrm{w}} m\,(\bT^{(a)}+\lambda_n\idty),
+\end{equation}
+and \eqref{eq: dominance_condition} holds with $c_{\mathrm{d}}=c_{\mathrm{w}} m.$ The effective dimension satisfies
+\begin{equation}\label{eq: eff_dim_explicit}
+d_{\mathrm{eff}}=\Tr(\tilde\bSigma(\bT_{\lambda_n}^{(a)})^{-1})+1\leq c_{\mathrm{w}} m\,\Tr\!\left(\tilde\bSigma(\tilde\bSigma+c_{\mathrm{w}} m\lambda_n\idty)^{-1}\right)+1=\mO(\lambda_n^{-1/(2r)}),
+\end{equation}
+where the first inequality uses  \eqref{eq: dominance_condition_applied}, and the last step follows from \Cref{lem: eff_dim_bound}. By \Cref{lem: empirical_dominance_general} and \eqref{dom: Tastara},
+\[\hatTlamba=\frac{1}{n}\sum_{i=1}^n\indi\{a_i=a\}\tilde X_i\otimes\tilde X_i+\lambda_n\idty\succeq\frac{1}{2}\bT_{\lambda_n}^{(a)}\succeq\frac{1}{2m}\bT_{\lambda_n}^{*(a)}\]
+with probability at least $1-\delta$ whenever $n\geq c\lambda_n^{-1/(2r)}\log(1/\delta).$ This completes the proof.
+\section{Proof of Lemma~\ref{lem: weak-dominance-interval}}\label{sec: proof_weak_dominance_interval}
+The proof decomposes the prediction error into a bias term and a variance term, then bounds each using the empirical operator dominance from \Cref{lem: empirical_dominance}.
+
+Fix any $a\in[m].$ Let 
+\[\tilde X=\bL_{K^{1/2}} X,\forall X\in \mL^2[0,1].\]
+Also, let \(\gamma^{(a)}=(\bL_{K^{1/2}})^{-1} \betaa,\) which by Assumption~\ref{asmp:RKHS} should be a function in $\mL^2[0,1]$ space. Similarly, let \(\hat\gamma^{(a)}=(\bL_{K^{1/2}})^{-1} \hat\beta^{(a)}\in\mL^2[0,1].\)
+
+By \eqref{eq: kernelregression}, we can write the explicit form of $\hat\gamma^{(a)}:$
+\begin{equation}\label{eq: expression_of_hatbetaa}
+	\hat\gamma^{(a)}=\left(\hatTlamba\right)^{-1}\left(\hatT \gamma^{(a)}+g_n^{(a)}\right),
+\end{equation}
+where 
+\[\hatT = \frac{1}{n}\sum_{i=1}^n \indi\{a_i=a\}\tilde X_i\otimes \tilde X_i\quad\text{and}\quad g_n^{(a)}=\frac{1}{n}\sum\varepsilon_i \indi\{a_i=a\}\tilde X_i.\]
+We now bound the right hand side of \eqref{ineq: oracle} by the sum of a bias term and a variance term:
+\begin{align}
+	\abs{\langle X,\hat\beta^{(a)}\rangle-\langle X,\beta^{(a)}\rangle} &=\abs{\langle \tilde X,\hat\gamma^{(a)}-\gamma^{(a)}\rangle}\nonumber \\
+	&=\abs{\langle \tilde X,\left(\hatTlamba\right)^{-1}\left(\hatT \gamma^{(a)}+g_n^{(a)}\right)-\gamma^{(a)}\rangle}\nonumber\\
+	&\leq \bigg|\underbrace{\langle \tilde X,\left(\hatTlamba\right)^{-1}\hatT \gamma^{(a)}-\gamma^{(a)}\rangle}_{:=b_n}\bigg|+\bigg|\underbrace{\langle \tilde X,\left(\hatTlamba\right)^{-1}g_n^{(a)}\rangle}_{:=v_n}\bigg|.\label{eq: bias_and_var}
+\end{align}
+\paragraph{Analysis of the bias term.} We first analyze the term $b_n.$ By Assumption~\ref{asmp:sub-gaussian}, we have $\tilde X$ is $\tilde\bSigma$-subgaussian, and thus \(b_n\) is also sub-gaussian with variance proxy
+\begin{align}
+&	\left\langle \left(\hatTlamba\right)^{-1}\hatT \gamma^{(a)}-\gamma^{(a)},\tilde\bSigma\left(\left(\hatTlamba\right)^{-1}\hatT \gamma^{(a)}-\gamma^{(a)}\right)\right\rangle\nonumber\\
+&=\left\langle \left(\hatTlamba\right)^{-1}\left(\hatT-\hatTlamba\right) \gamma^{(a)},\tilde\bSigma\left(\hatTlamba\right)^{-1}\left(\hatT-\hatTlamba\right) \gamma^{(a)}\right\rangle\nonumber\\
+&=\lambda_n^2\left\langle \left(\hatTlamba\right)^{-1} \gamma^{(a)},\tilde\bSigma\left(\hatTlamba\right)^{-1}\gamma^{(a)}\right\rangle.\label{eq: proxy}
+\end{align}
+Recall the regularized optimal-region operator $\bT_{\lambda_n}^{*(a)}=\bL_{M^{(a)}}+\lambda_n\idty.$
+Lemma condition with Assumption~\ref{asmp: weak-dominance} gives
+\[\tilde\bSigma\preceq c_{\mathrm{w}} \bT_{\lambda_n}^{*(a)}\preceq 2mc_{\mathrm{w}} \hatTlamba,\]
+and thus the proxy term in \eqref{eq: proxy} 
+\begin{align*}
+\lambda_n^2\left\langle \left(\hatTlamba\right)^{-1} \gamma^{(a)},\tilde\bSigma\left(\hatTlamba\right)^{-1}\gamma^{(a)}\right\rangle&\leq 2mc_{\mathrm{w}}\lambda_n^2\left\langle \left(\hatTlamba\right)^{-1} \gamma^{(a)},\hatTlamba\left(\hatTlamba\right)^{-1}\gamma^{(a)}\right\rangle\\
+&=2mc_{\mathrm{w}}\lambda_n^2\left\langle \left(\hatTlamba\right)^{-1} \gamma^{(a)},\gamma^{(a)}\right\rangle\\
+&\leq 2mc_{\mathrm{w}}\lambda_n^2\left\|\left(\hatTlamba\right)^{-1}\right\|_{\op}\|\gamma^{(a)}\|_2^2\leq 2mc_{\mathrm{w}}\lambda_n
+\end{align*}
+where the last step uses $\|(\hatTlamba)^{-1}\|_{\op}\leq\lambda_n^{-1}$ and $\|\gamma^{(a)}\|_2\leq 1$ from \Cref{asmp:RKHS}.
+Since $b_n$ is subgaussian with variance proxy bounded by $2mc_{\mathrm{w}}\lambda_n,$ by Lemma~\ref{lem: subgaussian_tail} we have
+\[\abs{b_n}\leq \sqrt{4mc_{\mathrm{w}}\lambda_n\log (1/\delta)}\]
+with probability greater than $1-\delta$ for any $\delta\in(0,1).$
+\paragraph{Analysis of the variance term.}Now we upper bound the variance term in \eqref{eq: bias_and_var}. We have
+\begin{align}
+	v_n &= \langle \tilde X,\left(\hatTlamba\right)^{-1}g_n^{(a)}\rangle\nonumber\\
+	&=\left\langle \tilde X,\left(\hatTlamba\right)^{-1}\frac{1}{n}\sum_{i=1}^n \varepsilon_i\indi\{a_i=a\}\tilde X_i\right\rangle\nonumber\\
+	&=\frac{1}{n} \sum_{i=1}^n \varepsilon_i \left\langle \tilde X, \left(\hatTlamba\right)^{-1}\tilde X_i\indi\{a_i=a\}\right\rangle.\label{eq: var_1}
+\end{align}
+Since $\varepsilon_i$ are i.i.d. $\sigma_{\varepsilon}^2$-subgaussian noise, by Lemma~\ref{lem: iidsumofgaussian}, we have with probability greater than $1-\delta$
+\begin{align*}
+	|v_n|&\leq \frac{\sigma_\varepsilon\sqrt{2\log(1/\delta)}}{n}\sqrt{\sum_{i=1}^n \left\langle \tilde X, \left(\hatTlamba\right)^{-1}\tilde X_i\indi\{a_i=a\}\right\rangle^2}\\
+	&=\sigma_\varepsilon\sqrt{\frac{2\log(1/\delta)}{n}}\sqrt{\frac{\sum_{i=1}^n \left\langle \tilde X, \left(\hatTlamba\right)^{-1}\tilde X_i\indi\{a_i=a\}\right\rangle^2}{n}}\\
+	&=\sigma_\varepsilon\sqrt{\frac{2\log(1/\delta)}{n}}\sqrt{\left\langle \tilde X, \left(\hatTlamba\right)^{-1}\hatT\left(\hatTlamba\right)^{-1}\tilde X\right\rangle}\\
+	&\leq \sigma_\varepsilon\sqrt{\frac{2\log(1/\delta)}{n}}\sqrt{\left\langle \tilde X, \left(\hatTlamba\right)^{-1}\tilde X\right\rangle},
+\end{align*}
+where the last inequality follows from $\hatT\preceq\hatTlamba$.
+
+\paragraph{Combining bias and variance.} Substituting the bias and variance bounds into the decomposition \eqref{eq: bias_and_var}, we obtain that with probability greater than $1-2\delta,$
+\[\abs{\langle X,\hat\beta^{(a)}\rangle-\langle X,\beta^{(a)}\rangle} \leq |b_n|+|v_n| \leq 2\sqrt{2mc_{\mathrm{w}}\lambda_n\log(1/\delta)}+\sigma_\varepsilon\sqrt{\frac{2\log(1/\delta)}{n}\left\langle \tilde X, \left(\hatTlamba\right)^{-1}\tilde X\right\rangle}\]
+for all $a\in[m].$ Recalling that $\tilde X=\bL_{K^{1/2}}X$ and rescaling $\delta$ by a constant factor, we conclude that \eqref{ineq: oracle} holds with
+	\[\Delta^{(a)}(X)\asymp \sqrt{\lambda_n\log(1/\delta) }+\sqrt{\frac{\log (1/\delta)}{n}\langle \bL_{K^{1/2}}X,
+\left(	\hatTlamba\right)^{-1}\bL_{K^{1/2}}X\rangle}\]
+with probability greater than $1-\delta$ for all $X$ and $a\in[m].$ This completes the proof.
+
+
+\section{Proof of Theorem~\ref{thm:elimregret}}\label{sec: proof_elimregret}
+
+Define the \emph{good event}
+\[\mE=\bigcap_{\tau=1}^{\tau_0}\bigcap_{a\in[m]}\left\{\abs{\langle X,\hat\beta_\tau^{(a)}\rangle-\langle X,\beta^{(a)}\rangle}\leq \Delta_\tau^{(a)}(X),\;\forall X\in\mX\right\},\]
+on which the oracle output is valid in every epoch simultaneously. By the oracle guarantee \eqref{ineq: oracle} with $\delta=m^{-1}T^{-3}$ and a union bound over the $\tau_0=\mO(\log T)$ epochs, $\mathbb{P}(\mE)\geq 1-m\tau_0\delta\geq 1-T^{-2}.$
+
+We first note that the optimal action is never eliminated for any $t\in[T]$ on $\mE$. Fix any epoch $\tau$ and any time step $t$ in epoch $\tau.$ On $\mE,$ for any $a'\in[m],$
+\[\langle X_t,\hat\beta_\tau^{(a^*)}\rangle+\Delta_\tau^{(a^*)}(X_t)\geq \langle X_t,\beta^{(a^*)}\rangle\geq \langle X_t,\beta^{(a')}\rangle\geq \langle X_t,\hat\beta_\tau^{(a')}\rangle-\Delta_\tau^{(a')}(X_t),\]
+where the first and third inequalities use the oracle validity on $\mE$ and the second uses optimality of $a^*.$ Hence $a^*$ is never eliminated by \Cref{alg:elim}, i.e., $a^*\in\mA_t$ for all $t\in[T].$
+
+Now we are ready to show the per-step regret bound on $\mE$. Fix epoch $\tau\geq 2$ and time step $t$ in epoch $\tau.$ If $a_t=a^*(X_t),$ the regret is zero. If $a_t\neq a^*(X_t),$ then $a_t\in\mA_t$ means it is not eliminated, so
+\[\langle X_t,\hat\beta_\tau^{(a_t)}\rangle+\Delta_\tau^{(a_t)}(X_t)\geq \max_{a'\in[m]}\langle X_t,\hat\beta_\tau^{(a')}\rangle-\Delta_\tau^{(a')}(X_t)\geq \langle X_t,\hat\beta_\tau^{(a^*)}\rangle-\Delta_\tau^{(a^*)}(X_t).\]
+On $\mE,$ the left-hand side is at most $\langle X_t,\beta^{(a_t)}\rangle+2\Delta_\tau^{(a_t)}(X_t)$ and the right-hand side is at least $\langle X_t,\beta^{(a^*)}\rangle-2\Delta_\tau^{(a^*)}(X_t).$ Therefore
+\begin{equation}\label{eq: perstep_regret}
+0<\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle\leq 2\Delta_\tau^{(a_t)}(X_t)+2\Delta_\tau^{(a^*(X_t))}(X_t).
+\end{equation}
+
+With the per-period regret bound, the total regret decomposes as
+\begin{align}
+\mathbb{E}\!\left[\Reg_{\text{Alg.~\ref{alg:elim}}}(T)\right]
+&= \underbrace{\mathbb{E}\!\left[\sum_{t=1}^T\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle\indi_\mE\right]}_{\text{(I)}}+\underbrace{\mathbb{E}\!\left[\sum_{t=1}^T\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle\indi_{\mE^c}\right]}_{\text{(II)}}.\label{eq: regret_decomp}
+\end{align}
+
+For term (II) in \eqref{eq: regret_decomp}, since for any $a\in[m],$ $|\langle X_t,\beta^{(a)}\rangle|=|\langle \tilde X_t,\gamma^{(a)}\rangle|\leq\|\tilde X_t\|$ by $\|\gamma^{(a)}\|_2\leq 1$ (\Cref{asmp:RKHS}) and $\mathbb{E}[\|\tilde X_t\|^2]=\Tr(\tilde\bSigma)<\infty$ (since $r>1/2$), Cauchy--Schwarz gives
+\[\mathbb{E}\!\left[\sum_{t=1}^T\abs{\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle}\indi_{\mE^c}\right]\leq 2T\sqrt{\Tr(\tilde\bSigma)}\sqrt{\mathbb{P}(\mE^c)}=\mO(1),\]
+given that $\mathbb{P}(\mE^c)\leq T^{-2}.$ 
+
+For term (I) in \eqref{eq: regret_decomp}, we similarly have
+\begin{align}\label{eq: term_I}
+\text{(I)}&=\sum_{\tau=2}^{\tau_0}\sum_{t\in\mT_\tau}\mathbb{E}\!\left[\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle\indi_\mE\right]+\sum_{t\in\mT_1}\mathbb{E}\!\left[\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle\indi_\mE\right]\nonumber\\
+&=\sum_{\tau=2}^{\tau_0}\sum_{t\in\mT_\tau}\mathbb{E}\!\left[\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle\indi_\mE\right]+\mO(1).
+\end{align}
+On $\mE,$ the per-step regret is zero when $a_t=a^*(X_t).$ When $a_t\neq a^*(X_t),$ since $a_t\in\mA_t,$ \eqref{eq: perstep_regret} gives $0<\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle\leq 2\Delta_\tau^{(a_t)}(X_t)+2\Delta_\tau^{(a^*(X_t))}(X_t),$ so the gap indicator $\indi\big\{0<\abs{\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle}<2\Delta_\tau^{(a_t)}(X_t)+2\Delta_\tau^{(a^*(X_t))}(X_t)\big\}$ equals~$1.$ Therefore, the summand in \eqref{eq: term_I} has
+\begin{align}
+&\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle\indi_\mE\nonumber\\&\leq 2\big(\Delta_\tau^{(a_t)}(X_t)+\Delta_\tau^{(a^*(X_t))}(X_t)\big)\indi\big\{0<\abs{\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle}<2\Delta_\tau^{(a_t)}(X_t)+2\Delta_\tau^{(a^*(X_t))}(X_t)\big\}.\label{eq: perstep_with_indicator}
+\end{align}
+The oracle output $(\hat\beta_\tau^{(a)},\Delta_\tau^{(a)})$ depends only on epoch $\tau-1$ data, so $X_t\sim\mF$ is independent of $(\hat\beta_\tau^{(a)},\Delta_\tau^{(a)})$ for each $t$ in epoch $\tau.$ Conditioning on $X_t$ and the oracle output, the uniform action selection $a_t\sim\mathrm{Uniform}(\mA_t)$ gives
+\begin{align}
+&\mathbb{E}_{a_t}\!\left[\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle\indi_\mE\,\Big|\,X_t,\hat\beta_\tau,\Delta_\tau\right]=\frac{1}{|\mA_t|}\sum_{a\in\mA_t}\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a)}\rangle\indi_\mE.\label{eq: conditional_expansion}
+\end{align}
+Substituting \eqref{eq: perstep_with_indicator} into each summand of \eqref{eq: conditional_expansion} and relaxing $\frac{1}{|\mA_t|}\sum_{a\in\mA_t}$ to $\sum_{a\in[m]},$ we obtain
+\begin{align}
+&\mathbb{E}_{a_t}\!\left[\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle\indi_\mE\,\Big|\,X_t,\hat\beta_\tau,\Delta_\tau\right]\nonumber\\
+&\leq 2\sum_{a\in[m]}\big(\Delta_\tau^{(a)}(X_t)+\Delta_\tau^{(a^*(X_t))}(X_t)\big)\cdot\indi\big\{0<\abs{\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a)}\rangle}<2\Delta_\tau^{(a)}(X_t)+2\Delta_\tau^{(a^*(X_t))}(X_t)\big\}.\label{eq: transfer_step}
+\end{align}
+Taking expectation over both $X_t$ and the oracle randomness, summing over the $|\mT_\tau|=2^\tau$ time steps in epoch $\tau$ and over $\tau=2,\ldots,\tau_0,$ substituting into \eqref{eq: term_I} gives
+\begin{align}
+\text{(I)}&\leq \sum_{\tau=2}^{\tau_0}2^\tau\cdot 2\sum_{a\in[m]}\mathbb{E}\Big[\big(\Delta_\tau^{(a)}(X)+\Delta_\tau^{(a^*(X))}(X)\big)\nonumber\\
+&\qquad\qquad\cdot\indi\big\{0<\abs{\langle X,\beta^{(a^*(X))}-\beta^{(a)}\rangle}<2\Delta_\tau^{(a)}(X)+2\Delta_\tau^{(a^*(X))}(X)\big\}\Big]+\mO(1).\label{eq: term_I_bound}
+\end{align}
+Combining \eqref{eq: term_I_bound} for term~(I) and the $\mO(1)$ bound for term~(II) in \eqref{eq: regret_decomp} completes the proof.
+
+
+
+\section{Proof of Theorem~\ref{thm: regret_weakdominance}}\label{sec: proof_regret_weakdominance}
+We first show that the oracle $\mO$ is valid across all epochs by induction on $\tau=1,\ldots,\tau_0.$
+In epoch $\tau=1,$ the algorithm has no prior samples, so \eqref{ineq:oracle_deltazero} is satisfied by \Cref{lem: delta_0}. Now suppose that for all $a\in[m],$ the oracle output $(\hat\beta_{\tau-1}^{(a)},\Delta_{\tau-1}^{(a)})$ in epoch $\tau-1$ satisfies \eqref{ineq: oracle}. Since $\lambda_T\leq\lambda_{2^{\tau-1}}$ for all $\tau,$ \Cref{asmp: weak-dominance} holds with $\mu=\lambda_{2^{\tau-1}}$ as required by \Cref{lem: empirical_dominance}. To apply \Cref{lem: empirical_dominance}, we also need $(c\log(T/\delta)/n)^{2r}\leq\lambda_n.$ With our choice $\lambda_n\asymp(\log(mT)/n)^{2r/(2r+1)}$, by choosing the implicit constant sufficiently large,
+\[\left(\frac{c\log(T/\delta)}{n}\right)^{\!2r}\leq\lambda_n.\] By \Cref{lem: empirical_dominance} applied to the $n=2^{\tau-1}$ samples $\{(X_i,a_i,y_i)\}$ collected in epoch $\tau-1,$ the empirical dominance
+\[\frac{1}{2m}\bT_{\lambda_{2^{\tau-1}}}^{*(a)}\preceq\hat\bT_{\lambda_{2^{\tau-1}}}^{(a)}\]
+holds with probability at least $1-\delta/T$ for all $a\in[m].$ Given this dominance, \Cref{lem: weak-dominance-interval} then guarantees that for all $a\in[m],$ the oracle output $(\hat\beta_{\tau}^{(a)},\Delta_{\tau}^{(a)})$ in epoch $\tau$ satisfies \eqref{ineq: oracle} with probability at least $1-\delta/T.$ By induction and a union bound over the $\tau_0=\mO(\log T)$ epochs (accounting for both the dominance and oracle failure in each epoch), the oracle is valid in every epoch simultaneously with probability at least $1-2\tau_0\delta/T\geq 1-\delta.$
+
+By \Cref{thm:elimregret}, dropping the indicator and noting $\sum_{a\in[m]}\Delta_\tau^{(a^*(X))}(X)=m\,\Delta_\tau^{(a^*(X))}(X)\leq m\sum_{a\in[m]}\Delta_\tau^{(a)}(X),$ we have
+\[\mathbb{E}\left[\Reg_{\text{Alg.~\ref{alg:elim}}}(T)\right]\leq \mO\left(\sum_{\tau=2}^{\tau_0}2^\tau\sum_{a\in[m]}\mathbb{E}\left[\Delta_{\tau}^{(a)}(X)\right]\right)+\mO(1).\]
+
+Fix any epoch $\tau\in\{2,\ldots,\tau_0\}.$ It remains to bound $\mathbb{E}[\Delta_\tau^{(a)}(X)]$ for each $a\in[m],$ where $X\sim\mF$ is independent of the epoch $\tau-1$ data. By \Cref{lem: weak-dominance-interval} with $n=2^{\tau-1}$ and $\delta=m^{-1}T^{-3},$ the confidence radius satisfies
+\begin{equation}\label{eq: confidence_radius_explicit}
+\Delta_\tau^{(a)}(X)\asymp \sqrt{\lambda_{2^{\tau-1}}\log(mT) }+\sqrt{\frac{\log (mT)}{2^{\tau-1}}\langle \bL_{K^{1/2}}X,
+\left(\hat\bT_{\lambda_{2^{\tau-1}}}^{(a)}\right)^{-1}\bL_{K^{1/2}}X\rangle}.
+\end{equation}
+Let $\mD_\tau$ denote the event that $\hat\bT_{\lambda_{2^{\tau-1}}}^{(a)}\succeq\frac{1}{2m}\bT_{\lambda_{2^{\tau-1}}}^{*(a)}$ holds for all $a\in[m];$ by \Cref{lem: empirical_dominance}, $\mathbb{P}(\mD_\tau^c)\leq T^{-2}.$ We split each summand:
+\[\mathbb{E}\left[\Delta_\tau^{(a)}(X)\right]=\mathbb{E}\left[\Delta_\tau^{(a)}(X)\indi_{\mD_\tau}\right]+\mathbb{E}\left[\Delta_\tau^{(a)}(X)\indi_{\mD_\tau^c}\right].\]
+
+For the on-event term, by \Cref{asmp: weak-dominance}, on $\mD_\tau$ we have
+\[\hat\bT_{\lambda_{2^{\tau-1}}}^{(a)}\succeq\frac{1}{2m}\bT_{\lambda_{2^{\tau-1}}}^{*(a)}\succeq\frac{1}{2c_{\mathrm{w}} m}(\tilde\bSigma+\lambda_{2^{\tau-1}}\idty)\]
+for all $a\in[m].$ Substituting into \eqref{eq: confidence_radius_explicit},
+\begin{align}
+\mathbb{E}\left[\Delta_\tau^{(a)}(X)\indi_{\mD_\tau}\right]
+&\leq \mO\left(\sqrt{\lambda_{2^{\tau-1}}\log(mT)}+\sqrt{\frac{\log(mT)}{2^{\tau-1}}}\,\mathbb{E}\left[\sqrt{\langle \tilde X,(\tilde\bSigma+\lambda_{2^{\tau-1}}\idty)^{-1}\tilde X\rangle}\right]\right)\nonumber\\
+&\leq \mO\left(\sqrt{\lambda_{2^{\tau-1}}\log(mT)}+\sqrt{\frac{\log(mT)}{2^{\tau-1}}}\sqrt{\Tr\!\left(\tilde\bSigma(\tilde\bSigma+\lambda_{2^{\tau-1}}\idty)^{-1}\right)}\right)\nonumber\\
+&\leq \mO\left(\sqrt{\lambda_{2^{\tau-1}}\log(mT)}+\sqrt{\frac{\log(mT)}{2^{\tau-1}}}(\lambda_{2^{\tau-1}})^{-\frac{1}{4r}}\right),\nonumber
+\end{align}
+where the second line uses Jensen's inequality and the trace identity, and the third line applies \Cref{lem: eff_dim_bound}.
+
+For the off-event term, since $\hat\bT_{\lambda_{2^{\tau-1}}}^{(a)}\succeq\lambda_{2^{\tau-1}}\idty$ by definition, $(\hat\bT_{\lambda_{2^{\tau-1}}}^{(a)})^{-1}\preceq(\lambda_{2^{\tau-1}})^{-1}\idty.$ By independence of $X$ and the oracle output, \eqref{eq: confidence_radius_explicit} gives
+\[\mathbb{E}\!\left[(\Delta_\tau^{(a)}(X))^2\right]\lesssim \lambda_{2^{\tau-1}}\log(mT)+\frac{\log(mT)}{2^{\tau-1}\lambda_{2^{\tau-1}}}\Tr(\tilde\bSigma)=\mO(1),\]
+since $\Tr(\tilde\bSigma)=\mO(1)$ by $r>1/2$ and $\lambda_{2^{\tau-1}}\geq\Omega\big((2^{\tau-1})^{-1}\big).$ Cauchy--Schwarz gives
+\[\mathbb{E}\left[\Delta_\tau^{(a)}(X)\indi_{\mD_\tau^c}\right]\leq\sqrt{\mathbb{E}[(\Delta_\tau^{(a)}(X))^2]}\cdot\sqrt{\mathbb{P}(\mD_\tau^c)}=\mO(T^{-1}).\]
+
+Combining the two contributions and substituting into \Cref{thm:elimregret}, noting $\sum_{\tau=2}^{\tau_0}2^\tau\cdot\mO(T^{-1})=\mO(1),$ we obtain
+\[\mathbb{E}[\Reg_{\text{Alg.~\ref{alg:elim}}}(T)]\leq \sum_{\tau=2}^{\tau_0}2^\tau\mO\left(\sqrt{\lambda_{2^{\tau-1}}\log(mT)}+\sqrt{\frac{\log(mT)}{2^{\tau-1}}}(\lambda_{2^{\tau-1}})^{-\frac{1}{4r}}\right).\]
+Now, substituting the choice $\lambda_n\asymp (\log(mT)/n)^{2r/(2r+1)},$ a direct computation shows that both
+\[\sqrt{\lambda_{2^{\tau-1}}\log(mT)}=\tilde\mO\!\left(2^{-\frac{r(\tau-1)}{2r+1}}\right) \quad\text{and}\quad \sqrt{\frac{\log(mT)}{2^{\tau-1}}}\cdot(\lambda_{2^{\tau-1}})^{-\frac{1}{4r}}=\tilde\mO\!\left(2^{-\frac{r(\tau-1)}{2r+1}}\right).\]
+Substituting into the above display, each epoch $\tau$ contributes $2^\tau\cdot\tilde\mO(2^{-\frac{r(\tau-1)}{2r+1}})=\tilde\mO(2^{\frac{\tau(r+1)}{2r+1}})$ to the regret. Summing this geometric series over $\tau=2,\ldots,\tau_0,$
+	\begin{align*}
+		\mathbb{E}\left[\Reg_{\text{Alg.~\ref{alg:elim}}}(T)\right]&\leq \sum_{\tau=2}^{\tau_0}\tilde\mO\left(2^{\frac{\tau(r+1)}{2r+1}}\right)+\mO(1)=\tilde\mO\left(2^{\frac{\tau_0(r+1)}{2r+1}}\right).
+	\end{align*}
+	Since $2^{\tau_0}=\mO(T)$ by the geometric design of Algorithm~\ref{alg:elim}, this yields the final result.
+\section{Proof of Theorem~\ref{thm: regret-strong-dominance}}\label{sec: proof_regret_strong_dominance}
+%Let
+%\[v_\tau^{(a)} \asymp \sqrt{\frac{\log \delta}{2^{\tau-1}}}\langle \bL_{K^{1/2}}X, 
+%\left(	\hat\bT_{\lambda_{2^{\tau-1}}}^{(a)}\right)^{-1}\bL_{K^{1/2}}X\rangle,\quad\text{where}\;\;\lambda_{\tau} \asymp 2^{\frac{-2r(\tau-1)}{2r+1}}.\]
+Fix any epoch $\tau\in\{2,\ldots,\tau_0\}.$ Recall that from Lemma~\ref{lem: weak-dominance-interval} for any $a\in[m]$
+\begin{equation}\label{eq: delta}
+\Delta^{(a)}_\tau(X)\asymp \sqrt{\lambda_{2^{\tau-1}}\log(mT) }+\sqrt{\frac{\log (mT)}{2^{\tau-1}}\langle \bL_{K^{1/2}}X,
+	\left(	\hat\bT^{(a)}_{\lambda_{2^{\tau-1}}}\right)^{-1}\bL_{K^{1/2}}X\rangle}.
+\end{equation}
+
+	The following lemma provides a high probability bound for the variance term in $\Delta_\tau^{(a)}(X).$
+	\begin{lemma}\label{lem: prbofdelta}
+	For any $a\in[m],$	with probability higher than $1-2m^{-1}T^{-2},$
+		\[\sqrt{\langle \bL_{K^{1/2}}X,
+			\left(	\hat\bT^{(a)}_{\lambda_{2^{\tau-1}}}\right)^{-1}\bL_{K^{1/2}}X\rangle}\leq 2\left(\lambda_{2^{\tau-1}}\right)^{-\frac{1}{4r}} +\log(mT).\]
+	\end{lemma}
+	Let $\mB_\tau$ denote the event that the bound in Lemma~\ref{lem: prbofdelta} holds simultaneously for all $a\in[m].$ Substituting Lemma~\ref{lem: prbofdelta} and the choice of $\lambda_{2^{\tau-1}}\asymp(\log(mT)/2^{\tau-1})^{2r/(2r+1)}$ into \eqref{eq: delta}, on $\mB_\tau$ we obtain the deterministic bound $\Delta_\tau^{(a)}(X)\lesssim \bar\Delta_\tau$ for all $a\in[m],$ where
+	\[\bar\Delta_\tau := \sqrt{\lambda_{2^{\tau-1}}\log(mT) }+\sqrt{\frac{\log (mT)}{2^{\tau-1}}}\left((\lambda_{2^{\tau-1}})^{-\frac{1}{4r}}+\log(mT)\right) = \tilde{\mathcal{O}}\left(2^{\frac{-r(\tau-1)}{2r+1}}\right).\]
+We split into on-event and off-event contributions. On $\mB_\tau,$ we have $\Delta_\tau^{(a)}(X)\leq\bar\Delta_\tau$ for all $a\in[m].$ Off $\mB_\tau,$ Cauchy--Schwarz gives $\mathbb{E}[\Delta_\tau^{(a)}(X)\indi_{\mB_\tau^c}]\leq\sqrt{\mathbb{E}[(\Delta_\tau^{(a)}(X))^2]}\cdot\sqrt{\mathbb{P}(\mB_\tau^c)},$ which is $\mO(T^{-1})$ since $\mathbb{E}[(\Delta_\tau^{(a)}(X))^2]$ is bounded and $\mathbb{P}(\mB_\tau^c)\leq 2T^{-2}.$ Therefore,
+\begin{align*}
+&	\sum_{a\in[m]}\mathbb{E}\left[\big(\Delta_{\tau}^{(a)}(X)+\Delta_{\tau}^{(a^*(X))}(X)\big)\indi\left\{0<\abs{\langle X,\beta^{(a^*(X))}-\beta^{(a)}\rangle}< 2\Delta_\tau^{(a)}(X)+2\Delta_\tau^{(a^*(X))}(X)\right\}\right]\\
+&\leq \sum_{a\in[m]}\mathbb{E}\left[2\bar\Delta_\tau\indi\left\{0<\abs{\langle X,\beta^{(a^*(X))}-\beta^{(a)}\rangle}< 4\bar\Delta_\tau\right\}\indi_{\mB_\tau}\right]+\mO(T^{-1})\\
+&\leq 2mc_m(4\bar\Delta_\tau)^{\alpha+1}+\mO(T^{-1}),
+\end{align*}
+where the last inequality applies the margin condition in \Cref{asmp: margin_condition}. Since $2\cdot 4^{\alpha+1}$ is a constant, we absorb it into $\mO(\cdot).$
+
+To get our final result, note that by Theorem~\ref{thm:elimregret} we have
+\begin{align*}
+\mathbb{E}\left[\Reg_{\text{Alg.~\ref{alg:elim}}}(T)\right]&\leq\mO\bigg(\sum_{\tau=2}^{\tau_0}2^\tau\sum_{a\in[m]}\mathbb{E}\Big[\big(\Delta_{\tau}^{(a)}(X)+\Delta_{\tau}^{(a^*(X))}(X)\big)\\
+&\qquad\cdot\indi\left\{0<\abs{\langle X,\beta^{(a^*(X))}-\beta^{(a)}\rangle}< 2\Delta_\tau^{(a)}(X)+2\Delta_\tau^{(a^*(X))}(X)\right\}\Big]\bigg)+\mO(1)\\
+&\leq \mO\!\left(\sum_{\tau=2}^{\tau_0} 2^\tau \bar\Delta_\tau^{\alpha+1}\right)+\mO(1).
+\end{align*}
+Substituting $\bar\Delta_\tau = \tilde{\mathcal{O}}(2^{-r(\tau-1)/(2r+1)})$ gives
+\begin{align*}
+\sum_{\tau=2}^{\tau_0} 2^\tau \bar\Delta_\tau^{\alpha+1}= \sum_{\tau=2}^{\tau_0} 2^\tau \tilde{\mathcal{O}}\left(2^{\frac{-r(\alpha+1)(\tau-1)}{2r+1}}\right)=\sum_{\tau=2}^{\tau_0}\tilde\mO\left(2\cdot 2^{(\tau-1)\left(1-\frac{r(\alpha+1)}{2r+1}\right)}\right)=\sum_{\tau=2}^{\tau_0}\tilde\mO\left(2^{\frac{(\tau-1)(r+1-r\alpha)}{2r+1}}\right).
+\end{align*}
+Since $\alpha<1+1/r,$ we have $r+1-r\alpha>0,$ so each term grows geometrically in $\tau$ and the sum is dominated by the last term $\tau=\tau_0:$
+\[\sum_{\tau=2}^{\tau_0}\tilde\mO\left(2^{\frac{(\tau-1)(r+1-r\alpha)}{2r+1}}\right)=\tilde\mO\left(2^{\frac{(\tau_0-1)(r+1-r\alpha)}{2r+1}}\right)=\tilde\mO\left(2^{\frac{\tau_0(r+1-r\alpha)}{2r+1}}\right).\]
+Since $2^{\tau_0}=\mO(T)$ by our geometric design, we conclude
+\[\mathbb{E}\left[\Reg_{\text{Alg.~\ref{alg:elim}}}(T)\right]\leq \tilde\mO\left(T^{\frac{r+1-r\alpha}{2r+1}}\right).\]
+%\setlength{\headsep}{0.4in}
+
+%%% Main head for the e-companion
+
+
+
+
+
+
+
+
+\section{Proof of Theorem~\ref{thm: model_slct_thm}}
+We begin by establishing empirical operator dominance for all models $s\leq s^*$, which guarantees that the optimal action is never eliminated. Under this good event $\mE_t$, the per-step regret is controlled by the confidence width of the true model $s^*.$ We then bound the expected confidence width via the effective dimension to obtain the final rate.
+
+
+\begin{lemma}\label{lem: empirical_dominance_model_slct}
+Under the assumptions of Theorem~\ref{thm: model_slct_thm} we have
+\begin{equation}\label{eq: emp_dom_model_slct}
+\hat\bT^{(a)}_{s,t}\succeq \frac{1}{4c_{\mathrm{o}}}\left(\tilde\bSigma_{s}+\lambda_{s,t}\idty\right),\quad\text{for all $s\leq s^*,$ $a\in[m],$ and $t\geq 2t_0,$}
+\end{equation}
+with probability at least $1-4T^{-2},$ where $c_{\mathrm{o}}>0$ is the constant from \Cref{asmp: dominance_outside_margin}.
+\end{lemma}
+With this dominance, the oracle output is valid for all models $s\leq s^*,$ so that the optimal action survives elimination.
+\begin{lemma}\label{lem: outside-margin_error}
+Instate the assumptions in Theorem~\ref{thm: model_slct_thm}. If the empirical dominance \eqref{eq: emp_dom_model_slct} holds, then
+\begin{equation*}
+	\abs{\langle X_t,\hat\beta^{(a)}_{s,t}\rangle-\langle X_t,\betaa\rangle} \leq \Delta^{(a)}_{s,t},\quad\text{for all $s\leq s^*,$ $a\in[m],$ and $t\geq 2t_0,$}
+\end{equation*}
+with probability at least $1-3T^{-2}.$
+\end{lemma}
+
+For any $t\geq 2t_0,$ let $\mE_t$ denote the event that \eqref{eq: emp_dom_model_slct} and the oracle validity from \Cref{lem: outside-margin_error} hold simultaneously. On $\mE_t,$ for every $s\leq s^*$ and any $a'\in[m],$
+\[\langle X_t,\hat\beta_{s,t}^{(a^*)}\rangle+\Delta_{s,t}^{(a^*)}\geq\langle X_t,\beta^{(a^*)}\rangle\geq\langle X_t,\beta^{(a')}\rangle\geq\langle X_t,\hat\beta_{s,t}^{(a')}\rangle-\Delta_{s,t}^{(a')},\]
+so $a^*(X_t)\in\mA_t^s.$ Since $\bigcap_{s=1}^{s^*}\mA_t^s\neq\emptyset,$ the algorithm selects $s_t\geq s^*,$ and hence $a_t\in\bigcap_{s=1}^{s_t}\mA_t^s\subseteq\mA_t^{s^*}.$
+
+Now, suppose that $\mE_t$ holds for every $t\geq 2t_0,$ we can decompose the cumulative regret from time period $2t_0$ to time period $T$ as
+\begin{align*}
+\sum_{t=2t_0}^T \langle X_t,\beta^{(a^*(X_t))}\rangle-\langle X_t,\beta^{(a_t)}\rangle&\leq \sum_{t=2t_0}^T\max_{a\in\mA_t^{s^*}} \langle X_t,\beta^{(a^*(X_t))}\rangle-\langle X_t,\betaa\rangle\\
+&\leq \sum_{t=2t_0}^T\langle X_t,\hat\beta^{(a^*(X_t))}_t\rangle+\Delta^{(a^*(X_t))}_{s^*,t}-\min_{a\in\mA_t^{s^*}} \left(\langle X_t,\hat\beta^{(a)}\rangle-\Delta_{s^*,t}^{(a)}\right)\\
+&\leq \sum_{t=2t_0}^T \left(\Delta^{(a^*(X_t))}_{s^*,t}+\max_{a\in\mA_{s^*,t}}\Delta^{(a)}_{s^*,t}\right)+\left(\langle X_t,\hat\beta^{(a^*(X_t))}_t\rangle-\min_{a\in\mA_t^{s^*}}\langle X_t,\hat\beta^{(a)}\rangle\right)\\
+&\leq \sum_{t=2t_0}^T 2\left(\Delta^{(a^*(X_t))}_{s^*,t}+\max_{a\in\mA_{s^*,t}}\Delta^{(a)}_{s^*,t}\right),
+\end{align*} 
+where the last inequality is given by \[\min_{a\in\mA_t^{s^*}}\langle X_t,\hat\beta^{(a)}\rangle+\max_{a\in\mA_t^{s^*}}\Delta^{(a)}_{s^*,t}\geq \min_{a\in\mA_t^{s^*}}\langle X_t,\hat\beta^{(a)}\rangle+\Delta^{(a)}_{s^*,t}\geq \max_{a\in\mA_t^{s^*}}\langle X_t,\hat\beta^{(a)}\rangle-\Delta^{(a)}_{s^*,t}\geq \langle X_t,\hat\beta^{(a^*(X_t))}\rangle-\Delta^{(a^*(X_t))}_{s^*,t},\]
+due to our elimination rule in the algorithm and that $a^*(X_t)\in\mA^{s^*}_t.$ We now proceed with 
+\begin{align*}
+	\sum_{t=2t_0}^T 2\left(\Delta^{(a^*(X_t))}_{s^*,t}+\max_{a\in\mA_{s^*,t}}\Delta^{(a)}_{s^*,t}\right)&\leq	\sum_{t=2t_0}^T 4\max_{a\in[m]}\Delta_{s^*,t}^{(a)}
+\end{align*}
+and take expectation and account for the event $\mE_t$ not holding. Since the per-step regret satisfies $|\langle X_t,\beta^{(a^*(X_t))}-\beta^{(a_t)}\rangle|\leq 2\|\tilde X_t\|$ (by $\|\gamma^{(a)}\|_2\leq 1$ from \Cref{asmp:RKHS}) and $\mathbb{E}[\|\tilde X_t\|^2]=\Tr(\tilde\bSigma)<\infty,$ Cauchy--Schwarz gives
+\begin{align*}
+\mathbb{E}\left[\regret_{\text{Alg.~\ref{alg:model_slct}}}(T)\right]&= \mathbb{E}\left[\sum_{t=1}^{2t_0-1}\left(\langle X_t,\beta^{(a^*(X_t))}\rangle-\langle X_t,\beta^{(a_t)}\rangle\right)\right]+\sum_{t=2t_0}^T\mathbb{E}\left[\langle X_t,\beta^{(a^*(X_t))}\rangle-\langle X_t,\beta^{(a_t)}\rangle\right]\\
+&\leq \mO(t_0) + \sum_{t=2t_0}^T \left(\mathbb{E}\left[\left(\langle X_t,\beta^{(a^*(X_t))}\rangle-\langle X_t,\beta^{(a_t)}\rangle\right)\indi_{\mE_t}\right]+2\sqrt{\Tr(\tilde\bSigma)}\sqrt{\mathbb{P}(\mE_t^c)}\right)\\
+&\leq \mO(t_0)+ 4\sum_{t=2t_0}^T\mathbb{E}\left[\max_{a\in[m]}\Delta_{s^*,t}^{(a)}\cdot\indi_{\mE_t}\right]+2\sqrt{\Tr(\tilde\bSigma)}\sum_{t=2t_0}^T\sqrt{\mathbb{P}(\mE_t^c)},
+\end{align*}
+where in the last inequality we used the per-period regret bound $4\max_{a\in[m]}\Delta_{s^*,t}^{(a)}$ on $\mE_t$ established above. By \Cref{lem: empirical_dominance_model_slct}, \eqref{eq: emp_dom_model_slct} holds with probability at least $1-4T^{-2}.$ Given this, \Cref{lem: outside-margin_error} gives the oracle validity with probability at least $1-3T^{-2}.$ A union bound yields $\mathbb{P}(\mE_t^c)\leq 7T^{-2}$ for each $t\geq 2t_0,$ and
+\[2\sqrt{\Tr(\tilde\bSigma)}\sum_{t=2t_0}^T\sqrt{\mathbb{P}(\mE_t^c)}\leq 2\sqrt{\Tr(\tilde\bSigma)}\cdot T\cdot\sqrt{7}\,T^{-1}=\mO(1),\]
+and combining with $t_0=\tilde{\mO}(1)$ gives
+\begin{equation}\label{eq: model_slct_regret_decomp}
+\mathbb{E}\left[\regret_{\text{Alg.~\ref{alg:model_slct}}}(T)\right]\leq 4\sum_{t=2t_0}^T\mathbb{E}\left[\max_{a\in[m]}\Delta_{s^*,t}^{(a)}\cdot\indi_{\mE_t}\right]+\tilde{\mO}(1).
+\end{equation}
+
+It remains to bound $\mathbb{E}\left[\max_{a\in[m]}\Delta_{s^*,t}^{(a)}\cdot\indi_{\mE_t}\right].$ By \Cref{lem: weak-dominance-interval} applied to model $s^*$ with $n=t-1$ and $\lambda_n=\lambda_{s^*,t-1},$ the confidence radius at time $t$ satisfies
+\begin{equation}\label{eq: delta_model_slct}
+\Delta_{s^*,t}^{(a)}(X_t)\asymp \sqrt{\lambda_{s^*,t-1}\log(mT) }+\sqrt{\frac{\log (mT)}{t-1}\langle \bL_{K_{s^*}^{1/2}}X_t,
+	\left(	\hat\bT^{(a)}_{s^*,t-1}\right)^{-1}\bL_{K_{s^*}^{1/2}}X_t\rangle},
+\end{equation}
+where $\hat\bT^{(a)}_{s^*,t-1}$ is built from data $1,\ldots,t-1.$ On $\mE_t,$ the empirical dominance \eqref{eq: emp_dom_model_slct} applied at index $t-1$ gives
+\[\langle \bL_{K_{s^*}^{1/2}}X_t, \left(\hat\bT^{(a)}_{s^*,t-1}\right)^{-1}\bL_{K_{s^*}^{1/2}}X_t\rangle \leq 4c_{\mathrm{o}}\,\langle \bL_{K_{s^*}^{1/2}}X_t, \left(\tilde\bSigma_{s^*}+\lambda_{s^*,t-1}\idty\right)^{-1}\bL_{K_{s^*}^{1/2}}X_t\rangle\]
+for all $a\in[m],$ where the right-hand side no longer depends on $a.$ Since $\hat\bT^{(a)}_{s^*,t-1}$ depends only on data $1,\ldots,t-1$, we apply Jensen's inequality $\mathbb{E}[\sqrt{Y}]\leq\sqrt{\mathbb{E}[Y]}$ and the trace identity to obtain
+\begin{align*}
+\mathbb{E}\left[\max_{a\in[m]}\Delta_{s^*,t}^{(a)}\cdot\indi_{\mE_t}\right]&\leq \mO\!\left(\sqrt{\lambda_{s^*,t-1}\log(mT)}+\sqrt{\frac{c_{\mathrm{o}}\log(mT)}{t-1}}\cdot\mathbb{E}\left[\sqrt{\langle \bL_{K_{s^*}^{1/2}}X_t, \left(\tilde\bSigma_{s^*}+\lambda_{s^*,t-1}\idty\right)^{-1}\bL_{K_{s^*}^{1/2}}X_t\rangle}\right]\right)\\
+&\leq \mO\!\left(\sqrt{\lambda_{s^*,t-1}\log(mT)}+\sqrt{\frac{c_{\mathrm{o}}\log(mT)}{t-1}\cdot\Tr\left(\tilde\bSigma_{s^*}\left(\tilde\bSigma_{s^*}+\lambda_{s^*,t-1}\idty\right)^{-1}\right)}\right).
+\end{align*}
+By \Cref{lem: eff_dim_bound} under \Cref{asmp: decay_model}, $\Tr\!\left(\tilde\bSigma_{s^*}(\tilde\bSigma_{s^*}+\lambda_{s^*,t-1}\idty)^{-1}\right)=\mO(\lambda_{s^*,t-1}^{-1/(2r_{s^*})}).$
+Substituting into \eqref{eq: model_slct_regret_decomp} and summing over $t,$
+\begin{align*}
+\mathbb{E}\left[\regret_{\text{Alg.~\ref{alg:model_slct}}}(T)\right]&\leq \tilde\mO\left(\sum_{t=2t_0}^T\sqrt{\lambda_{s^*,t-1}}+\sqrt{\frac{1}{t-1}}\left(\lambda_{s^*,t-1}\right)^{-\frac{1}{4r_{s^*}}}\right)+\tilde{\mO}(1),
+\end{align*}
+Now, substituting the choice $\lambda_{s,t}\asymp (\log(mT)/t)^{2r_s/(2r_s+1)}$ for all $s\in[l]$ and $t,$ a direct computation shows that $\sqrt{\lambda_{s^*,t-1}}\asymp t^{-r_{s^*}/(2r_{s^*}+1)}$ and $\sqrt{1/(t-1)}\cdot(\lambda_{s^*,t-1})^{-1/(4r_{s^*})}\asymp t^{-r_{s^*}/(2r_{s^*}+1)}.$
+The integral calculation gives
+\[\mO\left(\sum_{t=2t_0}^T t^{-\frac{r_{s^*}}{2r_{s^*}+1}}\right)=\tilde{\mO}\left(T^{\frac{r_{s^*}+1}{2r_{s^*}+1}}\right).\]
+Substituting into \eqref{eq: model_slct_regret_decomp}, we conclude
+\[\mathbb{E}\left[\regret_{\text{Alg.~\ref{alg:model_slct}}}(T)\right]\leq \tilde\mO\left(T^{\frac{r_{s^*}+1}{2r_{s^*}+1}}\right).\]
+This completes the proof.
+
+
+\subsection{Proof of \Cref{lem: empirical_dominance_model_slct}}
+The proof relies on the following lemma, which shows that the exploration phase produces sufficiently accurate estimates for all models $s\leq s^*.$
+\begin{lemma}\label{lem: exploration_gap}
+Instate the assumptions in Theorem~\ref{thm: model_slct_thm}. With $\lambda_{s,t_0}\asymp (\log(mT)/t_0)^{2r_s/(2r_s+1)}$ for all $s\in[l],$ after $t_0=\tilde\mO(h^{-(2+1/r_1)})$ rounds of random exploration in Algorithm~\ref{alg:model_slct},
+\[\abs{\langle X_t,\hat\beta^{(a)}_{s,t_0+1}\rangle-\langle X_t,\betaa\rangle}\leq h/4,\text{ for all $s\leq s^*,$ $a\in[m],$ and any $t>t_0,$}\]
+with probability at least $1-3T^{-2}.$
+\end{lemma}
+
+Fix any $s\leq s^*$ and $a\in[m].$ Throughout, we write $\tilde X_i=\bL_{K_{s}^{1/2}}X_i$ for the transformed covariates under kernel $K_{s},$ and let $\lambda_t=\lambda_{s,t}$ for brevity. The empirical operator of interest is
+\[\hat\bT^{(a)}_{s,t}=\frac{1}{t}\sum_{i=1}^t\indi\{a_i=a\}\tilde X_i\otimes\tilde X_i+\lambda_t\idty.\]
+
+We first show that on the event of \Cref{lem: exploration_gap}, the full empirical operator $\hat\bT^{(a)}_{s,t}$ dominates the empirical second-moment operator restricted to outside-margin covariates. For any $i>t_0$ and any covariate $X_i\in\mU_h^{(a)},$ the definition of $\mU_h^{(a)}$ gives
+\[\langle X_i,\beta^{(a)}\rangle-\max_{a'\neq a}\langle X_i,\beta^{(a')}\rangle>h.\]
+By \Cref{lem: exploration_gap}, on the event of probability at least $1-3T^{-2},$ the exploration-phase estimates satisfy $|\langle X_i,\hat\beta^{(a')}_{s',t_0+1}\rangle-\langle X_i,\beta^{(a')}\rangle|\leq h/4$ for all $a'\in[m]$ and all $s'\leq s^*.$ In particular, for $s'=1,$
+\begin{align*}
+\langle X_i,\hat\beta^{(a)}_{1,t_0+1}\rangle-\max_{a'\neq a}\langle X_i,\hat\beta^{(a')}_{1,t_0+1}\rangle&\geq \langle X_i,\beta^{(a)}\rangle-h/4-\max_{a'\neq a}\left(\langle X_i,\beta^{(a')}\rangle+h/4\right)\\
+&=\langle X_i,\beta^{(a)}\rangle-\max_{a'\neq a}\langle X_i,\beta^{(a')}\rangle-h/2>h/2>0.
+\end{align*}
+Therefore, the condition in line~4 of Algorithm~\ref{alg:model_slct} is satisfied, and the algorithm selects $a_i=\argmax_{a'\in[m]}\langle X_i,\hat\beta^{(a')}_{1,t_0+1}\rangle=a.$ Therefore, $\indi\{a_i=a\}\geq\indi\{X_i\in\mU_h^{(a)}\}$ for all $i>t_0$ on the event of \Cref{lem: exploration_gap}. Since each summand $\indi\{a_i=a\}\tilde X_i\otimes\tilde X_i\succeq 0,$ we may drop the exploration-phase terms ($i\leq t_0$) and restrict to outside-margin covariates to obtain
+\begin{equation}\label{eq: emp_to_outside}
+\hat\bT^{(a)}_{s,t}=\frac{1}{t}\sum_{i=1}^t\indi\{a_i=a\}\tilde X_i\otimes\tilde X_i+\lambda_t\idty\succeq\frac{1}{t}\sum_{i=t_0+1}^t\indi\{X_i\in\mU_h^{(a)}\}\tilde X_i\otimes\tilde X_i+\lambda_t\idty.
+\end{equation}
+Define $Y_i=\indi\{X_i\in\mU_h^{(a)}\}\tilde X_i$ for $i>t_0.$ Since $X_i\sim\mF$ independently for each $i,$ the random elements $\{Y_i\}_{i=t_0+1}^t$ are i.i.d.\ with population second moment operator
+\begin{equation}\label{eq: pop_outside_margin}
+\mathbb{E}[Y_i\otimes Y_i]=\mathbb{E}\left[\indi\{X_i\in\mU_h^{(a)}\}\tilde X_i\otimes\tilde X_i\right].
+\end{equation}
+Conjugating both sides of \Cref{asmp: dominance_outside_margin} by $\bL_{K_s^{1/2}}$ gives
+\begin{equation}\label{eq: pop_dom_model_slct_final}
+\tilde\bSigma_s\preceq c_{\mathrm{o}}\,\mathbb{E}[Y_i\otimes Y_i].
+\end{equation}
+We apply \Cref{lem: empirical_dominance_general} to the i.i.d.\ random elements $Y_i=\indi\{X_i\in\mU_h^{(a)}\}\tilde X_i,$ $i=t_0+1,\ldots,t.$ Note that $Y_i$ is $\tilde\bSigma_{s}$-sub-Gaussian. We verify the dominance condition \eqref{eq: dominance_condition} with $\bSigma_0=\mathbb{E}[Y_i\otimes Y_i],$ $\bSigma_{\mathrm{proxy}}=\tilde\bSigma_s,$ and $\lambda=\lambda_t.$ By \eqref{eq: pop_dom_model_slct_final},
+\[\tilde\bSigma_s+\lambda_t\idty\preceq c_{\mathrm{o}}(\mathbb{E}[Y_i\otimes Y_i]+\lambda_t\idty),\]
+and \eqref{eq: dominance_condition} holds with $c_{\mathrm{d}}=c_{\mathrm{o}}.$ By \Cref{lem: empirical_dominance_general} applied to the $t-t_0$ samples $\{Y_i\}_{i=t_0+1}^t,$
+\[\frac{1}{t-t_0}\sum_{i=t_0+1}^tY_i\otimes Y_i+\lambda_t\idty\succeq\frac{1}{2}(\mathbb{E}[Y_i\otimes Y_i]+\lambda_t\idty)\]
+with probability at least $1-\delta_0$ whenever $t-t_0\geq c'(\lambda_t)^{-1/(2r_s)}\log(1/\delta_0)$ for a sufficiently large constant $c'>0$ depending on $c_{\mathrm{o}}.$ Substituting into \eqref{eq: emp_to_outside} and using $(t-t_0)/t\geq 1/2$ for $t\geq 2t_0,$
+\[\hat\bT^{(a)}_{s,t}\succeq\frac{t-t_0}{t}\cdot\frac{1}{2}(\mathbb{E}[Y_i\otimes Y_i]+\lambda_t\idty)+\frac{t_0}{t}\lambda_t\idty\succeq\frac{1}{4}(\mathbb{E}[Y_i\otimes Y_i]+\lambda_t\idty)\succeq\frac{1}{4c_{\mathrm{o}}}(\tilde\bSigma_s+\lambda_t\idty),\]
+where the last inequality uses \eqref{eq: pop_dom_model_slct_final}. This establishes \eqref{eq: emp_dom_model_slct}. Since $t-t_0\geq t/2$ for $t\geq 2t_0,$ the sample size condition is satisfied by the choice $\lambda_t=\lambda_{s,t}\asymp(\log(mT)/t)^{2r_s/(2r_s+1)}.$
+
+Finally, setting $\delta_0=(lmT)^{-1}T^{-2}$ (so that $\log(1/\delta_0)=\mO(\log(lmT))$) and taking a union bound over all $s\in[s^*],$ $a\in[m],$ and $t\in\{t_0+1,\ldots,T\},$ the concentration in \Cref{lem: empirical_dominance_general} fails with probability at most $lmT\cdot(lmT)^{-1}T^{-2}=T^{-2}.$ Combining with the failure probability $3T^{-2}$ of \Cref{lem: exploration_gap}, \eqref{eq: emp_dom_model_slct} holds with probability at least $1-4T^{-2}.$
+\subsection{Proof of \Cref{lem: exploration_gap}}\label{sec: proof_exploration_gap}
+Fix any $a\in[m]$ and any model $s\leq s^*.$ For notational brevity, write $\lambda=\lambda_{s,t_0}.$ Similarly, we write $\tilde X_i=\bL_{K_{s}^{1/2}}X_i$ for the transformed covariates under kernel $K_{s}$ for any $i\in[t_0].$ For any $i\in[t_0]$ in the random exploration phase, $a_i\sim\mathrm{Uniform}([m])$ independently of $X_i,$ so the population operator is
+\[\bT^{(a)}:=\mathbb{E}[\indi\{a_i=a\}\tilde X_i\otimes\tilde X_i]=\frac{1}{m}\tilde\bSigma_s.\]
+Since $\bT^{(a)}=\frac{1}{m}\tilde\bSigma_s,$ the dominance condition \eqref{eq: dominance_condition} holds trivially with $\bSigma_0=\bT^{(a)},$ $\bSigma_{\mathrm{proxy}}=\tilde\bSigma_s,$ $\lambda=\lambda,$ and $c_{\mathrm{d}}=m,$ since
+\[\tilde\bSigma_s+\lambda\idty= m\bT^{(a)}+\lambda\idty\preceq m(\bT^{(a)}+\lambda\idty).\]
+Since the random exploration samples $\{\tilde X_i,a_i\}_{i=1}^{t_0}$ are i.i.d., we apply \Cref{lem: empirical_dominance_general} to the random elements $\indi\{a_i=a\}\tilde X_i,$ $i=1,\ldots,t_0.$ By \Cref{asmp:sub-gaussian}, $\indi\{a_i=a\}\tilde X_i$ is $\tilde\bSigma_s$-sub-Gaussian.
+By \Cref{lem: empirical_dominance_general}, when $t_0\geq c\lambda^{-1/(2r_s)}\log(lmT),$ we obtain
+\begin{equation}\label{eq: exploration_dominance}
+	\hat\bT_\lambda^{(a)}\succeq\frac{1}{2}(\bT^{(a)}+\lambda\idty)=\frac{1}{2m}\tilde\bSigma_s+\frac{1}{2}\lambda\idty\succeq\frac{1}{2m}(\tilde\bSigma_s+\lambda\idty)
+\end{equation}
+with probability at least $1-(mlT)^{-1}T^{-2}.$
+
+
+On the event \eqref{eq: exploration_dominance}, the condition of Lemma~\ref{lem: weak-dominance-interval} is satisfied with $n=t_0$ and $\delta=(mlT)^{-1}T^{-2}.$ Therefore, for all $X\in\mX,$
+\begin{equation}\label{eq: exploration_delta}
+	\abs{\langle X,\hat\beta^{(a)}_{s,t_0+1}\rangle-\langle X,\betaa\rangle}\leq\Delta_{s,t_0}^{(a)}(X)\asymp\sqrt{\lambda\log(mT)}+\sqrt{\frac{\log(mT)}{t_0}\langle \tilde X,(\hat\bT_\lambda^{(a)})^{-1}\tilde X\rangle}
+\end{equation}
+with probability at least $1-(mlT)^{-1}T^{-2}.$ Fix any $t>t_0.$ It remains to show that $\Delta_{s,t_0}^{(a)}(X_t)\leq h/4$ with high probability over $X_t\sim\mF.$
+
+By \eqref{eq: exploration_dominance}, $(\hat\bT_\lambda^{(a)})^{-1}\preceq 2m(\tilde\bSigma_s+\lambda\idty)^{-1},$ so
+\[\langle \tilde X_t,(\hat\bT_\lambda^{(a)})^{-1}\tilde X_t\rangle\leq 2m\langle \tilde X_t,(\tilde\bSigma_s+\lambda\idty)^{-1}\tilde X_t\rangle.\]
+Since $X_t$ is independent of the exploration data and $\tilde X_t$ is $\tilde\bSigma_s$-sub-Gaussian, by a similar argument as in \Cref{lem: prbofdelta},
+\begin{equation}\label{eq: quadform_tail}
+	\langle \tilde X_t,(\tilde\bSigma_s+\lambda\idty)^{-1}\tilde X_t\rangle\leq 2\Tr(\tilde\bSigma_s(\tilde\bSigma_s+\lambda\idty)^{-1})+\log(mT)
+\end{equation}
+with probability at least $1-(mlT)^{-1}T^{-2}.$ Substituting into \eqref{eq: exploration_delta},
+\[\Delta_{s,t_0}^{(a)}(X_t)\lesssim \sqrt{\lambda\log(mT)}+\sqrt{\frac{m\log(mT)(\Tr(\tilde\bSigma_s(\tilde\bSigma_s+\lambda\idty)^{-1})+\log(mT))}{t_0}}\]
+with probability at least $1-3(mlT)^{-1}T^{-2},$ where we take a union bound over the empirical dominance event \eqref{eq: exploration_dominance}, the prediction error event \eqref{eq: exploration_delta}, and the quadratic form tail \eqref{eq: quadform_tail}.
+It remains to choose $t_0.$ Substituting $\lambda=\lambda_{s,t_0}\asymp (\log(mT)/t_0)^{2r_s/(2r_s+1)},$ the bias and variance terms in the above display are both of order $\tilde\mO(t_0^{-r_s/(2r_s+1)}).$ Indeed, the bias term satisfies
+\[\sqrt{\lambda\log(mT)}\asymp\left(\frac{\log(mT)}{t_0}\right)^{r_s/(2r_s+1)}\!\!\cdot\sqrt{\log(mT)}=\tilde\mO\!\left(t_0^{-r_s/(2r_s+1)}\right),\]
+and by \Cref{lem: eff_dim_bound}, $\Tr(\tilde\bSigma_s(\tilde\bSigma_s+\lambda\idty)^{-1})=\mO(\lambda^{-1/(2r_s)})=\mO((t_0/\log(mT))^{1/(2r_s+1)}),$ so the variance term satisfies
+\[\sqrt{\frac{m\log(mT)(\Tr(\tilde\bSigma_s(\tilde\bSigma_s+\lambda\idty)^{-1})+\log(mT))}{t_0}}=\tilde\mO\!\left(t_0^{-r_s/(2r_s+1)}\right).\]
+For the bound $\Delta_{s,t_0}^{(a)}(X_t)\leq h/4$ to hold, it suffices that $t_0^{-r_s/(2r_s+1)}\lesssim h,$ i.e., $t_0\geq \tilde\Omega(h^{-(2+1/r_s)}).$ Since this must hold for all $s\leq s^*,$ the most conservative model $s=1$ (with the smallest decay rate $r_1$) is binding, giving
+\[t_0\geq \tilde\Omega\!\left(h^{-(2+1/r_1)}\right).\]
+Taking a union bound over all $a\in[m],$ $s\in[l],$ and $t\in\{t_0+1,\ldots,T\},$ the total failure probability is at most $mlT\cdot 3(mlT)^{-1}T^{-2}=3T^{-2}.$ This completes the proof.
+\subsection{Proof of \Cref{lem: outside-margin_error}}
+The proof follows the same bias-variance decomposition as \Cref{lem: weak-dominance-interval}, with the empirical operator dominance from \Cref{lem: empirical_dominance_model_slct} playing the role of \Cref{lem: empirical_dominance}.
+
+Fix any $s\leq s^*,$ $a\in[m],$ and $t>t_0.$ Write $\tilde X_i=\bL_{K_s^{1/2}}X_i$ for any $i\in[t]$ and $\lambda_t=\lambda_{s,t}.$ Let $\gamma^{(a)}=(\bL_{K_s^{1/2}})^{-1}\betaa\in\mL^2[0,1]$ and $\hat\gamma^{(a)}=(\bL_{K_s^{1/2}})^{-1}\hat\beta^{(a)}_{s,t}\in\mL^2[0,1].$ By \eqref{eq: kernelregression} with $K=K_s,$ $\lambda_n=\lambda_t,$ and $n=t,$
+\[\hat\gamma^{(a)}=\left(\hat\bT^{(a)}_{s,t}\right)^{-1}\left(\hat\bT^{(a),0}_{s,t}\gamma^{(a)}+g_t^{(a)}\right),\]
+where $\hat\bT^{(a),0}_{s,t}=\frac{1}{t}\sum_{i=1}^t\indi\{a_i=a\}\tilde X_i\otimes\tilde X_i$ and $g_t^{(a)}=\frac{1}{t}\sum_{i=1}^t\varepsilon_i\indi\{a_i=a\}\tilde X_i.$ The prediction error decomposes as in \eqref{eq: bias_and_var}:
+\[\abs{\langle X_t,\hat\beta^{(a)}_{s,t}\rangle-\langle X_t,\betaa\rangle}=\abs{\langle \tilde X_t,\hat\gamma^{(a)}-\gamma^{(a)}\rangle}\leq\underbrace{\abs{\langle \tilde X_t,(\hat\bT^{(a)}_{s,t})^{-1}\hat\bT^{(a),0}_{s,t}\gamma^{(a)}-\gamma^{(a)}\rangle}}_{|b_t|}+\underbrace{\abs{\langle \tilde X_t,(\hat\bT^{(a)}_{s,t})^{-1}g_t^{(a)}\rangle}}_{|v_t|}.\]
+
+The bias and variance terms are bounded by the same argument as in the proof of \Cref{lem: weak-dominance-interval}. Since \eqref{eq: emp_dom_model_slct} holds by assumption, $\tilde\bSigma_s\preceq c_{\mathrm{o}}(\tilde\bSigma_s+\lambda_t\idty)\preceq 4c_{\mathrm{o}}^2\,\hat\bT^{(a)}_{s,t},$ and the bias analysis (cf.\ \eqref{eq: proxy}) yields
+\[|b_t|\leq\sqrt{8c_{\mathrm{o}}^2\lambda_t\log(1/\delta)}\]
+with probability at least $1-\delta,$ while the variance analysis (cf.\ \eqref{eq: var_1}) yields
+\[|v_t|\leq\sigma_\varepsilon\sqrt{\frac{2\log(1/\delta)}{t}\langle\tilde X_t,(\hat\bT^{(a)}_{s,t})^{-1}\tilde X_t\rangle}\]
+with probability at least $1-\delta.$ Combining via a union bound over the bias and variance events,
+\[\abs{\langle X_t,\hat\beta^{(a)}_{s,t}\rangle-\langle X_t,\betaa\rangle}\leq\Delta^{(a)}_{s,t}(X_t)\asymp\sqrt{\lambda_t\log(mT)}+\sqrt{\frac{\log(mT)}{t}\langle\bL_{K_s^{1/2}}X_t,(\hat\bT^{(a)}_{s,t})^{-1}\bL_{K_s^{1/2}}X_t\rangle}\]
+for all $s\leq s^*,$ $a\in[m],$ and $t>t_0,$ with probability at least $1-3T^{-2}$ (after setting $\delta=l^{-1}m^{-1}$ and taking a union bound over $s,a,t,$ and absorbing constants). This completes the proof.
+%\ECSwitch
+\ECHead{Appendix}
+
+\section{Technical lemmas}
+\begin{lemma}\label{lem: subgaussian_tail}
+Let $w$ be a $\sigma^2$-subgaussian random variable. Then for any $\delta\in(0,1),$ we have
+\[\mathbb{P}\left[|w|\geq \sigma\sqrt{2 \log(2/\delta)}\right]\leq \delta.\]
+\end{lemma}
+\proof{Proof.}
+See Lemma~2.2 in \citet{wainwright2019high}.\Halmos
+\endproof
+\begin{lemma}\label{lem: iidsumofgaussian}
+	Suppose that $\varepsilon_1,\ldots, \varepsilon_n$ are i.i.d. $\sigma^2$-subgaussian random variables. Then for any $a_1,a_2,\ldots, a_n\in\R$ and any $\delta\in(0,1),$ we have
+	\[\mathbb{P}\left[\abs{\frac{1}{n}\sum_{i=1}^n a_i\varepsilon_i}\geq \frac{\sigma\sqrt{2\log(2/\delta)\sum_{i=1}^n a_i^2}}{n}\right]\leq \delta.\]
+\end{lemma}
+\proof{Proof.}
+Since $\varepsilon_i$ are i.i.d. $\sigma^2$-subgaussian, $\frac{1}{n}\sum_{i=1}^n a_i\varepsilon_i$ is $\frac{\sigma^2\sum_{i=1}^n a_i^2}{n^2}$-subgaussian by Proposition~2.6.1 in \citet{wainwright2019high}. The result then follows from Lemma~\ref{lem: subgaussian_tail}.\Halmos
+\endproof
+
+
+
+\begin{lemma}[Sub-Gaussian fourth moment bound]\label{lem: fourth_moment_bound}
+Let $X$ be a $\bSigma_{\mathrm{proxy}}$-sub-Gaussian random element in a separable Hilbert space $\mH.$ Then
+\[\mathbb{E}[\norm{X}^2\,X\otimes X]\preceq 3\,\Tr(\bSigma_{\mathrm{proxy}})\,\bSigma_{\mathrm{proxy}}.\]
+\end{lemma}
+\proof{Proof.}
+For any unit vector $u\in\mH,$ since $\langle u,X\rangle$ is $\langle u,\bSigma_{\mathrm{proxy}} u\rangle$-sub-Gaussian, the fourth moment satisfies $\mathbb{E}[\langle u,X\rangle^4]\leq 3\langle u,\bSigma_{\mathrm{proxy}} u\rangle^2.$ Let $\{e_k\}$ be an orthonormal basis of $\mH.$ By Cauchy--Schwarz,
+\begin{align*}
+\langle u,\mathbb{E}[\norm{X}^2\,X\otimes X]u\rangle
+&=\sum_{k}\mathbb{E}[\langle e_k,X\rangle^2\langle u,X\rangle^2]\\
+&\leq\sum_{k}\sqrt{\mathbb{E}[\langle e_k,X\rangle^4]}\,\sqrt{\mathbb{E}[\langle u,X\rangle^4]}\\
+&\leq 3\sum_{k}\langle e_k,\bSigma_{\mathrm{proxy}} e_k\rangle\langle u,\bSigma_{\mathrm{proxy}} u\rangle=3\,\Tr(\bSigma_{\mathrm{proxy}})\langle u,\bSigma_{\mathrm{proxy}} u\rangle.
+\end{align*}
+Since $u$ is arbitrary, the result follows.\Halmos
+\endproof
+
+\begin{lemma}[Covariance operator concentration]\label{lem: operator_bernstein}
+Let $\mH$ be a separable Hilbert space and let $X_1,\ldots,X_n$ be i.i.d.\ copies of a $\bSigma_{\mathrm{proxy}}$-sub-Gaussian random element $X\in\mH$ with covariance operator $\bSigma:=\mathbb{E}[X\otimes X].$ Let $\bold{W}_i:=X_i\otimes X_i-\bSigma$ denote the centered operator. Define the uncentered operator variance
+\[\bold{V}:=n\,\mathbb{E}[(X_1\otimes X_1)^2]=n\,\mathbb{E}[\norm{X_1}^2\,X_1\otimes X_1],\]
+the variance parameter $\nu^2:=\norm{\bold{V}}_{\op},$ the effective rank $\sr(\bold{V}):=\Tr(\bold{V})/\nu^2,$ and the sub-exponential parameter $\ell\asymp\norm{\bSigma_{\mathrm{proxy}}}_{\op}$ (with an absolute implied constant). Then for any $t\geq\frac{1}{2}\!\left(\ell+\sqrt{\ell^2+4\nu^2}\right),$
+\begin{equation}\label{eq: operator_bernstein}
+\mathbb{P}\!\left(\left\|\sum_{i=1}^n\left(X_i\otimes X_i-\bSigma\right)\right\|_{\op}>t\right)\leq 14\,\sr(\bold{V})\exp\!\left(-\frac{t^2/2}{\nu^2+\ell t}\right).
+\end{equation}
+\end{lemma}
+%Condition~\eqref{eq: intrinsic_moment} is the operator analogue of the scalar Bernstein moment condition $\mathbb{E}[|W|^k]\leq\frac{k!}{2}\nu^2 \ell^{k-2}.$ When $\norm{\bold{W}_i}_{\op}\leq u$ a.s., it holds with $\ell=u/3,$ recovering Theorem~3.1 of \citet{minsker2017}.\footnote{Indeed, $\mathbb{E}[\norm{\bold{W}_i}_{\op}^{k-2}\bold{W}_i^2]\preceq u^{k-2}\mathbb{E}[\bold{W}_i^2]$ and $u^{k-2}\leq\frac{k!}{2}(u/3)^{k-2}$ for $k\geq 2.$}
+\proof{Proof.}
+We prove the result for $\mH=\R^d$ and note that the extension to separable Hilbert spaces follows by the finite-dimensional approximation argument of \citet[Section~3.2]{minsker2017}, which applies since the intrinsic moment condition~\eqref{eq: intrinsic_moment} below is preserved under projection onto finite-dimensional subspaces.\footnote{This uses $\norm{P_F \bold{W}_i P_F}_{\op}\leq\norm{\bold{W}_i}_{\op}$ and $(P_F \bold{W}_i P_F)^2\preceq P_F \bold{W}_i^2 P_F$ for any finite-dimensional subspace $F\subset\mH.$}
+
+Since $X$ is $\bSigma_{\mathrm{proxy}}$-sub-Gaussian, the product $\langle u,X\rangle\langle v,X\rangle$ is sub-exponential with parameter proportional to $\norm{\bSigma_{\mathrm{proxy}}}_{\op}$ for any unit vectors $u,v$ \citep[Lemma~2.7.7]{vershynin2018high}. A standard tensorization argument (see, e.g., \citet[Proposition~2.1]{koltchinskii2017}) then shows that the intrinsic moment condition
+\begin{equation}\label{eq: intrinsic_moment}
+\mathbb{E}\!\left[\norm{\bold{W}_1}_{\op}^{k-2}\bold{W}_1^2\right]\preceq\frac{k!}{2}\,\ell^{k-2}\,\mathbb{E}[\bold{W}_1^2]
+\end{equation}
+holds for all integers $k\geq 2$ with $\ell\asymp\norm{\bSigma_{\mathrm{proxy}}}_{\op}.$
+
+ Let $\bold{S}_n=\sum_{i=1}^n \bold{W}_i$ and $\phi(x)=e^x-x-1.$ Fix $0<\theta<1/\ell.$ We bound the operator moment generating function of each summand. Expanding $\mathbb{E}[e^{\theta \bold{W}_i}]$ and using $\mathbb{E}[\bold{W}_i]=0,$
+\[\mathbb{E}[e^{\theta \bold{W}_i}]=\idty+\theta^2\,\mathbb{E}\!\left[\bold{W}_i\!\left(\sum_{j=0}^{\infty}\frac{(\theta \bold{W}_i)^j}{(j+2)!}\right)\!\bold{W}_i\right].\]
+Since $\bold{W}_i^j\preceq\norm{\bold{W}_i}_{\op}^j\,\idty$ for $j\geq 0$ and conjugation preserves the Loewner order,
+\[\mathbb{E}[e^{\theta \bold{W}_i}]\preceq\idty+\theta^2\sum_{j=0}^{\infty}\frac{\theta^j}{(j+2)!}\,\mathbb{E}\!\left[\norm{\bold{W}_i}_{\op}^j \bold{W}_i^2\right].\]
+Applying~\eqref{eq: intrinsic_moment} with $k=j+2$ and summing the geometric series,
+\begin{equation}\label{eq: mgf_bound}
+\mathbb{E}[e^{\theta \bold{W}_i}]\preceq\idty+\frac{\theta^2}{2(1-\theta \ell)}\,\mathbb{E}[\bold{W}_i^2]\preceq\exp\!\left(\frac{\theta^2}{2(1-\theta \ell)}\,\mathbb{E}[\bold{W}_i^2]\right),
+\end{equation}
+where the last step uses $\idty+\bold{A}\preceq e^{\bold{A}}$ for $\bold{A}\succeq 0.$ Taking the operator logarithm,
+\begin{equation}\label{eq: log_mgf}
+\log\mathbb{E}[e^{\theta \bold{W}_i}]\preceq\frac{\theta^2}{2(1-\theta \ell)}\,\mathbb{E}[\bold{W}_i^2].
+\end{equation}
+
+We next convert the tail probability into a trace bound. Since $\phi(x)=e^x-x-1\geq 0$ for all $x,$ the operator $\phi(\theta\bold{S}_n)\succeq 0.$ By the functional calculus, $\lambda_{\max}(\phi(\theta\bold{S}_n))=\phi(\theta\lambda_{\max}(\bold{S}_n)).$ Since $\phi$ is increasing on $(0,\infty)$ and $\theta t>0,$ on the event $\{\lambda_{\max}(\bold{S}_n)>t\}$ we have
+\[\Tr\,\phi(\theta\bold{S}_n)\geq\lambda_{\max}(\phi(\theta\bold{S}_n))=\phi(\theta\lambda_{\max}(\bold{S}_n))>\phi(\theta t).\]
+Markov's inequality applied to the non-negative random variable $\Tr\,\phi(\theta\bold{S}_n)$ then gives
+\begin{equation}\label{eq: markov_step}
+\mathbb{P}(\lambda_{\max}(\bold{S}_n)>t)\leq\mathbb{P}(\Tr\,\phi(\theta\bold{S}_n)>\phi(\theta t))\leq\frac{\mathbb{E}\,\Tr\,\phi(\theta \bold{S}_n)}{\phi(\theta t)}.
+\end{equation}
+To control $\mathbb{E}\,\Tr\,\phi(\theta\bold{S}_n),$ write $\exp(\theta \bold{S}_n)=\exp(\theta \bold{S}_{n-1}+\log e^{\theta \bold{W}_n}).$ Lieb's concavity theorem and Jensen's inequality give $\mathbb{E}_{n-1}\Tr\exp(\theta \bold{S}_{n-1}+\log e^{\theta \bold{W}_n})\leq\Tr\exp(\theta \bold{S}_{n-1}+\log\mathbb{E}e^{\theta \bold{W}_n}).$ Iterating $n$ times and substituting~\eqref{eq: log_mgf},
+\[\mathbb{E}\,\Tr\,\phi(\theta \bold{S}_n)\leq\Tr\!\left(\exp\!\left(\frac{n\theta^2}{2(1-\theta \ell)}\,\mathbb{E}[\bold{W}_1^2]\right)-\idty\right).\]
+Since $\mathbb{E}[\bold{W}_1^2]=\mathbb{E}[(X_1\otimes X_1)^2]-\bSigma^2\preceq\mathbb{E}[(X_1\otimes X_1)^2]$ (as $\bSigma^2\succeq 0$), we have $n\,\mathbb{E}[\bold{W}_1^2]\preceq n\,\mathbb{E}[(X_1\otimes X_1)^2]=\bold{V}.$ The monotonicity of $A\mapsto\Tr(e^A)$ then gives
+\begin{equation}\label{eq: trace_iter}
+\mathbb{E}\,\Tr\,\phi(\theta \bold{S}_n)\leq\Tr\!\left(\exp\!\left(\frac{\theta^2}{2(1-\theta \ell)}\,\bold{V}\right)-\idty\right).
+\end{equation}
+
+It remains to extract the effective rank from the right-hand side of~\eqref{eq: trace_iter}. Set $g:=g(\theta):=\frac{\theta^2}{2(1-\theta \ell)}.$ Expanding $\exp(g\bold{V})-\idty$ in a power series and factoring each term as $\bold{V}^m=\bold{V}^{1/2}\bold{V}^{m-1}\bold{V}^{1/2},$
+\[\exp(g\bold{V})-\idty=\sum_{m=1}^{\infty}\frac{g^m}{m!}\,\bold{V}^m=\bold{V}^{1/2}\!\left(\sum_{m=1}^{\infty}\frac{g^m}{m!}\,\bold{V}^{m-1}\right)\!\bold{V}^{1/2}.\]
+Since $\bold{V}\preceq\nu^2\idty,$ we have $\bold{V}^{m-1}\preceq\nu^{2(m-1)}\idty$ for $m\geq 1,$ so
+\begin{equation}\label{eq: rank_extract}
+\exp(g\bold{V})-\idty\preceq\bold{V}^{1/2}\!\left(\sum_{m=1}^{\infty}\frac{(g\nu^2)^m}{m!\,\nu^2}\right)\!\bold{V}^{1/2}=\frac{e^{g\nu^2}-1}{\nu^2}\,\bold{V}\preceq\frac{e^{g\nu^2}}{\nu^2}\,\bold{V}.
+\end{equation}
+Taking the trace of~\eqref{eq: rank_extract} we get
+\[\Tr\!\left(\exp(g\bold{V})-\idty\right)\leq\frac{e^{g\nu^2}}{\nu^2}\,\Tr(\bold{V})=\sr(\bold{V})\,e^{g\nu^2}.\]
+Substituting into~\eqref{eq: trace_iter} gives $\mathbb{E}\,\Tr\,\phi(\theta\bold{S}_n)\leq\sr(\bold{V})\,e^{g\nu^2}.$ Combining with~\eqref{eq: markov_step} and the bound $\frac{e^{\theta t}}{\phi(\theta t)}\leq 1+\frac{6}{(\theta t)^2}$ from \citet[inequality~(3.8)]{minsker2017}:
+\begin{equation}\label{eq: combined_bound}
+\mathbb{P}(\lambda_{\max}(\bold{S}_n)>t)\leq\frac{\sr(\bold{V})\,e^{g\nu^2}}{\phi(\theta t)}\leq \sr(\bold{V})\exp\!\left(g\nu^2-\theta t\right)\!\left(1+\frac{6}{(\theta t)^2}\right).
+\end{equation}
+
+Finally, we optimize over $\theta.$ Setting $\theta=\frac{t}{\nu^2+\ell t}\in(0,1/\ell),$ we compute $1-\theta \ell=\frac{\nu^2}{\nu^2+\ell t}$ and
+\[g(\theta)\nu^2=\frac{t^2}{2(\nu^2+\ell t)},\qquad g(\theta)\nu^2-\theta t=-\frac{t^2}{2(\nu^2+\ell t)}.\]
+Moreover, $\theta t=\frac{t^2}{\nu^2+\ell t},$ and whenever $t^2\geq\nu^2+\ell t$ (equivalently, $t\geq\frac{1}{2}(\ell+\sqrt{\ell^2+4\nu^2})$), the prefactor satisfies $1+\frac{6}{(\theta t)^2}\leq 7.$ Therefore
+\[\mathbb{P}(\lambda_{\max}(\bold{S}_n)>t)\leq 7\,\sr(\bold{V})\exp\!\left(-\frac{t^2/2}{\nu^2+\ell t}\right).\]
+Repeating the argument with $\bold{W}_i$ replaced by $-\bold{W}_i$ (which satisfies the same moment condition) and using $\mathbb{P}(\norm{\bold{S}_n}_{\op}>t)\leq\mathbb{P}(\lambda_{\max}(\bold{S}_n)>t)+\mathbb{P}(\lambda_{\max}(-\bold{S}_n)>t)$ yields~\eqref{eq: operator_bernstein}.\Halmos
+\endproof
+
+\begin{lemma}[Empirical operator dominance]\label{lem: empirical_dominance_general}
+Let $\mH$ be a separable Hilbert space and let $X_1,\ldots,X_n$ be i.i.d.\ copies of a $\bSigma_{\mathrm{proxy}}$-sub-Gaussian random element $X\in\mH$ with population second moment $\bSigma_0:=\mathbb{E}[X\otimes X].$ Suppose that
+\begin{equation}\label{eq: dominance_condition}
+\bSigma_{\mathrm{proxy}}+\lambda\idty\preceq c_{\mathrm{d}}(\bSigma_0+\lambda\idty)
+\end{equation}
+for some constants $c_{\mathrm{d}}>0$ and $\lambda>0.$ Then
+\begin{equation}\label{eq: empirical_dominance_general}
+\frac{1}{n}\sum_{i=1}^n X_i\otimes X_i+\lambda\idty\succeq\frac{1}{2}(\bSigma_0+\lambda\idty)
+\end{equation}
+with probability at least $1-\delta$ whenever $n\geq c'\,d_{\mathrm{eff}}\log(d_{\mathrm{eff}}/\delta),$ where $d_{\mathrm{eff}}=\Tr(\bSigma_{\mathrm{proxy}}(\bSigma_0+\lambda\idty)^{-1})+1$ and $c'>0$ is a constant depending only on $c_{\mathrm{d}}.$
+\end{lemma}
+\proof{Proof.}
+Define the regularized population operator \[\bSigma_\lambda=\bSigma_0+\lambda\idty,\]  \[\text{the whitened variables } Z_i=\bSigma_\lambda^{-1/2}X_i, \text{ and the centered operators } \bold{W}_i=Z_i\otimes Z_i-\mathbb{E}[Z_i\otimes Z_i].\] Then $\mathbb{E}[Z_i\otimes Z_i]=\bSigma_\lambda^{-1/2}\bSigma_0\,\bSigma_\lambda^{-1/2}=\idty-\lambda\bSigma_\lambda^{-1},$ and
+\[\frac{1}{n}\sum_{i=1}^n Z_i\otimes Z_i=\bSigma_\lambda^{-1/2}\!\left(\frac{1}{n}\sum_{i=1}^n X_i\otimes X_i\right)\!\bSigma_\lambda^{-1/2}.\]
+If $\left\|\frac{1}{n}\sum_{i=1}^n\bold{W}_i\right\|_{\op}\leq\frac{1}{2},$ then since $\mathbb{E}[Z_i\otimes Z_i]\preceq\idty,$
+\[\frac{1}{n}\sum_{i=1}^n Z_i\otimes Z_i=\mathbb{E}[Z_i\otimes Z_i]+\frac{1}{n}\sum_{i=1}^n\bold{W}_i\succeq\mathbb{E}[Z_i\otimes Z_i]-\frac{1}{2}\idty\succeq\frac{1}{2}\mathbb{E}[Z_i\otimes Z_i].\]
+Conjugating by $\bSigma_\lambda^{1/2}$ gives $\frac{1}{n}\sum_{i=1}^n X_i\otimes X_i\succeq\frac{1}{2}\bSigma_0,$ and adding $\lambda\idty$ to both sides,
+\[\frac{1}{n}\sum_{i=1}^n X_i\otimes X_i+\lambda\idty\succeq\frac{1}{2}\bSigma_0+\lambda\idty=\frac{1}{2}\bSigma_\lambda+\frac{1}{2}\lambda\idty\succeq\frac{1}{2}\bSigma_\lambda,\]
+establishing \eqref{eq: empirical_dominance_general}.
+
+It remains to show $\left\|\frac{1}{n}\sum\bold{W}_i\right\|_{\op}\leq\frac{1}{2}$ with the stated probability. Since $X$ is $\bSigma_{\mathrm{proxy}}$-sub-Gaussian, $Z_i$ is $\bSigma_\lambda^{-1/2}\bSigma_{\mathrm{proxy}}\bSigma_\lambda^{-1/2}$-sub-Gaussian. By \eqref{eq: dominance_condition}, \[\bSigma_{\mathrm{proxy}}\preceq c_{\mathrm{d}}(\bSigma_0+\lambda\idty)-\lambda\idty\preceq c_{\mathrm{d}}\bSigma_\lambda,\] so $\|\bSigma_\lambda^{-1/2}\bSigma_{\mathrm{proxy}}\bSigma_\lambda^{-1/2}\|_{\op}\leq c_{\mathrm{d}},$ so \Cref{lem: operator_bernstein} gives the sub-exponential parameter $\ell\asymp c_{\mathrm{d}}.$ By \Cref{lem: fourth_moment_bound}, the uncentered operator variance $\bold{V}=n\,\mathbb{E}[\|Z_i\|^2 Z_i\otimes Z_i]$ satisfies
+\[\nu^2:=\|\bold{V}\|_{\op}\leq 3nc_{\mathrm{d}}\Tr(\bSigma_{\mathrm{proxy}}\bSigma_\lambda^{-1}),\]
+and via the same effective rank calculation as in the proof of \Cref{lem: empirical_dominance} (cf.\ \eqref{eq: eff_dim_explicit}),
+\[\sr(\bold{V})=\frac{\Tr(\bold{V})}{\nu^2}=\mO\!\left(\Tr^2(\bSigma_{\mathrm{proxy}}\bSigma_\lambda^{-1})\right).\]
+Applying \Cref{lem: operator_bernstein} with threshold $t=n/2,$ the failure probability is at most
+\[14\,\sr(\bold{V})\exp\!\left(-\frac{n^2/8}{\nu^2+\ell n/2}\right).\]
+For $n\geq c'\,d_{\mathrm{eff}}\log(d_{\mathrm{eff}}/\delta)$ with $d_{\mathrm{eff}}=\Tr(\bSigma_{\mathrm{proxy}}\bSigma_\lambda^{-1})+1$ and a sufficiently large constant $c'>0$ depending on $c_{\mathrm{d}},$ we have $n^2/8\geq(\nu^2+\ell n/2)\log(14\,\sr(\bold{V})/\delta),$ and the right-hand side is at most $\delta.$\Halmos
+\endproof
+
+\begin{lemma}[Effective dimension bound]\label{lem: eff_dim_bound}
+Under \Cref{asmp: decay} with $2r>1,$ for any $\lambda>0,$
+\[\Tr\!\left(\tilde\bSigma(\tilde\bSigma+\lambda\idty)^{-1}\right)=\mO(\lambda^{-1/(2r)}).\]
+\end{lemma}
+\proof{Proof.}
+Write $k^*=\lfloor\lambda^{-1/(2r)}\rfloor.$ If $k^*\geq 1,$ then $\sigma_{k^*}=\mO(k^{*-2r})=\mO(\lambda).$ Splitting the sum at $k^*,$
+\begin{align*}
+\Tr\!\left(\tilde\bSigma(\tilde\bSigma+\lambda\idty)^{-1}\right)=\sum_{k=1}^\infty\frac{\sigma_k}{\sigma_k+\lambda}\leq \sum_{k\leq k^*}1+\frac{1}{\lambda}\sum_{k>k^*}\sigma_k\leq k^*+\frac{C}{\lambda}\int_{k^*}^\infty x^{-2r}\dd{x}=k^*+\frac{C(k^*)^{1-2r}}{(2r-1)\lambda},
+\end{align*}
+where the integral converges since $2r>1,$ and $C>0$ is the constant from $\sigma_k\leq Ck^{-2r}.$ Since $(k^*)^{1-2r}/\lambda=\mO(\lambda^{(2r-1)/(2r)}/\lambda)=\mO(\lambda^{-1/(2r)})$ and $k^*=\mO(\lambda^{-1/(2r)}),$ both terms are $\mO(\lambda^{-1/(2r)}).$ If $k^*=0$ (i.e., $\lambda>1$), the first sum is empty and
+\[\sum_{k=1}^\infty\frac{\sigma_k}{\sigma_k+\lambda}\leq\frac{1}{\lambda}\sum_{k=1}^\infty\sigma_k=\frac{\Tr(\tilde\bSigma)}{\lambda}=\mO(\lambda^{-1})\leq\mO(\lambda^{-1/(2r)}),\]
+where $\Tr(\tilde\bSigma)<\infty$ since $2r>1,$ and $\lambda^{-1}\leq\lambda^{-1/(2r)}$ since $\lambda>1.$\Halmos
+\endproof
+\end{document}
+
+

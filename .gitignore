@@ -1,0 +1,11 @@
+*.zip
+*.aux
+*.log
+*.synctex.gz
+*.bbl
+*.blg
+*.out
+*.toc
+*.fdb_latexmk
+*.fls
+.DS_Store

@@ -1,0 +1,508 @@
+\documentclass[11pt,a4paper]{article}
+
+% ========================
+% ESSENTIAL PACKAGES
+% ========================
+
+% Language and encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+
+% Math packages
+\usepackage{amsmath}        % Enhanced math environments
+\usepackage{amssymb}        % Additional math symbols
+\usepackage{amsthm}         % Theorem environments
+\usepackage{amsfonts}       % Additional math fonts
+\usepackage{mathtools}      % Extension to amsmath
+\usepackage{bm}             % Bold math symbols
+\usepackage{dsfont}         % Double-struck fonts (for sets like ℝ, ℕ)
+\usepackage{mathrsfs}       % Script fonts for math
+
+% Graphics and figures
+\usepackage{graphicx}       % Include graphics
+\usepackage{float}          % Better float placement
+\usepackage{subcaption}     % Subfigures
+\usepackage{tikz}           % Drawing diagrams
+\usepackage{pgfplots}       % Plotting
+\pgfplotsset{compat=1.18}
+
+% Page layout and formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}       % Custom headers and footers
+\usepackage{titlesec}       % Customize section titles
+\usepackage{enumitem}       % Customize lists
+\usepackage{parskip}        % Paragraph spacing
+
+% Colors and highlighting
+\usepackage{xcolor}
+\usepackage{mdframed}       % Framed environments
+\usepackage{tcolorbox}      % Colored boxes
+
+% Tables
+\usepackage{array}          % Extended array environments
+\usepackage{booktabs}       % Professional tables
+\usepackage{multirow}       % Multi-row cells
+
+% References and links
+\usepackage{hyperref}       % Hyperlinks
+\usepackage{cleveref}       % Smart cross-references
+
+% Additional useful packages
+\usepackage{cancel}         % Cancel terms in equations
+\usepackage{siunitx}        % SI units
+\usepackage{listings}       % Code listings (if needed)
+
+% ========================
+% CUSTOM COMMANDS
+% ========================
+
+% Common math sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+
+% Common operators
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\rank}{rank}
+%\DeclareMathOperator{\span}{span}
+%\DeclareMathOperator{\null}{null}
+
+% Shortcuts for common expressions
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+% Derivatives and integrals
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+\newcommand{\dv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+
+% ========================
+% THEOREM ENVIRONMENTS
+% ========================
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{exercise}{Exercise}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{assumption}{Assumptio}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{note}{Note}[section]
+
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\op}{\mathrm{op}}
+
+\newcommand{\mX}{\mathcal X}
+\newcommand{\mD}{\mathcal D}
+\newcommand{\bP}{\mathbb P}
+\newcommand{\lp}{L^2(\bP)}
+\newcommand{\lx}{L^2(\mX)}
+\newcommand{\ltwo}{L^2(\mX)}
+\newcommand{\ud}{\mathrm d}
+\newcommand{\mH}{\mathcal H}
+\newcommand{\mA}{\mathcal A}
+
+\newcommand{\diag}{\mathrm{diag}}
+\newcommand{\tr}{\mathrm{tr}}
+
+\newcommand{\vct}{\boldsymbol}
+
+% ========================
+% COLORED BOXES
+% ========================
+
+% Important theorem box
+\newtcolorbox{importantbox}{
+	colback=blue!5!white,
+	colframe=blue!75!black,
+	title=Important
+}
+
+% Warning/Note box
+\newtcolorbox{notebox}{
+	colback=yellow!10!white,
+	colframe=orange!75!black,
+	title=Note
+}
+
+% Example box
+\newtcolorbox{examplebox}{
+	colback=green!5!white,
+	colframe=green!75!black,
+	title=Example
+}
+
+% ========================
+% DOCUMENT SETUP
+% ========================
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\leftmark}
+
+% Title formatting
+\title{Functional Bandit Notes}
+\author{Your Name}
+\date{\today}
+
+% Hyperlink setup
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	citecolor=red
+}
+
+\begin{document}
+
+The main purpose of this document is to offer some additional ideas, based on the framework of \cite{cai2012minimax}.
+These ideas are along the line of imposing additional assumptions so that we can have honest and adaptive pointwise confidence intervals of KRR.
+
+Using notations in \cite{cai2012minimax}, let $\tilde f_i=L_{K^{1/2}} f_i$ be the normalized input function, $\tilde\beta_0=L_{K^{-1/2}}\beta_0$
+be the normalized regression functional. Let $T=\mathbb E[\tilde f_i\otimes\tilde f_i]$ admit the spectrum decomposition $T=\sum_{j=1}^{\infty}s_j\psi_j\otimes\psi_j$
+with $s_j\asymp j^{-2r}$ and $\{\psi_j\}$ being an orthonormal basis of $L^2(\mX)$.
+
+Suppose $\tilde\beta_0=\sum_j \vartheta_j\psi_j$. We only know $\sum_j\vartheta_j^2\leq 1$ and $\mathbb E[\alpha_j^2]=s_j$, but nothing else.
+Given a test function $v$ with $\tilde v=L_{K^{1/2}}v = \sum_j\alpha_j\psi_j$, such that $\sum_j\alpha_j^2\leq 1$. If we know $T$ (and therefore $\{\psi_j\}$), we would know $\{\alpha_j\}$.
+Roughly speaking, omitting supposedly higher-order terms, the estimation error can be decomposed into
+$$
+\big|\langle \tilde v, \lambda (T+\lambda I)^{-1}\tilde\beta_0\rangle\big| + \frac{1}{n}\left|\sum_{i=1}^n \varepsilon_i \langle \tilde v, (T_n+\lambda I)^{-1}\tilde f_i\rangle\right|.
+$$
+Consequently, the \emph{squared} estimation error on $\tilde v$ is upper bounded by 
+$$
+\underbrace{\left|\sum_{j=1}^{\infty} \frac{\lambda\vartheta_j\alpha_j}{s_j+\lambda}\right|^2}_{=:\text{bias}^2} + \underbrace{\frac{1}{n}\sum_{j=1}^{\infty} \frac{\alpha_j^2}{s_j+\lambda}}_{=:\text{variance}}.
+$$
+Here in the variance term we transit from $T_n$ to $T$ to avoid discussion of empirical covariance eigenvalues/eigenfunctions.
+
+We seek a CI function $\Delta(\cdot)$ that satisfies the following properties:
+\begin{enumerate}
+\item $\Delta(\cdot)$ does not depend on $\{\vartheta_j\}$;
+\item With high probability, for any $\tilde v$, $\Delta(\tilde v)^2$ upper bounds the squared error at $\tilde v$;
+\item $\mathbb E[\Delta(\cdot)^2]$ is roughly on the right order.
+\end{enumerate}
+
+\subsection{What is the right order?}
+
+On the bias side, we have (note this does \emph{not} require any assumptions on $\{s_j\}$ at all.)
+$$
+\mathbb E[\text{bias}^2] = \sum_{j=1}^{\infty} \frac{\lambda^2 \vartheta_j^2 s_j}{(s_j+\lambda)^2} \leq \left(\sum_{j=1}^{\infty}\vartheta_j^2\right)\sup_{s>0}\frac{\lambda^2 s}{(s+\lambda)^2} \lesssim \lambda.
+$$
+Note that the first equality holds because $\mathbb E[\alpha_j\alpha_k]=\delta_{jk}s_j$ because $\{\psi_j\}_{j=1}^{\infty}$ is an ONB for $T$ with eigenvalues $\{s_j\}_{j=1}^{\infty}$.
+
+On the variance side, with $s_j\lesssim j^{-2r}$, we have
+$$
+\mathbb E[\text{variance}] = \frac{1}{n}\sum_{j=1}^{\infty} \frac{s_j}{s_j+\lambda} \lesssim \frac{1}{\lambda^{1/2r}n}.
+$$
+So we should aim for
+$$
+\mathbb E[\Delta(\tilde v)^2] \lesssim \lambda + \frac{1}{\lambda^{1/2r}n} \lesssim n^{-2r/(2r+1)}
+$$
+for $\lambda \asymp n^{-2r/(2r+1)}$.
+
+\subsection{A simple idea}
+
+By Cauchy-Schwarz inequality, it holds that
+$$
+\mathrm{bias}(\tilde v)^2 \leq \left(\sum_{j=1}^{\infty}\vartheta_j^2\right)\cdot \lambda^2\left(\sum_{j=1}^{\infty} \frac{\alpha_j^2}{(s_j+\lambda)^2}\right) \lesssim \lambda^2\left(\sum_{j=1}^{\infty} \frac{\alpha_j^2}{(s_j+\lambda)^2}\right),
+$$
+where $\alpha_j = \langle\tilde v,\psi_j\rangle$ is known. This leads to
+$$
+\mathbb E[\Delta(\tilde v)^2] \lesssim \lambda^2\left(\sum_{j=1}^{\infty}\frac{s_j}{(s_j+\lambda)^2}\right) \lesssim \lambda^{1-1/2r},
+$$
+which is losing a factor of $\lambda^{1/2r}$.
+
+\section{Constraints on regression functional: anisotropic krr}
+
+We consider using \emph{changing} regularization parameters so that $T+\lambda I$ is replaced with $T+\Lambda$ where $\Lambda =\sum_{j=1}^{\infty} \lambda_j \psi_j\otimes\psi_j$.
+We also denote $\lambda_0 \asymp n^{-2r/(2r+1)}$ for reference purposes. Then at any $\tilde v=\sum_j\alpha_j\psi_j$, 
+$$
+\text{bias}(\tilde v)^2+\text{variance}(\tilde v) \lesssim \left|\sum_{j=1}^{\infty}\frac{\lambda_j\vartheta_j\alpha_j}{s_j+\lambda_j}\right|^2 + \frac{1}{n}\sum_{j=1}^{\infty}\frac{\alpha_j^2}{s_j+\lambda_j},
+$$
+because the bias term is now $(T+\Lambda)^{-1}\Lambda\tilde\beta_0$.
+
+We are going to use
+$$
+\lambda_j := s_j\sqrt{\lambda_0}/|\alpha_j|.
+$$
+The intuition is to upper bound the bias term in a uniform manner:
+$$
+\left|\frac{\lambda_j\alpha_j}{s_j+\lambda_j}\right| \leq \frac{\sqrt{\lambda_0}}{1+\sqrt{\lambda_0/|\alpha_j|}}\leq \sqrt{\lambda_0},\;\;\;\;\;\;\forall j\geq 1.
+$$
+
+\subsection{Assumptions needed}
+
+Due to existence of uncorrelated but non-zero cross-terms in the bias-square expression, some restrictions on $\tilde\beta_0=\sum_{j=1}^{\infty}\vartheta_j\psi_j$
+must be imposed, in addition to $\sum_j\vartheta_j^2\leq 1$ implied by square integrability of $\tilde\beta_0$.
+Both assumptions below must be imposed with respect to $\{\psi_j\}_{j=1}^{\infty}$; that is, for any policy (or near-optimal policy) the bandit algorithm constructs.
+
+\paragraph{Option 1.} We assume $\sum_{j=1}^{\infty}|\vartheta_j|\leq M<+\infty$. This implies
+$$
+\left|\sum_{j=1}^{\infty}\frac{\lambda_j\vartheta_j\alpha_j}{s_j+\lambda_j}\right| \leq M\sup_{j\geq 1}\frac{\lambda_j|\alpha_j|}{s_j+\lambda_j} \leq M\sqrt{\lambda_0}.
+$$
+
+\begin{remark}
+This assumption is implied by the decay condition $\vartheta_j\lesssim j^{-\beta}$ for any $\beta>1$, which is imposed and necessary for fPCA analysis (see e.g.~\cite{cai2006prediction}).
+Note that fPCA analysis also requires this specific coefficient decay on the basis $\{\psi_j\}$, which is not basis independent.
+\end{remark}
+
+\begin{remark}
+Under the context of fPCA analysis in \cite{cai2006prediction}, $|\alpha_j|\lesssim j^{-\gamma}$ and $|\beta_j|\lesssim j^{-\beta}$. Assuming we use an RKHS with spectral decay $j^{-(\beta-1-\epsilon)}$
+and $T$ and $C$ commute, we have $r=2\gamma+\beta-1-\epsilon\approx 2\gamma+\beta-1$ and the MSE rate is $n^{-2r/(2r+1)} = n^{-(4\gamma+2\beta-2)/(4\gamma+2\beta-1)} = n^{-1+\frac{1}{4\gamma+2\beta-1}}$.
+On the other hand, with the understanding of $\alpha=2\gamma$, the fPCA MSE rate is $n^{-2(\beta+\gamma-1)/(\alpha+2\beta-1)} = n^{-(2\beta+2\gamma-2)/(2\beta+2\gamma-1)}=n^{-1+\frac{1}{2\beta+2\gamma-1}}$.
+fPCA remains sub-optimal.
+\end{remark}
+
+\begin{remark}
+If $\{\psi_j\}$ is the Fourier basis, $\sum_{j=1}^{\infty}|\vartheta_j|<+\infty$ implies $\tilde\beta_0$ is absolutely continuous. (On the other hand, if $\tilde\theta_0$ is H\"{o}lder continuous in any $\alpha>0$,
+then $\sum_{j=1}^{\infty}|\vartheta_j|<+\infty$ on the Fourier basis.)
+If $\{\psi_j\}$ is the wavelet basis, it implies $\tilde\beta_0\in B_{1,1}^{1/2}$.
+These are \emph{some} regularity conditions, but not super strong. The stronger assumption of $|\vartheta_j|\lesssim j^{-\beta}$ for $\beta>1$, in either the Fourier or the wavelet basis,
+implies that $\tilde\beta_0$ is in the fractional sobolev space $H^{s}$ with $s=1/2$. This is a tiny amount of smoothness that we'll not be able to capture, potentially leading to some sub-optimality.
+\end{remark}
+
+\paragraph{Option 2.} We assume $\{\vartheta_j\}_{j=1}^{\infty}$ is random. Furthermore, $\vartheta=(\vartheta_j)_{j=1}^{\infty}$ is centered, sub-Gaussian, with variance proxy $\Sigma$ that satisfies the following properties:
+\begin{enumerate}
+\item $\tr(\Sigma) =\sum_{j=1}^{\infty}\Sigma_{jj} \leq M<+\infty$, mimicking square integrability of $\tilde\beta_0$;
+\item $\Sigma$ is \emph{``weakly'' diagonally dominant}, meaning that there exists $C<+\infty$ such that for all $j\geq 1$, $\sum_{k\neq j}|\Sigma_{jk}|\leq C\cdot \Sigma_{jj}$.
+\end{enumerate}
+
+In this case, using the celebrated condition that $|ab|\leq \frac{1}{2}(a^2+b^2)$ for any $a,b\in\mathbb R$, we obtain
+\begin{align*}
+\mathbb E_{\vartheta}\left[\left(\sum_{j=1}^{\infty}\frac{\lambda_j\vartheta_j\alpha_j}{s_j+\lambda_j}\right)^2\right]
+&= \sum_{j,k=1}^{\infty} \frac{\Sigma_{jk}\lambda_j\lambda_k\alpha_j\alpha_k}{(s_j+\lambda_j)(s_k+\lambda_k)} 
+\overset{(a)}{\leq} (C+1)\cdot \sum_{j=1}^{\infty}\frac{\Sigma_{jj}\lambda_j^2\alpha_j^2}{(s_j+\lambda_j)^2}\\
+&\leq (C+1)M\cdot \sup_{j>0}\frac{\lambda_j^2\alpha_j^2}{(s_j+\lambda_j)^2} \leq (C+1)M\cdot \lambda_0.
+\end{align*}
+Note that all expectations here are taken with respect to $\vartheta$, fixing $\tilde v$ and $\{\alpha_j\}$.
+In Eq.~(a) we used weakly diagonal dominance of $M$.
+
+With sub-gaussianity, with high probability (over the randomness in $\tilde\beta_0$) the (squared) bias is upper bounded by $\lambda_0\cdot O(\log n)$.
+
+\begin{remark}
+If $\tilde\beta_0$ is samples from a Gaussian Process (GP) on $[0,1]$, then by the Kosambi-Karhunen-Loeve theorem, there exists an orthonormal basis $\{\phi_j\}_{j=1}^{\infty}$ of $L^2([0,1])$
+such that $\tilde\beta_0 = \sum_{j=1}^{\infty}Z_j\phi_j$, where $\{Z_j\}$ are centered, independent Normal random variables with $\mathbb E[Z_j^2]=\mu_j$.
+If $T$ and $K$ commute (i.e.~$\psi_j\equiv \phi_j$), then the assumption is satisfied. If exact commutability is not available, then $Z\sim \mathcal N(0, WDW^*)$
+where $W_{ij}=\langle\phi_i,\psi_j\rangle$ and $D=\diag(\mu_1,\mu_2,\cdots)$, and the assumption is implied by
+$$
+C\times \left(\sum_{\ell=1}^{\infty}\mu_\ell\langle\phi_j,\psi_\ell\rangle^2\right) \;\;\geq\;\;  \sum_{k\neq j}\left|\sum_{\ell=1}^{\infty}\mu_\ell\langle\phi_j,\psi_\ell\rangle\langle\phi_k,\psi_\ell\rangle\right|, \;\;\;\;\;\;\forall j=1,2,\cdots
+$$
+\end{remark}
+
+\subsection{The variance term}
+
+For the variance term, we have
+\begin{align*}
+\frac{1}{n}\sum_{j=1}^{\infty}\mathbb E\left[\frac{\alpha_j^2}{s_j+\lambda_j}\right]\leq \frac{1}{n}\sum_{j=1}^{\infty} \mathbb E\left[\frac{\alpha_j^2}{s_j(1+\sqrt{\lambda_0}/|\alpha_j|)}\right].
+\end{align*}
+
+%Let $f(x)=x^2/(a+b/x)$ for some $a,b>0$. This is a convex function on $x>0$ so Jensen's inequality implies $\mathbb E[f(x)]\geq f(\mathbb E[x])$. We again seek appropriate conditions so that the inverse is true:
+%\begin{align*}
+%\mathbb E\left[\frac{\alpha_j^2}{s_j(1+\sqrt{\lambda_0}/\alpha_j)}\right] &\overset{(??)}{\lesssim} O(\log n) \times \frac{\mathbb E[\alpha_j^2]}{s_j(1+\sqrt{\lambda_0}/\mathbb E[|\alpha_j|])} 
+%\leq O(\log n)\times \frac{\mathbb E[\alpha_j^2]}{s_j(1+\sqrt{\lambda_0}/\sqrt{\mathbb E[\alpha_j^2])}} \\
+%&\lesssim \frac{s_j}{s_j(1+\sqrt{\lambda_0/s_j})} = \frac{\sqrt{s_j}}{\sqrt{s_j}+\sqrt{\lambda_0}}.
+%\end{align*}
+%With $s_j\lesssim j^{-2r}$, $\lambda_0\asymp n^{-2r/(2r+1)}$ and $j_0\asymp n^{1/(2r+1)}$, we have
+%$$
+%\sum_{j=1}^{\infty}\frac{\sqrt{s_j}}{\sqrt{s_j}+\sqrt{\lambda_0}} \lesssim j_0 + \frac{1}{\sqrt{\lambda_0}}\int_{j_0}^{\infty} u^{-r}\ud u \lesssim j_0 + \frac{j_0^{-r+1}}{\sqrt{\lambda_0}}\lesssim j_0 =n^{1/(2r+1)}
+%$$
+%and therefore
+%$$
+%\frac{1}{n}\sum_{j=1}^{\infty}\frac{\sqrt{s_j}}{\sqrt{s_j}+\sqrt{\lambda_0}}  \lesssim n^{-2r/(2r+1)}.
+%$$
+
+We have
+\begin{align*}
+\mathbb E\left[\frac{\alpha_j^3}{|\alpha_j|+\sqrt{\lambda_0}}\right] &= \mathbb E\left[\alpha_j^2\cdot \frac{|\alpha_j|}{|\alpha_j|+\sqrt{\lambda_0}}\right] \overset{(a)}{\leq} \sqrt{\mathbb E[\alpha_j^4]}\sqrt{\mathbb E\left[\frac{\alpha_j^2}{(|\alpha_j+\sqrt{\lambda_0})^2}\right]}\\
+&\overset{(b)}{\leq} \sqrt{\mathbb E[\alpha_j^4]}\sqrt{\mathbb E\left[\frac{\alpha_j^2}{\alpha_j^2+\lambda_0}\right]}
+\overset{(c)}{\leq} \sqrt{\mathbb E[\alpha_j^4]}\sqrt{\frac{\mathbb E[\alpha_j^2]}{\mathbb E[\alpha_j^2]+\lambda_0}} \leq \sqrt{\mathbb E[\alpha_j^4]}\sqrt{\frac{s_j}{s_j+\lambda_0}},
+\end{align*}
+where Eq.~(a) holds by Cauchy-Schwarz inequality, Eq.~(b) holds because $(a+b)^2\geq |a|^2+|b|^2$, and Eq.~(c) holds by Jensen's inequality and the fact that $f(x)=x/(a+x)$ is concave on $a>0$ and $x>0$.
+{\color{red} Under the condition that $\mathbb E[\alpha_j^4] \lesssim (\mathbb E[\alpha_j^2])^2 \lesssim s_j^2$}, we have
+$$
+\mathbb E\left[\frac{\alpha_j^3}{s_j(|\alpha_j|+\sqrt{\lambda_0})}\right] \lesssim \frac{\sqrt{s_j}}{\sqrt{s_j+\lambda_0}}.
+$$
+
+\section{Constraints on input function: uniform CI}\label{sec:uniform}
+
+We now consider a set of alternative assumptions placed on $\tilde v=L_{K^{1/2}}f$. When appropriate, these conditions would lead to \emph{uniform} error bounds for almost every $\tilde v$.
+
+\subsection{Assumption needed}
+
+We impose the following assumptions on the distribution of $\tilde v$:
+\begin{enumerate}
+\item There exists a psd operator $V$ such that $\tilde v$ is centered and sub-Gaussian with variance proxy $V$; that is, for any $\phi\in L^2([0,1])$, $\mathbb E[e^{\langle\phi,\tilde v\rangle}] \leq \exp\{\langle\phi, V\phi\rangle/2\}$.
+\item For any action $a\in\mA$ and regularization parameter $\lambda\asymp n^{-2r/(2r+1)}$, let $T_\lambda^a := \mathbb E[\tilde f\otimes\tilde f| a^*(\tilde f)=a] + \lambda I$ be the smoothed population covariance operator on the region where $a$ is optimal. Then $\|(T_\lambda^a)^{-1/2} V (T_\lambda^a)\|_\op \leq O(1)$.
+\end{enumerate}
+
+This is a ``spectral alignment'' condition that very similarly resemble $\lambda_{\min}$ conditions in margin-based contextual bandit; e.g.~\cite{goldenshluger2013linear}.
+
+\subsection{Analysis on bias}
+
+On the bias side, assuming the optimal action is never eliminated, for action $a$ it holds that
+\begin{align*}
+\mathbb E[\langle\tilde v,\tilde\beta_\lambda^a-\tilde\beta_0^a\rangle^2] &\leq \lambda^2K\mathbb E[\langle \tilde v, (T_\lambda^a)^{-1}\tilde\beta_0\rangle^2]
+\leq \lambda K\|\tilde\beta_0\|_2^2\cdot \|(T_\lambda^a)^{-1/2} V (T_\lambda^a)\|_\op \lesssim O(\lambda).
+\end{align*}
+Because $\tilde v$ is sub-Gaussian with a matrix variance proxy, this ensures that the bias for $\tilde v$ is upper bounded above with high probability.
+This means, with high probability, $\tilde v$ has the same `
+
+\subsection{Analysis on variance}
+
+We can always use pointwise CI because we know variance. If we seek a uniform bound for almost all $\tilde v$ on this term too, we need the following stronger condition:
+$$
+\|(T^a)^{-1/2} V (T^a)^{-1/2}\|_\op \leq O(1). 
+$$
+This implies $\langle\phi, T_a \phi\rangle\leq O(1)\cdot \langle\phi, V\phi\rangle$ for any $\phi\in L^2([0,1]$.
+We then have
+\begin{align*}
+\mathbb E[\langle\tilde v, (T+\lambda I)^{-1} v\rangle] &\lesssim K\cdot\mathbb E[\langle\tilde v, (T_\lambda^a)^{-1} \tilde v\rangle] = K\cdot \tr((T_\lambda^a)^{-1/2} V (T_\lambda^a))\\
+&\leq K\tr((T_\lambda^a)^{-1/2}T^a(T_\lambda^a)^{-1/2}) = K\cdot \sum_{j=1}^{\infty} \frac{s_j}{s_j+\lambda}.
+\end{align*}
+
+\subsection{Without assuming known $T$}
+By using the Berstein that considers the effective dimension like \cite{minsker2011some}, we can derive
+\[\left\|T_{\lambda}^{-1/2}(T-\hat T)T_\lambda^{-1/2}\right\|_\op\leq \frac{1}{2}\]
+with high probabilty, which further imples
+\[\frac{1}{2}T_{\lambda}\preceq \hat{T}_{\lambda}\preceq \frac{3}{2}T_{\lambda}\]
+w.h.p..
+Then, for the variance of the bias term 
+\[	\langle L_{\boldsymbol K^{1/2}}x, \lambda \hat{\boldsymbol{T}}_\lambda^{-1}f_0\rangle,\]
+we have
+\begin{align*}
+	\mathbb{E}\left[\langle L_{\boldsymbol K^{1/2}}x, \lambda \hat{\boldsymbol{T}}_\lambda^{-1}f_0\rangle^2\right]=\lambda^2\langle f_0,\hat{T}_\lambda^{-1}V\hat T_{\lambda}^{-1}f_0\rangle&\leq\lambda^2\norm{f_0}^2\norm{\hat{T}_\lambda^{-1}V\hat T_{\lambda}^{-1}}_{\op}\\
+	&\lesssim \lambda^2\norm{f_0}^2\norm{\hat{T}_\lambda^{-1}T\hat T_{\lambda}^{-1}}_{\op}\\
+	&\lesssim\lambda^2\left(\norm{\hat{T}_\lambda^{-1}\hat T\hat T_{\lambda}^{-1}}_{\op}+\norm{\hat{T}_\lambda^{-1}(T-\hat T)\hat T_{\lambda}^{-1}}_{\op}\right)\\
+	&\lesssim \lambda^2(\lambda^{-1}+\frac{1}{2}\lambda^{-1})\sim \lambda,
+\end{align*}
+which is the right order.
+For the variance term itself we have
+\begin{align*}
+	\langle L_{\boldsymbol K^{1/2}}x,\hat{\boldsymbol T}_{\lambda}^{-1}g_\epsilon\rangle=\frac{1}{n}\sum_{i=1}^n \varepsilon_i\langle L_{\boldsymbol K^{1/2}}x,\hat{\boldsymbol T}_{\lambda}^{-1}L_{\boldsymbol K^{1/2}}x_i\rangle,
+\end{align*}
+whose variance is
+\begin{align*}
+\frac{\sigma^2}{n} \sum_{i=1}^n \Tr\left(\hat T_{\lambda}^{-1}\Sigma\hat T_{\lambda}^{-1}\hat T\right)\lesssim \frac{1}{n}\Tr\left(\hat T_{\lambda}^{-1}\Sigma\right)\lesssim\frac{1}{n}\Tr\left(\hat T_{\lambda}^{-1}T\right)\lesssim\frac{1}{n} \Tr\left(T_{\lambda}^{-1}T\right)\sim \frac{\lambda^{-1/(2r)}}{n},
+\end{align*}
+which is also of the right order.
+\section{Optimality of CI}
+
+Let $\Delta(\cdot)$ be a CI function associated with an estimator $\hat\theta$. We say that $\Delta(\cdot)$ is an \emph{honest and adaptive} confidence interval if the following holds:
+\begin{enumerate}
+\item For some type-I error bound $\epsilon\in(0,1)$, it holds for (almost) all $f$ that $\Pr[|\langle f,\hat\beta-\beta_0\rangle|\leq\Delta(f)] \geq 1-\epsilon$, where randomness is over $\{x_i,\varepsilon_i\}$.
+\item $\mathbb E[\Delta(f)^2]$ is on the same order of $\mathbb E[\langle f,\hat\beta-\beta_0\rangle^2]$, which should match the minimax rate (e.g.~$n^{-2r/(2r+1)}$).
+\end{enumerate}
+
+Note that the first requirement rules out high-probability CIs that are sufficient for bandit purposes, such as methods/analysis in Sec.~\ref{sec:uniform}.
+Nevertheless, for distributions of $f$ that are not sub-Gaussian, it might be possible to relax the first requirement to hold for a constant fraction of $f$ while still getting the required lower bound.
+
+\subsection{Summary of Prediction lower bound}
+
+This is a high-level summary of minimax prediction lower bound established in \cite{cai2012minimax}. For simplicity, we use the identity kernel, while general kernels can be handled by simply
+applying the $L_{K^{1/2}}$ operator. For notational simplicity, we will use $\beta_0=\sum_{j=1}^{\infty}\theta_j\psi_j$ where the only assumption on $\{\theta_j\}_j$ is that they are square summable.
+
+Let $M=n^{1/(2r+1)}$ and construct $\theta(\iota) = (\iota_j/\sqrt{M})$ where $\iota_j\in\{\pm 1\}$ for $M\leq j\leq 2M$ and $\iota_j=0$ otherwise. Easy to check that all $\theta(\iota)$ are square summable
+there exists a hypothesis class $\mathcal I$ with $\log|\mathcal I|\gtrsim M$, such that any pairs of $\iota,\iota'\in\mathcal I$ have at least $\Omega(M)$ different signs.
+Let $f=\sum_{j=1}^{\infty}\alpha_j\psi_j$ such that $\alpha_j = \pm j^{-r}$ with half probabilities, and they are independent. Clearly $\mathbb E[\alpha_j^2]=s_j\lesssim j^{-2r}$ and $\mathbb E[\alpha_j\alpha_k]=0$ for $j\neq k$.
+Then
+\begin{align*}
+n\times \mathbb E[\langle f,\theta(\iota)-\theta(\iota')\rangle^2] &\approx \mathrm{KL}(P_{\iota}^n\|P_{\iota'}^n) \approx \sum_{j=M}^{2M}ns_j|\theta(\iota)_j-\theta(\iota')_j|^2 \asymp \sum_{j=M}^{2M} \frac{ns_j}{M} \\
+&\approx nM^{-2r} = n^{\frac{1}{2r+1}} \asymp \log|\mathcal I|.
+\end{align*}
+Tsybakov's Master theorem (or Fano's inequality) then shows that minimax rate on MSE error is $n^{-2r/(2r+1)}$.
+
+
+\subsection{Minimax lower bound on honest CIs}
+
+\begin{remark}
+If we define the $\ell_{\infty}$ error between $\theta,\theta'$ as
+$$
+d(\theta,\theta') := \sup_{f} \big|\langle f,\theta-\theta'\rangle|\big|
+$$
+where supreme is taken over the support of the distribution on $f$, the it is easy to see that
+$$
+d(\theta,\theta') = \sum_{j=M}^{2M} j^{-r}|\theta_j-\theta'_j| \approx M\cdot M^{-r}/\sqrt{M} = M^{1/2-r} = \left(n^{\frac{1}{2r+1}}\right)^{\frac{1}{2}-r} = n^{-\frac{2r-1}{2(2r+1)}}
+$$
+whose square is $n^{-(2r-1)/(2r+1)}$. This should hint on a lower bound of honest and adaptive CIs.
+\end{remark}
+
+\section{Extensions}
+
+In addition to potential extensions to infinite action space and/or margin conditions, consider also the following model selection problem. We have $L$ possible RKHS with decay rates $r_1,r_2,r_3,\cdots$.
+The actual $\beta_0$ belongs to at least one particular RKHS, but not all of them. Can we adapt to the best rate, without knowing which RKHS?
+
+\begin{remark}
+If we know the RKHS, adapting to $r$ isn't a particularly difficult question because we observe $T$ approximately. \cite{cai2012minimax} already did this.
+\end{remark}
+
+\begin{remark}
+This problem is impossible in contextual nonparametric bandit or X-armed bandit settings without additional conditions: see \cite{gur2022smoothness,locatelli2018adaptivity}.
+Self-similarity type conditions must be imposed.
+\end{remark}
+
+\subsection{The idea}
+
+Let $\mH_1\supseteq\cdots\supseteq\mH_L$ and suppose $r_1<r_2<\cdots<r_L$.
+Suppose we have a sequence of estimates $\hat \beta_\ell$ and CIs $\Delta_\ell(\cdot)$, obtained on the same set of data.
+ We know the following: if $\beta_0\in\mH_{\ell^*}$, then with high probability
+ $$
+ \big|\langle v,\hat\beta_\ell-\beta_0\rangle\big|\leq \Delta_\ell(v),\;\; \mathbb E[\Delta_\ell(v)^2]\lesssim n^{-2r_\ell/(2r_\ell+1)},\;\;\;\;\;\forall \ell\leq \ell^*.
+ $$
+ 
+ \begin{remark}
+ If the same training data is used, and $r_1<r_2<\cdots<r_L$, it also holds that $\Delta_\ell(v)\leq\Delta_{\ell'}(v)$ for any $\ell\leq \ell'$ and $v\in L^2([0,1])$.
+ This is true for the fix-$\lambda$ model since $\lambda_\ell>\lambda_{\ell'}$, even if variable CI is used on the variance part.
+ But maybe less so for the anisotropic KRR approach.
+ \end{remark}
+ 
+ \paragraph{Method.} Suppose we only have two arms. Each model $\ell$ is telling us one of the three things: arm 0 is optimal, arm 1 is optimal, or indifference. Go from the $\ell=1,2,\cdots$
+ and stop if a decision is made. Use that decision.
+ 
+ \paragraph{Analysis.} If we stop at $\hat\ell\leq\ell^*$, then the decision is correct and the analysis proceeds as usual. If we stop at $\hat\ell>\ell^*$, it means the decision of $\ell^*$ is ``indifferent''
+ and therefore regret on $x$ is upper bounded by $\Delta_{\ell^*}(x)$. We only need to make sure that each action gets enough data. This is done by introducing some auxiliary data (e.g. pure exploration) to make sure $\Delta_\ell(x)=o(1)$ for all $\ell$ and $x$, and strengthening the dominance condition in the the above section to apply on all data with a positive margin.
+ 
+ \section{High-order terms}
+ 
+ \begin{remark}
+ If we do assume the population covariance $T$ is known, it is probably a better idea to use
+ $$
+ (T+\lambda I)^{-1}\frac{1}{n}\sum_{i=1}^n y_i L_{K^{1/2}}f_i
+ $$
+ as the estimator, which might be easier to analyze.
+ \end{remark}
+ 
+ \begin{remark}
+ In the anisotropic KRR method, if we insist on not knowing $T$, we have to adjust the estimator to
+ $$
+ (T_n+\Lambda_n)^{-1}\frac{1}{n}\sum_{i=1}^n y_i L_{K^{1/2}}f_i
+ $$
+ where $\Lambda_n = \sum_{j=1}^{\infty}\lambda_j \hat\psi_j\otimes\hat\psi_j$, where $\{\hat\psi_j\}$ are eigenfunctions of $T_n$.
+ We may then impose all assumptions on $T_n$ and $\{\hat\psi_j\}$ instead.
+ We may still need to analyze $T-T_n$ because $\mathbb E[\Delta(\tilde v)^2]$ must be on the population level (new data are different from training data for sure.)
+ \end{remark}
+
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

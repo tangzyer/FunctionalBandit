@@ -1,0 +1,352 @@
+\documentclass[11pt,a4paper]{article}
+
+% ========================
+% ESSENTIAL PACKAGES
+% ========================
+
+% Language and encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+%\usepackage{natbib}
+
+% Math packages
+\usepackage{amsmath}        % Enhanced math environments
+\usepackage{amssymb}        % Additional math symbols
+\usepackage{amsthm}         % Theorem environments
+\usepackage{amsfonts}       % Additional math fonts
+\usepackage{mathtools}      % Extension to amsmath
+\usepackage{bm}             % Bold math symbols
+\usepackage{dsfont}         % Double-struck fonts (for sets like ℝ, ℕ)
+\usepackage{mathrsfs}       % Script fonts for math
+
+% Graphics and figures
+\usepackage{graphicx}       % Include graphics
+\usepackage{float}          % Better float placement
+\usepackage{subcaption}     % Subfigures
+\usepackage{tikz}           % Drawing diagrams
+\usepackage{pgfplots}       % Plotting
+\pgfplotsset{compat=1.18}
+
+% Page layout and formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}       % Custom headers and footers
+\usepackage{titlesec}       % Customize section titles
+\usepackage{enumitem}       % Customize lists
+\usepackage{parskip}        % Paragraph spacing
+
+% Colors and highlighting
+\usepackage{xcolor}
+\usepackage{mdframed}       % Framed environments
+\usepackage{tcolorbox}      % Colored boxes
+
+% Tables
+\usepackage{array}          % Extended array environments
+\usepackage{booktabs}       % Professional tables
+\usepackage{multirow}       % Multi-row cells
+
+% References and links
+\usepackage{hyperref}       % Hyperlinks
+\usepackage{cleveref}       % Smart cross-references
+
+% Additional useful packages
+\usepackage{cancel}         % Cancel terms in equations
+\usepackage{siunitx}        % SI units
+\usepackage{listings}       % Code listings (if needed)
+
+% ========================
+% CUSTOM COMMANDS
+% ========================
+
+% Common math sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+
+% Common operators
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\rank}{rank}
+%\DeclareMathOperator{\span}{span}
+%\DeclareMathOperator{\null}{null}
+
+% Shortcuts for common expressions
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+% Derivatives and integrals
+\newcommand{\dd}[1]{\,\mathrm{d}#1}
+\newcommand{\dv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+
+% ========================
+% THEOREM ENVIRONMENTS
+% ========================
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{exercise}{Exercise}[section]
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{assumption}{Assumptio}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\newtheorem{note}{Note}[section]
+
+\newcommand{\supp}{\mathrm{supp}}
+\newcommand{\op}{\mathrm{op}}
+
+\newcommand{\mX}{\mathcal X}
+\newcommand{\mD}{\mathcal D}
+\newcommand{\bP}{\mathbb P}
+\newcommand{\lp}{L^2(\bP)}
+\newcommand{\lx}{L^2(\mX)}
+\newcommand{\ltwo}{L^2(\mX)}
+\newcommand{\ud}{\mathrm d}
+\newcommand{\mH}{\mathcal H}
+\newcommand{\mA}{\mathcal A}
+
+\newcommand{\diag}{\mathrm{diag}}
+
+% ========================
+% COLORED BOXES
+% ========================
+
+% Important theorem box
+\newtcolorbox{importantbox}{
+	colback=blue!5!white,
+	colframe=blue!75!black,
+	title=Important
+}
+
+% Warning/Note box
+\newtcolorbox{notebox}{
+	colback=yellow!10!white,
+	colframe=orange!75!black,
+	title=Note
+}
+
+% Example box
+\newtcolorbox{examplebox}{
+	colback=green!5!white,
+	colframe=green!75!black,
+	title=Example
+}
+
+% ========================
+% DOCUMENT SETUP
+% ========================
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\thepage}
+\lhead{\leftmark}
+
+% Title formatting
+\title{Functional Bandit Notes}
+\author{Your Name}
+\date{\today}
+
+% Hyperlink setup
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+	citecolor=red
+}
+
+\begin{document}
+
+The main purpose of this document is to give a technical summary of existing approaches towards (offline) functional regression,
+and remark on their strengths/weakness. When appropriate, I will also remark on possibilities to bandit problems (mostly confidence intervals).
+
+Let $\mX$ be a compact Euclidean set and $\mD=L^2(\mX)$ be the set of all square integrable functions on $\mX$.
+Let $\mathbb P$ be the distribution on $\mD$. The model is 
+$$
+y_i = \langle f_i, \beta_0\rangle + \varepsilon_i
+$$
+where $\{\varepsilon_i\}_{i=1}^n$ are centered, exogenous sub-Gaussian random variables, $\beta_0\in\mathcal F\subseteq \mD$ is an unknown regression model and $f_1,\cdots,f_N\overset{i.i.d.}{\sim}\mathbb P$.
+The inner product is taken with respect to the Lesbesgue measure on $\mX$:
+$$
+\langle f_i, \beta_0\rangle := \int_{\mX} f_i(u)\beta_0(u)\ud u.
+$$
+Sometimes, we will place additional assumptions on $\mathcal F$, or restrict the support of $\bP$.
+Errors are measured in 
+$$
+\|\hat \beta_n-\beta_0\|_{\lp}^2 := \int_{\mD} \langle f, \hat \beta_n-\beta_0\rangle^2\ud\bP(f).
+$$
+
+Let $K$ be the RKHS and recall the notation that $\tilde f = L_{K^{1/2}}f$, $\tilde\beta_0=L_{K^{-1/2}}\beta_0$, such that $\|\tilde\beta_0\|_2 < +\infty$.
+Let $T=\mathbb E[\tilde f\otimes \tilde f]$ be the population covariance operator, which is decomposed as $T=\sum_{j=1}^{\infty}s_j\psi_j\otimes\psi_j$ for an orthonormal basis $\{\psi_j\}_{j=1}^{\infty}$ of $L_2(\mX)$,
+and $s_j\asymp j^{-2r}$.
+
+\subsection{The anisotropic KRR approach}
+
+Given observations $\{f_i,y_i\}_{i=1}^n$, let 
+$$
+T_n := \frac{1}{n}\sum_{i=1}^n \tilde f_i\otimes\tilde f_i
+$$
+be the sample covariance operator, where $\tilde f_i = L_{K^{1/2}}f_i$. By the spectral theorem, there exist orthonormal (w.r.t.~$L^2(\mX)$) $\{\hat\psi_j\}_{j=1}^n$ and $\hat s_1\geq\cdots\hat s_n\geq 0$ such that
+$$
+T_n = \sum_{j=1}^n \hat s_j\hat\psi_j\otimes\hat\psi_j.
+$$
+Note that $T_n$ can only have at most $n$ non-zero eigenvalues.
+
+Given a function $f$, let $\hat\alpha_j := \langle \tilde f, \hat\psi_j\rangle=\langle L_{K^{1/2}}f,\hat\psi_j\rangle$. We then use the following anisotropic KRR estimator
+$$
+\hat\beta = \left(T_n + \Lambda_n(f)\right)^{-1}\cdot \frac{1}{n}\sum_{i=1}^n y_i L_{K^{1/2}}f_i,
+$$
+where
+$$
+\Lambda_n(f) = \sum_{j=1}^n\lambda_j(f)\hat\psi_j\otimes\hat\psi_j;\;\;\;\;\;\;\lambda_j(f) = \left\{\begin{array}{ll} \hat s_j\sqrt{\lambda_0}/|\hat\alpha_j|,& j\leq J_1;\\ +\infty,& j>J_1,\end{array}\right.
+$$
+where $J_1\leq n$ is a cut-off threshold to be determined later.
+{\color{red}Note that this is a truncation + KRR approach.}
+For notational convenience, we will drop the dependency on $f$ whenever there is no ambiguity. An estimate of $\langle f,\beta_0\rangle$ is the obtained as $\langle L_{K^{1/2}} f, \hat\beta\rangle$.
+
+\subsection{Analysis of bias}
+
+Recall the definition that $\tilde\beta_0=L_{K^{-1/2}}\beta_0$. Let 
+$$
+\bar\beta := \mathbb E[\hat\beta] = (T_n+\Lambda_n)^{-1}\frac{1}{n}\sum_{i=1}^n \langle\tilde f_i,\tilde\beta_0\rangle \tilde f_i = (T_n+\Lambda_n)^{-1}T_n\tilde\beta_0.
+$$
+Let $\hat\theta_j := \langle\tilde\beta_0, \hat\psi_j\rangle$. Then
+$$
+\tilde\beta_0-\bar\beta = (T_n+\Lambda_n)^{-1}\Lambda_n \tilde\beta_0 = \sum_{j=1}^n \frac{\lambda_j\hat\theta_j}{\hat s_j+\lambda_j}\hat\psi_j.
+$$
+Subsequently, the bias is upper bounded by
+$$
+\big|\langle \tilde f,\tilde\beta_0-\bar\beta\rangle\big| = \left|\sum_{j=1}^n\frac{\lambda_j\hat\theta_j\hat\alpha_j}{\hat s_j+\lambda_j}\right|.
+$$
+
+From the definition of $\lambda_j$, it holds for every $j\in[n]$ that
+$$
+\frac{\lambda_j|\hat\theta_j\hat\alpha_j|}{\hat s_j+\lambda_j} \leq \left\{\begin{array}{ll} \sqrt{\lambda_0}|\hat\theta_j|,& j\leq J_1;\\ |\hat\theta_j\hat\alpha_j|,& j>J_1.\end{array}\right.
+$$
+Let $J_1 := n^{4r/(4r^2-1)} = J_0^{2r/(2r-1)}$ where $J_0=n^{1/(2r+1)}=\lambda_0^{-1/(2r)}$. We use the following approach to upper bound the RHS of the above inequality:
+\begin{align*}
+\left|\sum_{j=1}^n\frac{\lambda_j\hat\theta_j\hat\alpha_j}{\hat s_j+\lambda_j}\right|
+&\leq \sqrt{\lambda_0}\left(\sum_{j=1}^{J_1}|\hat\theta_j|\right) + \sqrt{\sum_{j=J_1+1}^n \hat\theta_j^2}\sqrt{\sum_{j=J_1+1}^n|\hat\alpha_j|^2}\\
+&\leq \sqrt{\lambda_0}\|\hat\theta_{J_1}\|_1 + \lambda_0\|\hat\theta\|_2\|\hat\alpha_{(J_1+1):n}\|_2.
+\end{align*}
+It should also be noted that, if $\sum_{j=J_1+1}^n \hat s_j\lesssim \sum_{j=J_1+1}^n s_j$, then
+$$
+\mathbb E[\|\hat\alpha_{(J_1+1):n}\|_2^2] \lesssim \int_{J_1}^{\infty} t^{-2r}\ud t \lesssim J_1^{1-2r} = J_0^{-2r} = \lambda_0.
+$$
+
+\subsection{Analysis of perturbation}
+
+We impose the following two main assumptions, on ``population'' coefficients $\theta_j := \langle \tilde\beta_0,\psi_j\rangle$:
+$$
+\sum_{j=1}^{\infty}\theta_j^2 < +\infty,\;\;\;\;\;\;\sum_{j=1}^{\infty}|\theta_j| < +\infty.
+$$
+The first condition is standard which simply means $\|\tilde\beta_0\|_2<+\infty$. This condition is also basis-invariance so applicable to $\{\hat\theta_j\}_j$ too. The main issue is the second assumption, which is \emph{not} basis invariant.
+
+We state the following result, which controls the behaviors of $\{\hat\theta_j\}$ and $\{\hat s_j\}$.
+\begin{lemma}
+Suppose the following additional conditions hold for every $j\in[n]$:
+\begin{enumerate}
+\item $s_j\asymp j^{-2r}$ and $s_j-s_{j+1}\gtrsim j^{-2r-1}$;
+\item The random variable $\hat\alpha_j = \langle \tilde f,\hat\psi_j\rangle$, with randomness on $\tilde f$ only, is sub-Gaussian with variance proxy $s_j$.
+\end{enumerate}
+Then, if $r>1+\sqrt{5}/2=2.118=:r_0$, the following holds with probability $1-o(1)$:
+\begin{enumerate}
+\item $\sum_{j=1}^{J_1}|\hat\theta_j| \leq \sum_{j=1}^{J_1}|\theta_j| + o(1)$;
+\item $\hat s_j\gtrsim j^{-2r}$ for all $1\leq j\leq J_1$;
+\item $\sum_{j=J_1+1}^n \hat s_j \lesssim J_1^{-2r+1}$.
+\end{enumerate}
+\label{lem:hat-psi}
+\end{lemma}
+
+\begin{remark}
+The sub-Gaussianity assumption and the spectral gap assumption can be somewhat relaxed, at the cost of a larger value of $s_0$. It should be noted that both assumptions are adopted for fPCA. We do \emph{not} adopt the fPCA assumption of decays on $\{\theta_j\}$, however, because that leads to significant sub-optimality.
+\end{remark}
+
+\begin{proof}[Proof of Lemma \ref{lem:hat-psi}.]
+Express both $T$ and $T_n$ on the first $n$ eigenfunctions $\{\psi_i\}_{i=1}^n$ of $T$. Then $T=\diag(s_1,\cdots,s_n)$ with the standard basis as its eigenvectors, and $T_n$ is a PSD matrix. 
+We will carry out our proof in this $n\times n$ finite matrix field to simplify matters.
+
+We will use the following inequality as the key workhorse of this proof: with probability $1-o(1)$ uniformly for every $i,j\in[n]$, 
+$$
+\big|[T_n]_{ij} - T_{ij}\big| \lesssim \frac{i^{-r}j^{-r}}{\sqrt{n}}.
+$$
+We can potentially tolerate higher-order terms in this inequality, if we want to relax the sub-Gaussianity assumption, but Bernstein with the simple $|T_{ij}|\leq 1$ is \emph{not} enough.
+The rest of the proof are conditioned on the success event that the above holds.
+
+Consider the submatrix of $T_n$ corresponding to $\psi_{J_1+1},\cdots,\psi_n$. The trace formula implies that
+\begin{align*}
+\sum_{j=J_1+1}^{n} \hat s_j &\leq \sum_{j=J_1+1}^n [T_n]_{jj} \lesssim \sum_{j=J_1+1}^n j^{-2r} + O\left(\frac{j^{-2r}}{\sqrt{n}}\right) \lesssim J_1^{-2r+1},
+\end{align*}
+which proves the third property.
+
+Now, let $A$ and $A_n$ be the $J_1\times J_1$ sub-matrices of $T$ and $T_n$ corresponding to the eigenspace spanned by $(\psi_1,\cdots,\psi_{J_1})$.
+We will prove that, for every $j\in[J]$, there exists $w\in\mathbb R^d$ satisfying $\|w\|_2 = o(J_1^{-1})$ such that
+\begin{equation}
+A_n (e_j+w) = s_j(e_j+w).
+\label{eq:eigen-an}
+\end{equation}
+This shows that $\hat s_j=s_j(1+o(J_1^{-1}))$. Because the eigengaps of the first $J_1$ eigenfunctions are larger than $J_1^{-1}$, this ensures that the top-$J_1$ eigenfunctions of $T$ and $T_n$ have the same span $\mathrm{span}(\psi_1,\cdots,\psi_{J_1})$, and furthermore $\|\hat\psi_j-\psi_j\|_2 = o(J_1^{-1})$. This is sufficient to prove the first two properties.
+
+Let $H=A_n-A$ and consider $w_j=0$ which is simply a Gauge choice. Because $Ae_j=s_je_j$, Eq.~(\ref{eq:eigen-an}) implies
+$$
+(A-s_j I+H)w = -He_j.
+$$
+Let $\bar H\in\mathbb R^{(J_1-1)\times (J_1-1)}$ be the submatrix formed by removing the $j$th row and $j$th column of $H$. Let $h\in\mathbb R^{J_1-1}$ be the $j$th column of $H$, removing $H_{jj}$.
+Let $D=\diag(s_1-s_j,\cdots,s_{j-1}-s_j,s_{j+1}-s_j,\cdots,s_{J_1}-s_j)\in\mathbb R^{(J_1-1)\times(J_1-1)}$. Let $\bar w=(w_1,\cdots,w_{j-1},w_{j+1},\cdots,w_n)\in\mathbb R^{J_1-1}$. Then
+$$
+\bar w = -(D+\bar H)^{-1}h = -D^{-1/2}(I+\tilde H)^{-1}D^{-1/2}h,
+$$
+where $\tilde H = D^{-1/2} \bar H D^{-1/2}$. 
+
+For any $i,k\neq j$, we have that
+$$
+\big|\tilde H_{ik}\big| \lesssim \frac{1}{\sqrt{n}} \frac{i^{-r}k^{-r}}{\sqrt{|(s_i-s_j)(s_k-s_j)|}} =: \frac{1}{\sqrt{n}}z_iz_k\;\;\;\;\;\;\text{where}\;\; z_k = \frac{k^{-r}}{\sqrt{|s_k-s_j|}}.
+$$
+In a similar way, $D^{-1/2}h$ can also be upper bounded component-wise as
+$$
+\big|[D^{-1/2}h]_k \big| \lesssim \frac{1}{\sqrt{n}}\frac{j^{-r}k^{-r}}{\sqrt{|s_k-s_j|}} = \frac{j^{-r}}{\sqrt{n}}z.
+$$
+
+Let $C>0$ be a sufficiently large numerical constant (potentially depending on constants in spectrum decay and spectral gaps). Discuss three cases:
+\begin{enumerate}
+\item The case of $k\leq j/C$. In this case $|s_k-s_j|\gtrsim s_k \gtrsim k^{-2r}$, and therefore $|z_k|\lesssim O(1)$.
+\item The case of $k\geq Cj$. In this case $|s_k-s_j|\gtrsim s_j \gtrsim j^{-2r}$, and therefore $|z_k|\lesssim O(j^rk^{-r})$.
+\item The case of $j/C\leq k\leq Cj$. In this case $|s_k-s_j| \gtrsim |k-j| j^{-2r-1}$, and therefore $|z_k|\lesssim O(\sqrt{j/|k-j|})$.
+\end{enumerate}
+Because $\tilde H=zz^\top/\sqrt{n}$, summarizing the above cases we obtain
+\begin{align}
+\|\tilde H\|_\op &\lesssim \frac{1}{\sqrt{n}}\|z\|_2^2 = \frac{1}{n}\sum_{k\neq j}|z_k|^2  \lesssim \frac{1}{\sqrt{n}}\left(j + j^{2r}\int_j^{\infty}t^{-2r}\ud t + j\int_1^{Cj} \frac{\ud t}{t}\right) \lesssim \frac{j\ln (j+1)}{\sqrt{n}}.
+\end{align}
+With $r>1+\sqrt{2}/2=1.207$, we have $J_1=n^{a}$ for some $a<1/2$. Therefore, $\|\tilde H\|_\op = o(1)$.
+{\color{blue}[Remark: utilizing the fact that $\mathbb E[\tilde H_{jk}]=0$ we might get tighter control of $\|\tilde H\|_\op$ with high probability. Highly likely $\sqrt{j/n}$. However, it is going to be harder to bound $\tilde H^\ell$ later since we don't have element-wise non-negativity.]}
+
+We can then do the following Taylor expansion using $(I+\tilde H)^{-1} = \sum_{\ell=0}^{\infty} (-1)^\ell \tilde H^\ell$:
+\begin{align*}
+\|w\|_2 &\leq \sum_{\ell=0}^{\infty} \|D^{-1/2}\tilde H^\ell D^{-1/2}h\|_2 \leq \sum_{\ell=0}^{\infty} \frac{j^{-r}}{\sqrt{n}}\left\|D^{-1/2}\left(\frac{1}{\sqrt{n}}zz^\top\right)^\ell z\right\|_2\\
+&\leq \sum_{\ell=0}^{\infty}\frac{j^{-r}}{\sqrt{n}}\left(\frac{j}{\sqrt{n}}\right)^\ell \|D^{-1/2}z\|_2 \lesssim \frac{j^{-r}}{\sqrt{n}}\|D^{-1/2}z\|_2\\
+&\lesssim \frac{j^{-r}}{\sqrt{n}}\left(\int_1^j \frac{\ud t}{t^{-2r}} + j^{2r}\int_j^{J_1}\frac{t^{-2r}}{j^{-2r}}\ud t + j\cdot \int_1^{Cj}\frac{1}{tj^{-2r-1}}\frac{\ud t}{t}\right)^{1/2}\\
+&\lesssim \frac{j^{-r}}{\sqrt{n}}\left(j^{2r+1} + j^{2r+1} + j^{2r+2}\right)^{1/2} = \frac{j}{\sqrt{n}}.
+\end{align*}
+With $4r^2-8r-1>0$, implied by $r>2+\sqrt{5}/2=2.118$, $j/\sqrt{n}<1/J_1$ and this proves the desired results.
+\end{proof}
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}
