@@ -10,3 +10,5 @@
 *.fls
 .DS_Store
 Icon?
+datasets/
+simulation/
