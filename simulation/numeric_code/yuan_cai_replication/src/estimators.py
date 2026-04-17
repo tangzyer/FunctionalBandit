@@ -337,9 +337,9 @@ def anisotropic_roughness_reg(Z, Y, lam, K):
     eigvals = eigvals[order]
     U = U[:, order]
 
-    # Anisotropic penalty: ν_j = min(λ, √(d_j λ))
+    # Anisotropic penalty: ν_j = √(d_j λ)
     d = np.maximum(eigvals, 0)  # ensure non-negative
-    nu = np.minimum(lam, np.sqrt(d * lam))
+    nu = np.sqrt(d * lam)
 
     # Solve in eigenbasis: γ_j = c_j / (d_j + ν_j)
     c = U.T @ (Z_tilde.T @ Y / n)  # (K,)
@@ -439,8 +439,8 @@ def anisotropic_reg_inference(Z, Y, lam, K, x_new, alpha=0.05):
     d = np.maximum(eigvals[order], 0)
     U = U[:, order]
 
-    # Anisotropic penalty
-    nu = np.minimum(lam, np.sqrt(d * lam))
+    # Anisotropic penalty: ν_j = √(d_j λ)
+    nu = np.sqrt(d * lam)
 
     # Estimation (reuse the same computation as anisotropic_roughness_reg)
     c_est = U.T @ (Z_tilde.T @ Y / n)

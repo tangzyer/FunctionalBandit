@@ -32,14 +32,6 @@ def load_and_compute(npz_path, n_val, target_conf_levels=(0.75, 0.85, 0.95)):
                 J = int(np.sqrt(n_val))
                 df = n_val - J
                 q_two = t_dist.ppf(1 - alpha / 2, df)
-            elif m == 3:
-                J = min(int(n_val ** 0.3), K)
-                df = n_val - J
-                q_two = t_dist.ppf(1 - alpha / 2, df)
-            elif m == 4:
-                J = min(int(n_val ** 0.4), K)
-                df = n_val - J
-                q_two = t_dist.ppf(1 - alpha / 2, df)
             elif m == 5:
                 J = min(int(n_val ** 0.2), K)
                 df = n_val - J
@@ -74,8 +66,8 @@ if __name__ == '__main__':
         r'Aniso (Lepski $\kappa$)',
         r'Iso (Lepski $\kappa$)',
         r'FPCA $\sqrt{n}$',
-        r'Trunc.Aniso $n^{0.3}$',
-        r'Trunc.Aniso $n^{0.4}$',
+        r'Trunc.Aniso $n^{0.3}$ (Lepski $\kappa$)',
+        r'Trunc.Aniso $n^{0.4}$ (Lepski $\kappa$)',
         r'Adapt.Trunc $n^{0.2}$',
     ]
     colors = ['tab:orange', 'tab:green', 'tab:purple', 'tab:blue', 'tab:red',
@@ -132,13 +124,11 @@ if __name__ == '__main__':
                             linewidth=0, elinewidth=1.3, capsize=3, capthick=1,
                             label=label, alpha=0.9)
             if metric == 'coverage':
-                for n_val in n_values:
-                    for ci in range(n_conf):
-                        xp = x_positions[(n_val, ci)]
-                        ax.scatter([xp], [conf_levels[ci]], marker='x',
-                                   color='black', s=60, zorder=10, linewidths=1.5)
-                        all_y_lo.append(conf_levels[ci])
-                        all_y_hi.append(conf_levels[ci])
+                for cl in conf_levels:
+                    ax.axhline(cl, color='black', linewidth=0.8,
+                               linestyle='--', alpha=0.5, zorder=0)
+                    all_y_lo.append(cl)
+                    all_y_hi.append(cl)
             y_lo, y_hi = min(all_y_lo), max(all_y_hi)
             pad = (y_hi - y_lo) * 0.06
             if metric == 'coverage':

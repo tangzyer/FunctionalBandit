@@ -357,7 +357,7 @@ Note that, in general, because the population covariance operator $T$ is unknown
 
 The following assumptions on imposed directly on the structure of $\{\psi_j\}_j$ and $\{s_j\}_j$.
 \begin{enumerate}
-\item[(B1)] There exists numerical constants $r>0$ \pd{$r > 1/2$} and $0<c_s\leq C_s<+\infty$ such that $c_s j^{-2r}\leq s_j\leq C_sj^{-2r}$ for all $j\geq 1$;
+\item[(B1)] There exists numerical constants $r>1/2$ and $0<c_s\leq C_s<+\infty$ such that $c_s j^{-2r}\leq s_j\leq C_sj^{-2r}$ for all $j\geq 1$;
 this also implies that $T$ is invertible;
 \item[(B2)] There exists a numerical constant $C_p<+\infty$ such that for every $f\in L_2(I)$, $\mathbb E[\langle Z,f\rangle^4] \leq C_p(\mathbb E[\langle Z,f\rangle^2])^2$;
 \item[(B3)] There exists numerical constants $\kappa\in[0,1/2)$ and $C_\nu<+\infty$ such that for every $j\geq 1$, $|\langle Z,\psi_j\rangle| \leq C_\nu n^{\kappa}\cdot \sqrt{s_j}$ almost surely.
@@ -1056,6 +1056,19 @@ where
 $$
 \bar\sigma(z) =\sigma_\varepsilon^2\mathbb E[g(z,Z)^2]= \sigma_\varepsilon^2\mathbb E[\langle z, (T+\lambda_n I)^{-1}Z\rangle^2]
 $$
+
+{\color{cyan}
+Let $Z,Z'$ be arbitrary in the support of $P_{\mathcal Z}$ induced by $P_{\mathcal X}$ with the understanding that $Z=L_{K^{1/2}}X$,
+and for every $j\geq 1$ define $\alpha_j := \langle Z,\psi_j\rangle$, $\alpha_j':=\langle Z',\psi_j\rangle$,
+where $\{\psi_j\}_{j=1}^{\infty}$ is the orthonormal basis of the population covariance operator $T=\mathbb E[Z\otimes Z]$.
+Thanks to Assumption (B3), it holds almost surely that $|\alpha_j|,|\alpha_j'|\leq C_\nu n^{\kappa}\sqrt{s_j}$ for every $j\geq 1$.
+Subsequently, with probability 1
+$$
+\big|\langle Z,(T+\lambda_n)^{-1}Z\rangle\big| \leq C_\nu n^{2\kappa}\sum_{j=1}^{\infty} \frac{s_j}{s_j+\lambda_n}\lesssim n^{2\kappa}\times \int_1^{\infty}\frac{ j^{-2r}\ud j}{j^{-2r}+\lambda_n} \lesssim n^{2\kappa+1/(2r)+\delta}
+$$
+for any $\delta>0$, where the last inequality holds because $\lambda_n n\to 0$ and $\lambda_n n^{1+\delta}\to \infty$ for any $\delta>0$.
+}
+
 \pd{This is a triangular array CLT because of $\lambda_n$, hence Lyapunov/Lindeberg verification is needed.}
 {\color{magenta}YW: this isn't easy. We need, for almost every $z$,
 $$
