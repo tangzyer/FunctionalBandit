@@ -29,10 +29,11 @@ def lepski_select(yhat_grid, se_grid, kappa):
     such that for ALL i < j:
         |yhat(lambda_j) - yhat(lambda_i)| <= kappa * SE(lambda_i)
 
-    Uses running bounds: O(n_grid * n_test).
+    Clipped to interior [1, n_grid-2] to avoid selecting boundary values.
     """
     n_grid, n_test = yhat_grid.shape
-    best_idx = np.zeros(n_test, dtype=int)
+    # default to interior lower bound
+    best_idx = np.ones(n_test, dtype=int)
     lower = yhat_grid[0] - kappa * se_grid[0]
     upper = yhat_grid[0] + kappa * se_grid[0]
     for j in range(1, n_grid):
@@ -40,6 +41,8 @@ def lepski_select(yhat_grid, se_grid, kappa):
         best_idx = np.where(valid, j, best_idx)
         lower = np.maximum(lower, yhat_grid[j] - kappa * se_grid[j])
         upper = np.minimum(upper, yhat_grid[j] + kappa * se_grid[j])
+    # cap away from upper boundary
+    best_idx = np.minimum(best_idx, n_grid - 2)
     return best_idx
 
 
@@ -48,7 +51,7 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
     sigma = 0.5
     n_datasets = 1000
     n_test = 500
-    n_grid = n_val // 2
+    n_grid = 2 * n_val
     lam_grid = np.logspace(-3 * np.log10(n_val), -1 * np.log10(n_val), n_grid)
 
     # mu_n grid for adaptive method: n^{-4} to 1, L=100
@@ -121,6 +124,30 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
         beta_power = 4
     elif case_name == 'haar_r2_3_sparse2':
         cov_spec = figure3_bottom_specs(K, r2_values=[3.0])[0]
+        _bvec = np.zeros(K)
+        _bvec[0], _bvec[1] = 4.0, -2.0
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_vec=_bvec)
+        custom_beta = _bvec
+    elif case_name == 'aligned_r2_1p5_beta4':
+        cov_spec = figure2_specs(K, r2_values=[1.5])[0]
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_power=4)
+        beta_power = 4
+    elif case_name == 'aligned_r2_1p5_sparse2':
+        cov_spec = figure2_specs(K, r2_values=[1.5])[0]
+        _bvec = np.zeros(K)
+        _bvec[0], _bvec[1] = 4.0, -2.0
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_vec=_bvec)
+        custom_beta = _bvec
+    elif case_name == 'haar_r2_1p5_beta4':
+        cov_spec = figure3_bottom_specs(K, r2_values=[1.5])[0]
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_power=4)
+        beta_power = 4
+    elif case_name == 'haar_r2_1p5_sparse2':
+        cov_spec = figure3_bottom_specs(K, r2_values=[1.5])[0]
         _bvec = np.zeros(K)
         _bvec[0], _bvec[1] = 4.0, -2.0
         gen_func = lambda n, rng: generate_data_haar_basis(
@@ -209,7 +236,7 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
         lam_arr = lam_grid[:, None]     # (n_grid, 1)
         d_arr = d_eig[None, :]          # (1, K)
 
-        nu_all = np.minimum(lam_arr, np.sqrt(d_arr * lam_arr))   # (n_grid, K)
+        nu_all = np.sqrt(d_arr * lam_arr)  # ν_j = √(d_j λ)
         den_all = d_arr + nu_all                                  # (n_grid, K)
         gamma_all = np.where(den_all > 1e-15,
                              c_est[None, :] / den_all, 0.0)      # (n_grid, K)
@@ -283,23 +310,31 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
         all_se[2, ds] = np.sqrt(sig2_f * np.sum(wWi * w_new, axis=1))
 
         # === Truncated Aniso (m=3: J=n^0.3, m=4: J=n^0.4) ===
+        # ν_j = √(d_j λ) for j ≤ J, γ_j = 0 for j > J. Lepski selects λ per test pt.
         trunc_sig2 = {}  # cache sigma^2 for reuse by adaptive
         for mi_off, power in enumerate([0.3, 0.4]):
             J_tr = min(int(n_val ** power), K)
-            gamma_tr = np.zeros(K)
-            valid_tr = d_eig[:J_tr] > 1e-15
-            gamma_tr[:J_tr] = np.where(valid_tr,
-                                       c_est[:J_tr] / d_eig[:J_tr], 0.0)
-            yhat_tr = c_new @ gamma_tr
-            b_tr = (U_T @ gamma_tr) * sqrt_mu
-            resid_tr = Y - Z @ b_tr
-            sig2_tr = np.sum(resid_tr ** 2) / max(n - J_tr, 1)
-            trunc_sig2[mi_off] = sig2_tr
-            wv_tr = np.zeros(K)
-            wv_tr[:J_tr] = np.where(valid_tr, 1.0 / d_eig[:J_tr], 0.0)
-            se_tr = np.sqrt(sig2_tr / n * (c_new_sq @ wv_tr))
-            all_yhat[3 + mi_off, ds] = yhat_tr
-            all_se[3 + mi_off, ds] = se_tr
+
+            # Mask: keep only top-J eigendirections
+            mask_J = np.zeros(K)
+            mask_J[:J_tr] = 1.0
+
+            # Aniso regularization on the kept directions
+            gamma_all_tr = gamma_all * mask_J[None, :]           # (n_grid, K)
+            yhat_tr_all = gamma_all_tr @ c_new.T                  # (n_grid, n_test)
+
+            b_all_tr = (U_T @ gamma_all_tr.T).T * sqrt_mu[None, :]  # (n_grid, K)
+            resid_tr_all = Y[:, None] - Z @ b_all_tr.T              # (n, n_grid)
+            sig2_tr_all = np.sum(resid_tr_all ** 2, axis=0) / n     # (n_grid,)
+
+            wv_tr_all = wv_all * mask_J[None, :]                   # (n_grid, K)
+            se_tr_all = np.sqrt((sig2_tr_all[:, None] / n) *
+                                (wv_tr_all @ c_new_sq.T))          # (n_grid, n_test)
+
+            best_idx_tr = lepski_select(yhat_tr_all, se_tr_all, kappa_aniso)
+            all_yhat[3 + mi_off, ds] = yhat_tr_all[best_idx_tr, idx_range]
+            all_se[3 + mi_off, ds] = se_tr_all[best_idx_tr, idx_range]
+            trunc_sig2[mi_off] = sig2_tr_all[best_idx_tr]
 
         # === Adaptive Truncated Aniso (m=5: J=n^0.2) ===
         # Section 7 of anisotropic_v2.pdf, Eq. (17).
