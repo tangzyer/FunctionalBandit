@@ -92,54 +92,113 @@ if __name__ == '__main__':
             cov, wid = load_and_compute(path, n_val)
             all_data[case_name][n_val] = (cov, wid)
 
+    from matplotlib.gridspec import GridSpec
     n_cols = len(case_info)
-    fig, axes = plt.subplots(2, n_cols, figsize=(18, 9))
+    fig = plt.figure(figsize=(18, 10))
+    outer = GridSpec(2, n_cols, figure=fig,
+                     height_ratios=[3.0, 4.0], hspace=0.28)
+    # Per-column: split only if FPCA width >> others (ratio > 3 at largest n)
+    needs_split = []
+    for case_name, _ in case_info:
+        fpca_w = max(all_data[case_name][n][1][2].mean() for n in n_values)
+        other_w = max(all_data[case_name][n][1][m].mean()
+                      for n in n_values for m in [0, 1, 3, 4, 5])
+        needs_split.append(fpca_w > 10 * other_w)
+    axes_cov = [fig.add_subplot(outer[0, c]) for c in range(n_cols)]
+    axes_wt, axes_wb = [], []
+    for c in range(n_cols):
+        if needs_split[c]:
+            inner = outer[1, c].subgridspec(2, 1, hspace=0.06,
+                                            height_ratios=[1.2, 3.0])
+            axes_wt.append(fig.add_subplot(inner[0]))
+            axes_wb.append(fig.add_subplot(inner[1]))
+        else:
+            axes_wt.append(None)
+            axes_wb.append(fig.add_subplot(outer[1, c]))
+    axes_cov = np.array([axes_cov])
+
     for col, (case_name, case_label) in enumerate(case_info):
-        for row, (metric, row_title, ylabel) in enumerate([
-            ('coverage', 'Two-sided Coverage', 'Actual Coverage'),
-            ('width', 'Two-sided CI Width', 'Mean CI Width'),
-        ]):
-            ax = axes[row, col]
-            all_y_lo, all_y_hi = [], []
-            for mi in range(n_m):
-                x_vals, y_means, y_stds = [], [], []
-                for n_val in n_values:
-                    cov, wid = all_data[case_name][n_val]
-                    pt = cov if metric == 'coverage' else wid
-                    for ci in range(n_conf):
-                        xp = x_positions[(n_val, ci)] + jitter[mi]
-                        ym = pt[mi, ci, :].mean()
-                        ys = pt[mi, ci, :].std()
-                        x_vals.append(xp)
-                        y_means.append(ym)
-                        y_stds.append(ys)
-                        all_y_lo.append(ym - ys)
-                        all_y_hi.append(ym + ys)
-                if col == 0 and row == 0:
-                    label = method_names[mi]
-                else:
-                    label = None
-                ax.errorbar(x_vals, y_means, yerr=y_stds,
+        ax_cov = axes_cov[0, col]; ax_wt = axes_wt[col]; ax_wb = axes_wb[col]
+        split_here = needs_split[col]
+        cov_lo, cov_hi = [], []
+        wt_lo, wt_hi = [], []   # FPCA width bounds (top axis)
+        wb_lo, wb_hi = [], []   # non-FPCA width bounds (bottom axis)
+
+        for mi in range(n_m):
+            x_vals = []; ym_c = []; ys_c = []; ym_w = []; ys_w = []
+            for n_val in n_values:
+                cov, wid = all_data[case_name][n_val]
+                for ci in range(n_conf):
+                    xp = x_positions[(n_val, ci)] + jitter[mi]
+                    mc, sc = cov[mi, ci, :].mean(), cov[mi, ci, :].std()
+                    mw, sw = wid[mi, ci, :].mean(), wid[mi, ci, :].std()
+                    x_vals.append(xp)
+                    ym_c.append(mc); ys_c.append(sc)
+                    ym_w.append(mw); ys_w.append(sw)
+                    cov_lo.append(mc - sc); cov_hi.append(mc + sc)
+                    if mi == 2:
+                        wt_lo.append(mw - sw); wt_hi.append(mw + sw)
+                    else:
+                        wb_lo.append(mw - sw); wb_hi.append(mw + sw)
+            label = method_names[mi] if col == 0 else None
+            ax_cov.errorbar(x_vals, ym_c, yerr=ys_c,
                             color=colors[mi], marker=markers[mi], markersize=6,
                             linewidth=0, elinewidth=1.3, capsize=3, capthick=1,
                             label=label, alpha=0.9)
-            if metric == 'coverage':
-                for cl in conf_levels:
-                    ax.axhline(cl, color='black', linewidth=0.8,
-                               linestyle='--', alpha=0.5, zorder=0)
-                    all_y_lo.append(cl)
-                    all_y_hi.append(cl)
-            y_lo, y_hi = min(all_y_lo), max(all_y_hi)
-            pad = (y_hi - y_lo) * 0.06
-            if metric == 'coverage':
-                ax.set_ylim(max(0, y_lo - pad), min(1.02, y_hi + pad))
+            # When split: FPCA only on upper axis, all others only on lower.
+            # When not split: all methods on the single (lower) axis.
+            if split_here:
+                target_ax = ax_wt if mi == 2 else ax_wb
             else:
-                ax.set_ylim(max(0, y_lo - pad), y_hi + pad)
-            tick_positions, tick_labels_list = [], []
-            for n_val in n_values:
-                for ci in range(n_conf):
-                    tick_positions.append(x_positions[(n_val, ci)])
-                    tick_labels_list.append(f'{conf_levels[ci]:.0%}')
+                target_ax = ax_wb
+            target_ax.errorbar(x_vals, ym_w, yerr=ys_w,
+                               color=colors[mi], marker=markers[mi], markersize=6,
+                               linewidth=0, elinewidth=1.3, capsize=3, capthick=1,
+                               alpha=0.9)
+
+        for cl in conf_levels:
+            ax_cov.axhline(cl, color='black', linewidth=0.8, linestyle='--',
+                           alpha=0.5, zorder=0)
+            cov_lo.append(cl); cov_hi.append(cl)
+
+        # Coverage y-lim
+        y_lo, y_hi = min(cov_lo), max(cov_hi); pad = (y_hi - y_lo) * 0.06
+        ax_cov.set_ylim(max(0, y_lo - pad), min(1.02, y_hi + pad))
+        # Width top (FPCA) only if splitting
+        if split_here and wt_lo:
+            y_lo, y_hi = min(wt_lo), max(wt_hi)
+            pad = (y_hi - y_lo) * 0.1 if y_hi > y_lo else max(1.0, 0.05 * y_hi)
+            ax_wt.set_ylim(max(0, y_lo - pad), y_hi + pad)
+        # Width bottom: non-FPCA when split; all methods otherwise
+        if split_here:
+            bounds_lo, bounds_hi = wb_lo, wb_hi
+        else:
+            bounds_lo = wb_lo + wt_lo
+            bounds_hi = wb_hi + wt_hi
+        y_lo, y_hi = min(bounds_lo), max(bounds_hi)
+        pad = (y_hi - y_lo) * 0.1 if y_hi > y_lo else max(0.05, 0.1 * y_hi)
+        ax_wb.set_ylim(max(0, y_lo - pad), y_hi + pad)
+
+        # Break-axis styling only when split
+        if split_here:
+            ax_wt.spines['bottom'].set_visible(False)
+            ax_wb.spines['top'].set_visible(False)
+            ax_wt.tick_params(bottom=False, labelbottom=False)
+            d = 0.012
+            kwargs = dict(transform=ax_wt.transAxes, color='k',
+                          clip_on=False, lw=0.8)
+            ax_wt.plot((-d, +d), (-4*d, +4*d), **kwargs)
+            ax_wt.plot((1-d, 1+d), (-4*d, +4*d), **kwargs)
+            kwargs = dict(transform=ax_wb.transAxes, color='k',
+                          clip_on=False, lw=0.8)
+            ax_wb.plot((-d, +d), (1-4*d, 1+4*d), **kwargs)
+            ax_wb.plot((1-d, 1+d), (1-4*d, 1+4*d), **kwargs)
+
+        tick_positions = [x_positions[(n_val, ci)]
+                          for n_val in n_values for ci in range(n_conf)]
+        tick_labels_list = [f'{conf_levels[ci]:.0%}'
+                            for _ in n_values for ci in range(n_conf)]
+        for ax in (ax_cov, ax_wb):
             ax.set_xticks(tick_positions)
             ax.set_xticklabels(tick_labels_list, fontsize=8)
             for n_val in n_values:
@@ -153,10 +212,23 @@ if __name__ == '__main__':
                         ha='center', fontsize=7, fontweight='bold')
             for sep_x in [4, 8]:
                 ax.axvline(sep_x, color='gray', linewidth=0.5, linestyle=':', alpha=0.5)
-            ax.set_ylabel(ylabel)
-            ax.set_title(f'{row_title} — {case_label}')
+        if split_here:
+            ax_wt.set_xticks(tick_positions)
+            ax_wt.set_xlim(ax_wb.get_xlim())
+            for sep_x in [4, 8]:
+                ax_wt.axvline(sep_x, color='gray', linewidth=0.5,
+                              linestyle=':', alpha=0.5)
 
-    handles, labels = axes[0, 0].get_legend_handles_labels()
+        ax_cov.set_ylabel('Actual Coverage')
+        ax_wb.set_ylabel('Mean CI Width')
+        ax_cov.set_title(f'Two-sided Coverage — {case_label}')
+        if split_here:
+            ax_wt.set_ylabel('FPCA', fontsize=9)
+            ax_wt.set_title(f'Two-sided CI Width — {case_label}', fontsize=10)
+        else:
+            ax_wb.set_title(f'Two-sided CI Width — {case_label}', fontsize=10)
+
+    handles, labels = axes_cov[0, 0].get_legend_handles_labels()
     fig.legend(handles, labels, loc='lower center', ncol=3, fontsize=9,
                bbox_to_anchor=(0.5, -0.03))
     fig.suptitle(rf'Sparse $\beta=(4,-2,0,\ldots)$ (C1 satisfied), $J=n^q$',

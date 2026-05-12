@@ -46,10 +46,11 @@ def lepski_select(yhat_grid, se_grid, kappa):
     return best_idx
 
 
-def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
+def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05,
+        test_func_kind='bm'):
     K = 200
     sigma = 0.5
-    n_datasets = 1000
+    n_datasets = 500
     n_test = 500
     n_grid = 2 * n_val
     lam_grid = np.logspace(-3 * np.log10(n_val), -1 * np.log10(n_val), n_grid)
@@ -63,7 +64,7 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
         gen_func = lambda n, rng: generate_data_cosine_basis(
             n, cov_spec, K, sigma=sigma, rng=rng)
     elif case_name == 'shifted':
-        cov_spec = figure3_top_specs(K, k0_values=[50])[0]
+        cov_spec = figure3_top_specs(K, k0_values=[25])[0]
         gen_func = lambda n, rng: generate_data_cosine_basis(
             n, cov_spec, K, sigma=sigma, rng=rng)
     elif case_name == 'aligned_r2_1p5':
@@ -109,6 +110,26 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
         cov_spec = figure3_bottom_specs(K, r2_values=[2.0])[0]
         gen_func = lambda n, rng: generate_data_haar_basis(
             n, cov_spec, K, M=K, sigma=sigma, rng=rng)
+    elif case_name == 'haar_r2_2_beta4':
+        cov_spec = figure3_bottom_specs(K, r2_values=[2.0])[0]
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_power=4)
+        beta_power = 4
+    elif case_name == 'aligned_r2_2_beta3p5':
+        cov_spec = figure2_specs(K, r2_values=[2.0])[0]
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_power=3.5)
+        beta_power = 3.5
+    elif case_name == 'haar_r2_2_beta3p5':
+        cov_spec = figure3_bottom_specs(K, r2_values=[2.0])[0]
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_power=3.5)
+        beta_power = 3.5
+    elif case_name == 'shifted_beta3p5':
+        cov_spec = figure3_top_specs(K, k0_values=[25])[0]
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_power=3.5)
+        beta_power = 3.5
     elif case_name == 'haar_r2_1p5':
         cov_spec = figure3_bottom_specs(K, r2_values=[1.5])[0]
         gen_func = lambda n, rng: generate_data_haar_basis(
@@ -154,17 +175,111 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
             n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_vec=_bvec)
         custom_beta = _bvec
     elif case_name == 'shifted_beta4':
-        cov_spec = figure3_top_specs(K, k0_values=[50])[0]
+        cov_spec = figure3_top_specs(K, k0_values=[25])[0]
         gen_func = lambda n, rng: generate_data_cosine_basis(
             n, cov_spec, K, sigma=sigma, rng=rng, beta_power=4)
         beta_power = 4
     elif case_name == 'shifted_sparse2':
-        cov_spec = figure3_top_specs(K, k0_values=[50])[0]
+        cov_spec = figure3_top_specs(K, k0_values=[25])[0]
         _bvec = np.zeros(K)
         _bvec[0], _bvec[1] = 4.0, -2.0
         gen_func = lambda n, rng: generate_data_cosine_basis(
             n, cov_spec, K, sigma=sigma, rng=rng, beta_vec=_bvec)
         custom_beta = _bvec
+    # --- r2 = 0.5 (rough covariance, stress-test below 1.5) ---
+    elif case_name == 'aligned_r2_0p5':
+        cov_spec = figure2_specs(K, r2_values=[0.5])[0]
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng)
+    elif case_name == 'aligned_r2_0p5_beta4':
+        cov_spec = figure2_specs(K, r2_values=[0.5])[0]
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_power=4)
+        beta_power = 4
+    elif case_name == 'aligned_r2_0p5_sparse2':
+        cov_spec = figure2_specs(K, r2_values=[0.5])[0]
+        _bvec = np.zeros(K)
+        _bvec[0], _bvec[1] = 4.0, -2.0
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_vec=_bvec)
+        custom_beta = _bvec
+    elif case_name == 'haar_r2_0p5':
+        cov_spec = figure3_bottom_specs(K, r2_values=[0.5])[0]
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng)
+    elif case_name == 'haar_r2_0p5_beta4':
+        cov_spec = figure3_bottom_specs(K, r2_values=[0.5])[0]
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_power=4)
+        beta_power = 4
+    elif case_name == 'haar_r2_0p5_sparse2':
+        cov_spec = figure3_bottom_specs(K, r2_values=[0.5])[0]
+        _bvec = np.zeros(K)
+        _bvec[0], _bvec[1] = 4.0, -2.0
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_vec=_bvec)
+        custom_beta = _bvec
+    # --- r2=1, default beta=k^{-2} ---
+    elif case_name == 'aligned_r2_1':
+        cov_spec = figure2_specs(K, r2_values=[1.0])[0]
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng)
+    elif case_name == 'haar_r2_1':
+        cov_spec = figure3_bottom_specs(K, r2_values=[1.0])[0]
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng)
+    # --- r2=1, beta4 / sparse2 (D1 holds) for Fig 1 ---
+    elif case_name == 'aligned_r2_1_beta4':
+        cov_spec = figure2_specs(K, r2_values=[1.0])[0]
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_power=4)
+        beta_power = 4
+    elif case_name == 'haar_r2_1_beta4':
+        cov_spec = figure3_bottom_specs(K, r2_values=[1.0])[0]
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_power=4)
+        beta_power = 4
+    elif case_name == 'aligned_r2_1_sparse2':
+        cov_spec = figure2_specs(K, r2_values=[1.0])[0]
+        _bvec = np.zeros(K)
+        _bvec[0], _bvec[1] = 4.0, -2.0
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_vec=_bvec)
+        custom_beta = _bvec
+    elif case_name == 'haar_r2_1_sparse2':
+        cov_spec = figure3_bottom_specs(K, r2_values=[1.0])[0]
+        _bvec = np.zeros(K)
+        _bvec[0], _bvec[1] = 4.0, -2.0
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_vec=_bvec)
+        custom_beta = _bvec
+    # --- b_k ∝ k^{-11/4}, r2=1: "(A2) holds, (D1) fails" regime ---
+    elif case_name == 'aligned_r2_1_beta2p75':
+        cov_spec = figure2_specs(K, r2_values=[1.0])[0]
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_power=2.75)
+        beta_power = 2.75
+    elif case_name == 'haar_r2_1_beta2p75':
+        cov_spec = figure3_bottom_specs(K, r2_values=[1.0])[0]
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_power=2.75)
+        beta_power = 2.75
+    # --- b_k ∝ k^{-11/4}, r2=0.5: rougher covariance, Adapt.Trunc on boundary ---
+    elif case_name == 'aligned_r2_0p5_beta2p75':
+        cov_spec = figure2_specs(K, r2_values=[0.5])[0]
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_power=2.75)
+        beta_power = 2.75
+    elif case_name == 'haar_r2_0p5_beta2p75':
+        cov_spec = figure3_bottom_specs(K, r2_values=[0.5])[0]
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_power=2.75)
+        beta_power = 2.75
+    elif case_name == 'shifted_beta2p75':
+        cov_spec = figure3_top_specs(K, k0_values=[25])[0]
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_power=2.75)
+        beta_power = 2.75
     else:
         raise ValueError(f'Unknown case: {case_name}')
 
@@ -179,15 +294,21 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
     mu_k = 2.0 / (ks * np.pi) ** 4
     sqrt_mu = np.sqrt(mu_k)
 
-    # BM test functions
+    # Test functions: either BM (default) or drawn from same input distribution
     rng_test = np.random.default_rng(999)
-    n_grid_pts = 200
-    t_grid = np.linspace(0, 1, n_grid_pts + 1)[1:]
-    dt = 1.0 / n_grid_pts
-    dW = rng_test.normal(size=(n_test, n_grid_pts)) * np.sqrt(dt)
-    bm_paths = np.cumsum(dW, axis=1)
-    phi_grid = np.sqrt(2) * np.cos(np.outer(ks, np.pi * t_grid))
-    x_test = bm_paths @ phi_grid.T * dt
+    if test_func_kind == 'bm':
+        n_grid_pts = 200
+        t_grid = np.linspace(0, 1, n_grid_pts + 1)[1:]
+        dt = 1.0 / n_grid_pts
+        dW = rng_test.normal(size=(n_test, n_grid_pts)) * np.sqrt(dt)
+        bm_paths = np.cumsum(dW, axis=1)
+        phi_grid = np.sqrt(2) * np.cos(np.outer(ks, np.pi * t_grid))
+        x_test = bm_paths @ phi_grid.T * dt
+    elif test_func_kind == 'input':
+        # Draw test x from same distribution as training inputs.
+        x_test, _, _, _ = gen_func(n_test, rng_test)
+    else:
+        raise ValueError(f'Unknown test_func_kind: {test_func_kind}')
     true_vals = x_test @ b_true
     mx_test = x_test * sqrt_mu
 
@@ -197,6 +318,12 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
     kappa_iso = C_iso * log_term
     print(f'  Lepski kappa for n={n_val}: aniso={kappa_aniso:.4f}, iso={kappa_iso:.4f} '
           f'(C_aniso={C_aniso}, C_iso={C_iso})')
+
+    # Undersmoothing: divide λ̂_Lepski by (log n)^2. In log-spaced grid this is a
+    # fixed index shift: log(λ) moves by -log((log n)^2); grid step is 2·log(n)/n_grid.
+    logn2 = np.log(n_val) ** 2
+    us_shift = int(round(-n_grid * np.log(logn2) / (2 * np.log(n_val))))
+    print(f'  undersmoothing by (log n)^2={logn2:.2f}  idx shift={us_shift}')
 
     # Methods: 0=Aniso-theory, 1=Iso-theory, 2=FPCA,
     #          3=TruncAniso n^0.3, 4=TruncAniso n^0.4,
@@ -211,7 +338,32 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
     # Pre-compute for vectorized Iso
     T_iso = 1.0 / np.sqrt(D)  # D^{-1/2}, (K,)
 
-    for ds in range(n_datasets):
+    # Checkpoint: resume from partial file if present. Seeds are per-ds
+    # deterministic, so skipping completed datasets is safe.
+    import os as _os
+    _tfx_suf = '' if test_func_kind == 'bm' else f'_{test_func_kind}test'
+    partial_fname = (f'alpha_sweep_{case_name}_n{n_val}_Ca{C_aniso}_Ci{C_iso}'
+                     f'_v13{_tfx_suf}.partial.npz')
+    partial_path = _os.path.join(results_dir, partial_fname)
+    start_ds = 0
+    if _os.path.exists(partial_path):
+        try:
+            _cp = np.load(partial_path)
+            if (_cp['all_yhat'].shape == all_yhat.shape and
+                int(_cp['last_ds']) + 1 < n_datasets):
+                all_yhat[:] = _cp['all_yhat']
+                all_se[:] = _cp['all_se']
+                selected_lam[:] = _cp['selected_lam']
+                start_ds = int(_cp['last_ds']) + 1
+                print(f'  resumed {case_name} n={n_val} from ds={start_ds}',
+                      flush=True)
+        except Exception as _e:
+            print(f'  could not resume partial ({_e}); starting fresh',
+                  flush=True)
+
+    CHECKPOINT_EVERY = 50
+
+    for ds in range(start_ds, n_datasets):
         if ds % 100 == 0:
             print(f'  {case_name} n={n_val}: dataset {ds}/{n_datasets}',
                   flush=True)
@@ -255,12 +407,26 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
         se_aniso = np.sqrt((sig2_aniso[:, None] / n) *
                            (wv_all @ c_new_sq.T))            # (n_grid, n_test)
 
-        # Lepski with hybrid kappa (m=0)
+        # Lepski selects λ from grid; final inference uses λ/log²n recomputed
+        # analytically (NOT via grid index — grid is only for selection).
         idx_range = np.arange(n_test)
         best_idx_at = lepski_select(yhat_aniso, se_aniso, kappa_aniso)
-        all_yhat[0, ds] = yhat_aniso[best_idx_at, idx_range]
-        all_se[0, ds] = se_aniso[best_idx_at, idx_range]
-        selected_lam[0, ds] = lam_grid[best_idx_at]
+        lam_used_at = lam_grid[best_idx_at] / logn2  # (n_test,) per-test-point
+        nu_used_at = np.sqrt(d_eig[None, :] * lam_used_at[:, None])  # (n_test, K)
+        den_used_at = d_eig[None, :] + nu_used_at
+        gamma_used_at = np.where(den_used_at > 1e-15,
+                                 c_est[None, :] / den_used_at, 0.0)
+        yhat_used_at = np.sum(gamma_used_at * c_new, axis=1)  # (n_test,)
+        b_used_at = (U_T @ gamma_used_at.T).T * sqrt_mu[None, :]  # (n_test, K)
+        resid_used_at = Y[:, None] - Z @ b_used_at.T  # (n, n_test)
+        sig2_used_at = np.sum(resid_used_at ** 2, axis=0) / n
+        wv_used_at = np.where(den_used_at > 1e-15,
+                              d_eig[None, :] / den_used_at ** 2, 0.0)
+        se_used_at = np.sqrt(sig2_used_at / n *
+                             np.sum(c_new_sq * wv_used_at, axis=1))
+        all_yhat[0, ds] = yhat_used_at
+        all_se[0, ds] = se_used_at
+        selected_lam[0, ds] = lam_used_at
 
         # === Iso: vectorized via eigendecomposition ===
         B_mat = ZtZ * np.outer(T_iso, T_iso)
@@ -286,11 +452,20 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
         quad_form = inv_diag @ v_test_sq  # (n_grid, n_test)
         se_iso = np.sqrt(sig2_iso[:, None] / n * quad_form)  # (n_grid, n_test)
 
-        # Lepski with hybrid kappa (m=1)
+        # Iso: same fix — recompute analytically at λ/log²n per test point.
         best_idx_it = lepski_select(yhat_iso, se_iso, kappa_iso)
-        all_yhat[1, ds] = yhat_iso[best_idx_it, idx_range]
-        all_se[1, ds] = se_iso[best_idx_it, idx_range]
-        selected_lam[1, ds] = lam_grid[best_idx_it]
+        lam_used_it = lam_grid[best_idx_it] / logn2  # (n_test,)
+        inv_diag_used = 1.0 / (eigvals_B[None, :] + lam_used_it[:, None])
+        coeff_used = c_iso[None, :] * inv_diag_used  # (n_test, K)
+        b_used_iso = (coeff_used @ Q.T) * T_iso[None, :]  # (n_test, K)
+        yhat_used_iso = np.sum(b_used_iso * x_test, axis=1)
+        resid_used_iso = Y[:, None] - Z @ b_used_iso.T  # (n, n_test)
+        sig2_used_iso = np.sum(resid_used_iso ** 2, axis=0) / n
+        quad_used = np.sum(inv_diag_used * v_test_sq.T, axis=1)
+        se_used_iso = np.sqrt(sig2_used_iso / n * quad_used)
+        all_yhat[1, ds] = yhat_used_iso
+        all_se[1, ds] = se_used_iso
+        selected_lam[1, ds] = lam_used_it
 
         # === FPCA (m=2) ===
         S = Z.T @ Z / n
@@ -331,10 +506,26 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
             se_tr_all = np.sqrt((sig2_tr_all[:, None] / n) *
                                 (wv_tr_all @ c_new_sq.T))          # (n_grid, n_test)
 
+            # Recompute at λ/log²n analytically (per test point).
             best_idx_tr = lepski_select(yhat_tr_all, se_tr_all, kappa_aniso)
-            all_yhat[3 + mi_off, ds] = yhat_tr_all[best_idx_tr, idx_range]
-            all_se[3 + mi_off, ds] = se_tr_all[best_idx_tr, idx_range]
-            trunc_sig2[mi_off] = sig2_tr_all[best_idx_tr]
+            lam_used_tr = lam_grid[best_idx_tr] / logn2  # (n_test,)
+            nu_used_tr = np.sqrt(d_eig[None, :] * lam_used_tr[:, None])
+            den_used_tr = d_eig[None, :] + nu_used_tr
+            gamma_used_tr_full = np.where(den_used_tr > 1e-15,
+                                          c_est[None, :] / den_used_tr, 0.0)
+            gamma_used_tr = gamma_used_tr_full * mask_J[None, :]  # (n_test, K)
+            yhat_used_tr = np.sum(gamma_used_tr * c_new, axis=1)
+            b_used_tr = (U_T @ gamma_used_tr.T).T * sqrt_mu[None, :]
+            resid_used_tr = Y[:, None] - Z @ b_used_tr.T
+            sig2_used_tr = np.sum(resid_used_tr ** 2, axis=0) / n
+            wv_used_tr = (np.where(den_used_tr > 1e-15,
+                                    d_eig[None, :] / den_used_tr ** 2, 0.0)
+                          * mask_J[None, :])
+            se_used_tr = np.sqrt(sig2_used_tr / n *
+                                 np.sum(c_new_sq * wv_used_tr, axis=1))
+            all_yhat[3 + mi_off, ds] = yhat_used_tr
+            all_se[3 + mi_off, ds] = se_used_tr
+            trunc_sig2[mi_off] = sig2_used_tr
 
         # === Adaptive Truncated Aniso (m=5: J=n^0.2) ===
         # Section 7 of anisotropic_v2.pdf, Eq. (17).
@@ -425,13 +616,26 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05):
             print(f'    kappa_aniso={kappa_aniso:.4f}, kappa_iso={kappa_iso:.4f}',
                   flush=True)
 
-    fname = f'alpha_sweep_{case_name}_n{n_val}_Ca{C_aniso}_Ci{C_iso}_v13.npz'
+        # Checkpoint every CHECKPOINT_EVERY datasets (and on last iteration).
+        # np.savez auto-appends '.npz' if filename doesn't end with it, so the
+        # tmp path must already include '.npz'.
+        if (ds + 1) % CHECKPOINT_EVERY == 0 or ds + 1 == n_datasets:
+            tmp_path = partial_path + '.tmp.npz'
+            np.savez(tmp_path,
+                     all_yhat=all_yhat, all_se=all_se,
+                     selected_lam=selected_lam, last_ds=ds)
+            _os.replace(tmp_path, partial_path)
+
+    fname = (f'alpha_sweep_{case_name}_n{n_val}_Ca{C_aniso}_Ci{C_iso}'
+             f'_v13{_tfx_suf}.npz')
     np.savez(os.path.join(results_dir, fname),
              all_yhat=all_yhat, all_se=all_se,
              true_vals=true_vals, alphas=alphas,
              kappa_aniso=kappa_aniso, kappa_iso=kappa_iso,
              selected_lam=selected_lam,
              lam_grid=lam_grid)
+    if _os.path.exists(partial_path):
+        _os.remove(partial_path)
     print(f'Saved {fname}')
     print(f'  kappa_aniso={kappa_aniso:.4f}, kappa_iso={kappa_iso:.4f}')
 
