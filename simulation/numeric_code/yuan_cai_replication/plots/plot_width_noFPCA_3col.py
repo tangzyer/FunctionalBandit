@@ -62,13 +62,13 @@ if __name__ == '__main__':
         (
             [('aligned_r2_3_beta4', r'Aligned ($r_2=3$)'),
              ('haar_r2_3_beta4', r'Haar ($r_2=3$)'),
-             ('shifted_beta4', r'Shifted ($k_0=50$)')],
+             ('shifted_beta4', r'Shifted ($k_0=25$)')],
             r'$b_k \sim k^{-4}$'
         ),
         (
             [('aligned_r2_3_sparse2', r'Aligned ($r_2=3$)'),
              ('haar_r2_3_sparse2', r'Haar ($r_2=3$)'),
-             ('shifted_sparse2', r'Shifted ($k_0=50$)')],
+             ('shifted_sparse2', r'Shifted ($k_0=25$)')],
             r'Sparse $\beta=(4,-2,0,\ldots)$'
         ),
     ]

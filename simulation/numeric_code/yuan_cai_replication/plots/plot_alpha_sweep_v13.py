@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     case_info = [
         ('aligned_r2_2', r'Aligned ($r_2=2$)'),
-        ('shifted', r'Shifted $k_0=50$'),
+        ('shifted', r'Shifted $k_0=25$'),
         ('haar_r2_2', r'Haar ($r_2=2$)'),
     ]
     n_values = [1000, 2000, 4000]

@@ -87,6 +87,20 @@ def run(case_name, n_val, results_dir, C_aniso=0.05, C_iso=0.05,
         gen_func = lambda n, rng: generate_data_cosine_basis(
             n, cov_spec, K, sigma=sigma, rng=rng, beta_vec=_bvec)
         custom_beta = _bvec
+    elif case_name == 'aligned_r2_2_sparse2':
+        cov_spec = figure2_specs(K, r2_values=[2.0])[0]
+        _bvec = np.zeros(K)
+        _bvec[0], _bvec[1] = 4.0, -2.0
+        gen_func = lambda n, rng: generate_data_cosine_basis(
+            n, cov_spec, K, sigma=sigma, rng=rng, beta_vec=_bvec)
+        custom_beta = _bvec
+    elif case_name == 'haar_r2_2_sparse2':
+        cov_spec = figure3_bottom_specs(K, r2_values=[2.0])[0]
+        _bvec = np.zeros(K)
+        _bvec[0], _bvec[1] = 4.0, -2.0
+        gen_func = lambda n, rng: generate_data_haar_basis(
+            n, cov_spec, K, M=K, sigma=sigma, rng=rng, beta_vec=_bvec)
+        custom_beta = _bvec
     elif case_name == 'aligned_r2_3_beta4':
         cov_spec = figure2_specs(K, r2_values=[3.0])[0]
         gen_func = lambda n, rng: generate_data_cosine_basis(
