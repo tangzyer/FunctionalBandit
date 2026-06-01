@@ -45,7 +45,8 @@ plt.rcParams.update({
     'ytick.major.width': 1.1,
 })
 
-MARKERSIZE = 11        # >5 in the old version
+MARKERSIZE = 11        # legend markers (kept large for visibility)
+MARKERSIZE_A = 5       # panel (a) point markers: small so CI bars aren't hidden
 ELINEWIDTH = 1.7
 CAPSIZE = 3.5
 
@@ -134,7 +135,7 @@ for i, m in enumerate(methods):
     y = sub.yhat.to_numpy()
     hw = sub.half_width.to_numpy()
     ax_a.errorbar(x, y, yerr=hw,
-                  fmt=markerspec[m], ms=MARKERSIZE,
+                  fmt=markerspec[m], ms=MARKERSIZE_A,
                   linewidth=0, elinewidth=ELINEWIDTH,
                   capsize=CAPSIZE, capthick=1.1,
                   color=palette[m], alpha=0.92)
