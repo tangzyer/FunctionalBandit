@@ -849,14 +849,14 @@ In this section we empirically validate the four pointwise-CI procedures develop
 
 \subsection{Experimental setup}\label{subsec:sim-setup}
 
-\paragraph{Data generating process.}
+\medskip\noindent\textit{Data generating process.}
 Each Monte-Carlo replicate draws $n$ i.i.d.\ pairs $\{(X_i,Y_i)\}_{i=1}^n$. The input functions are expanded in the cosine basis $\phi_k(t)=\sqrt{2}\cos(k\pi t)$ on $I=[0,1]$, truncated at $K=200$:
 \[
 X_i(t)=\sum_{k=1}^{K}\xi_{ik}\phi_k(t),\qquad \xi_{ik}\sim\mathcal N(0,\theta_k)\ \text{independently}.
 \]
 Responses follow $Y_i=\int_0^1 X_i(t)\beta_0(t)\ud t+\varepsilon_i$ with $\varepsilon_i\stackrel{\text{iid}}{\sim}\mathcal N(0,\sigma^2)$ and $\sigma=0.5$. The RKHS $\mH$ is taken to be the second-order Sobolev space, whose reproducing kernel has cosine eigenvalues $\mu_k=2/(k\pi)^4\asymp k^{-4}$. When the eigenbasis of $\Sigma$ coincides with the cosine basis (the Aligned design introduced below), the operator $T=L_{K^{1/2}}\Sigma L_{K^{1/2}}$ has eigenvalues $k^{-(4+2r_2)}$ in that basis, giving a spectral-decay exponent $2r=4+2r_2$ that drives the rate constants $2r/(2r+1)$ and $(2r-1)/2r$ in Theorems~\ref{thm:adptr-limiting}--\ref{thm:adptr-rates}. The Haar and Shifted designs introduce misalignment between the eigenbasis of $\Sigma$ and that of $L_{K^{1/2}}$, so the eigenvalues of $T$ obey a different design-dependent (but still polynomial) decay law that is not expressible as a closed-form function of $r_2$ alone.
 
-\paragraph{Covariance designs.}
+\medskip\noindent\textit{Covariance designs.}
 We consider three regimes for the population covariance operator $\Sigma$ of $X$, each engineered to target a different aspect of Assumptions (B1)--(B2):
 \begin{itemize}
 \item \textbf{Aligned}: eigenfunctions coincide with $\{\phi_k\}$ and $\theta_k=k^{-2r_2}$; the population eigenbasis is aligned with the RKHS eigenbasis and (B1)--(B2) hold with $q=0$.
@@ -865,7 +865,7 @@ We consider three regimes for the population covariance operator $\Sigma$ of $X$
 \end{itemize}
 For the Aligned and Haar designs we fix the covariance smoothness at $r_2=1$; in the Aligned design this places $T$'s decay exponent at $r=2+r_2=3$, comfortably inside the regime $r>(1+\sqrt 2)/2\approx 1.207$ in which the valid range of $q$ in Theorem \ref{thm:adptr-rates} is non-empty.
 
-\paragraph{Slope functions.}
+\medskip\noindent\textit{Slope functions.}
 The slope function is represented in the same cosine basis as $X$,
 \[
 \beta_0(t)\;=\;\sum_{k=1}^{K} b_k\,\phi_k(t),\qquad \phi_k(t)=\sqrt 2\cos(k\pi t),\;\; t\in[0,1],
@@ -877,10 +877,10 @@ truncated at the same $K=200$. Because $\phi_k$ are orthonormal in $L^2([0,1])$,
 \item \textbf{Sparse}: $b_1=4$, $b_2=-2$, and $b_k=0$ for $k\geq 3$; $\theta_0$ has finite support and (D1) is trivial.
 \end{itemize}
 
-\paragraph{Test functions, replications, and significance levels.}
+\medskip\noindent\textit{Test functions, replications, and significance levels.}
 Test inputs $\{x_\ell\}_{\ell=1}^{500}$ are drawn once per (covariance design, sample size) configuration from the same distribution as the training inputs, with a fixed random seed independent of the training data, and re-used across all $500$ Monte-Carlo replicates of that configuration. Each configuration is averaged over $500$ Monte-Carlo replications, with the nominal significance level $\alpha$ swept over $30$ values; we display the three levels $1-\alpha\in\{75\%,85\%,95\%\}$. Sample sizes are $n\in\{1000,2000,4000\}$.
 
-\paragraph{Methods compared.}
+\medskip\noindent\textit{Methods compared.}
 We evaluate five pointwise CI constructions; the truncated and adaptive-weight estimators share a common truncation level $J=\lfloor n^{0.4}\rfloor$ so that their performance is directly comparable.
 \begin{enumerate}[label=(\roman*),leftmargin=2.2em]
 \item \textbf{Aniso}: the undersmoothed anisotropic interval $\varphi^{\ani}$ of Section \ref{sec:anikrr} with $\lambda_{nj}=\sqrt{\hat s_j\lambda_n}$;
@@ -889,7 +889,7 @@ We evaluate five pointwise CI constructions; the truncated and adaptive-weight e
 \item \textbf{Trunc.\,Aniso} at $J=\lfloor n^{0.4}\rfloor$: the truncated-anisotropic interval $\varphi^{\anitr}$ of Section \ref{sec:anitr};
 \item \textbf{Adapt.\,Trunc} at $J=\lfloor n^{0.4}\rfloor$: the adaptive-weight estimator $\varphi^{\adptr}$ of Section \ref{sec:adptr} with $\mu_n$ chosen by $10$-fold cross-validation and subsequently scaled by $(\log n)^{-2}$.
 \end{enumerate}
-\paragraph{Choosing $\lambda_n$.}
+\medskip\noindent\textit{Choosing $\lambda_n$.}
 The three KRR-type intervals (Aniso, Iso, and Trunc.\,Aniso) all require an \emph{undersmoothed} scalar penalty $\lambda_n$, in the sense that $\lambda_n$ must decay faster than the rate that is optimal for mean squared estimation error: at the MSE-optimal $\lambda_n$ the bias of $\langle z, \hat\beta_n\rangle$ does not vanish faster than its standard deviation, and the asymptotic normality used to form the interval breaks down. Standard $k$-fold cross-validation targets MSE optimality and therefore does not deliver a $\lambda_n$ of the right order for these intervals. We instead select $\lambda_n$ on a log-spaced grid of length $L=2n$ by a Lepski-type adaptive rule with threshold $\kappa=C\sqrt{\log n+\log L}$ and $C=0.005$, in the spirit of the honest adaptive confidence procedure of \citet{chernozhukov2014anticoncentration}; the resulting $\hat\lambda_n$ is then further shrunk by a factor of $(\log n)^{-2}$ to enforce strict undersmoothing.
 
 For Adapt.\,Trunc the situation is different. The adaptive-weight construction of Section \ref{sec:adptr} produces an interval whose optimal regularization order in $\mu_n$ \emph{coincides} with the MSE-optimal order for the underlying estimation task, so a cross-validation criterion calibrated to estimation error is well-suited to selecting $\mu_n$ here. We accordingly pick $\mu_n$ by $10$-fold cross-validation over a log-spaced grid, and apply the same $(\log n)^{-2}$ shrinkage as a uniform safety margin matching the KRR procedures.
