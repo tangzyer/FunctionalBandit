@@ -1,0 +1,593 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+
+\usepackage{color}
+
+
+\begin{document}
+
+
+
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+
+
+\title{Honest Confidence Intervals over an \(\ell^1\) Slope Class in RKHS Linear Functional Regression}
+\author{}
+\date{}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prb}{\mathbb{P}}
+\newcommand{\Supp}{\operatorname{Supp}}
+\newcommand{\leb}{\operatorname{Leb}}
+\newcommand{\supp}{\mathrm{supp}}
+
+\maketitle
+
+
+
+
+
+
+
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cX}{\mathcal X}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\Leb}{\operatorname{Leb}}
+
+
+
+
+
+\section{Statistical Experiment}
+
+Let \(H=L^2[0,1]\), with inner product \(\langle\cdot,\cdot\rangle\) and norm
+\(\|\cdot\|\). Let
+\[
+  \Theta_X=\{x\in H:0<\|x\|\le 1\},
+  \qquad
+  \Theta=\{\theta\in H:\|\theta\|\le 1\}.
+\]
+Fix a known compact, self-adjoint, nonnegative, and \emph{injective}
+operator \(K:H\to H\), chosen so that the admissible class
+\(\mathfrak P\) defined below is nonempty. Write \(B=K^{1/2}\). For \(x\in H\), define
+\[
+  z(x)=Bx.
+\]
+If \(X\sim P_X\) is supported on \(\Theta_X\), let \(P_Z=P_X\circ z^{-1}\)
+be the induced law of \(Z=z(X)\), and define
+\[
+  T=T(P_X)=\E_{P_X}[Z\otimes Z].
+\]
+
+For each \(n\), the data are
+\[
+  D_n=\{(X_i,Y_i)\}_{i=1}^n,
+  \qquad
+  Y_i=\langle z(X_i),\theta_0\rangle+\epsilon_i,
+\]
+where \(X_i\stackrel{i.i.d.}{\sim}P_X\), \(\theta_0\in\Theta\), and
+\(\epsilon_i\stackrel{i.i.d.}{\sim}N(0,1)\) are independent of the covariates.
+
+An interval procedure is a measurable map
+\[
+  \varphi_n:\Theta_X\times (H\times\R)^n\to\cI,
+\]
+where \(\cI\) is identified with
+\[
+  \{(\ell,u)\in\R^2:\ell\le u\}
+\]
+equipped with the Borel sigma-field. The interval represented by
+\((\ell,u)\) is \([\ell,u]\). The procedure may use \(D_n\), the prediction
+point \(x\), the known operator \(K\), the confidence level \(\alpha\), and
+the known constants in the assumptions. It may not use \(P_X\), \(P_Z\),
+\(T\), or population eigenvalues/eigenfunctions, except through empirical
+quantities computed from \(D_n\).
+
+\section{Pointwise Classes, Global Risk, and Honesty}
+
+Fix \(r>1/2\), \(\kappa\in(0,1)\), and a prediction point
+\(x\in\Theta_X\). Write \(z=z(x)\). Let
+\[
+  \cP_n(z)=\cP_n(r,\kappa,z)
+\]
+be an increasing sequence of sets of laws \(P_X\) on \(\Theta_X\):
+\(\cP_n(z)\subseteq\cP_{n+1}(z)\). The constants below do not depend on
+\(n\), \(P_X\), \(j\), \(z\), or \(\theta\).
+
+\begin{enumerate}
+  \item[(A1)] There is \(C_4<\infty\) such that, for every
+  \(P_X\in\cP_n(z)\) and every \(\theta\in\Theta\),
+  \[
+    \E\big[\langle Z,\theta\rangle^4\big]
+    \le
+    C_4\{\E[\langle Z,\theta\rangle^2]\}^2 .
+  \]
+
+  \item[(A2)] For every \(P_X\in\cP_n(z)\), the nonzero eigenvalues of
+  \(T(P_X)\), written in decreasing order as
+  \(s_1>s_2>\cdots>0\), are simple and have normalized eigenfunctions
+  \(\psi_j\). There are constants \(0<a_s\le A_s<\infty\) such that
+  \[
+    a_s j^{-2r}\le s_j\le A_s j^{-2r}
+    \qquad\text{for all }j\ge 1.
+  \]
+
+  \item[(A3)] There is \(C_\infty<\infty\) such that, for every
+  \(P_X\in\cP_n(z)\) and every \(j\ge 1\),
+  \[
+    |\langle z,\psi_j\rangle|
+    \le C_\infty n^\kappa\sqrt{s_j}.
+  \]
+  In addition, the same \(P_X\) satisfies the global random-covariate bound
+  \[
+    |\langle Z,\psi_j\rangle|
+    \le C_\infty n^\kappa\sqrt{s_j}
+    \qquad\text{for \(P_X\)-almost every \(X\) and all }j\ge 1.
+  \]
+  The first part of (A3) is the fixed-\(z\) condition used for pointwise
+  coverage. The second part is the global \(P_X\)-condition used to control
+  integrated squared length.
+
+  \item[(A4)] (\textbf{Injectivity of \(T\).}) For every
+  \(P_X\in\cP_n(z)\),
+  \[
+    \ker T(P_X)=\{0\}.
+  \]
+  Equivalently, the eigenfunctions \(\{\psi_j\}_{j\ge1}\) of \(T(P_X)\)
+  form an orthonormal basis of \(H\), so \((\ker T(P_X))^{\perp}=H\)
+  and every \(z(x)\) automatically lies in
+  \(\overline{\operatorname{span}}\{\psi_j:j\ge1\}\). This excludes
+  finite-rank operators \(T(P_X)\) and rules out unidentifiable slope
+  components in \(\ker T(P_X)\).
+\end{enumerate}
+
+Define the global risk class
+\[
+  \cP_n=\bigcup_{x\in\Theta_X}\cP_n(z(x)).
+\]
+The squared-length risk is
+\[
+  R_n(\varphi_n;P_X,\theta_0)
+  =
+  \E_{\theta_0,P_X}
+  \E_{X\sim P_X}
+  \left[
+    \Leb\{\varphi_n(X;D_n)\}^2
+  \right],
+\]
+where the outer expectation is over the training sample \(D_n\), and the
+inner expectation is over an independent test point \(X\sim P_X\).
+
+A procedure has squared-length rate \(n^{-\rho(r)}\) on a slope class
+\(\Theta_0(P_X)\) if
+\[
+  \limsup_{n\to\infty}
+  \sup_{P_X\in\cP_n}
+  \sup_{\theta_0\in\Theta_0(P_X)}
+  n^{\rho(r)}R_n(\varphi_n;P_X,\theta_0)<\infty .
+\]
+An arbitrarily small exponent loss is considered matching: an upper bound
+\(O(n^{-\rho(r)+\delta})\) for every \(\delta>0\), together with a lower bound
+\(\Omega(n^{-\rho(r)})\), counts as the same minimax exponent.
+
+For fixed \(x\in\Theta_X\), honesty means
+for some given type-I error $\alpha\in(0,1)$,
+\[
+  \liminf_{n\to\infty}
+  \inf_{P_X\in\cP_n(z(x))}
+  \inf_{\theta_0\in\Theta_0(P_X)}
+  \Prb_{\theta_0,P_X}
+  \left[
+    \langle z(x),\theta_0\rangle\in\varphi_n(x;D_n)
+  \right]
+  \ge 1-\alpha .
+\]
+The point \(x\) is fixed outside the probability statement. This is not an
+averaged coverage statement over a fresh test point.
+
+If \(\cP_n(z(x))=\varnothing\) eventually, the honesty condition at that
+\(x\) is interpreted as vacuous. Equivalently, nonvacuous honesty is required
+only for prediction points \(x\) for which \(\cP_n(z(x))\neq\varnothing\)
+along an infinite tail or along the adversarial sequence under consideration.
+
+All \(O(\cdot)\), \(o(\cdot)\), \(\Omega(\cdot)\), \(\lesssim\), and
+\(\gtrsim\) constants must be uniform over the classes and prediction points
+specified in each question.
+
+\subsection*{Admissible Procedures and the Minimax Rate}
+
+An interval procedure \(\varphi_n\) is \emph{admissible at level
+\(\alpha\)} if it satisfies the honesty condition above
+\emph{simultaneously} for every admissible problem instance and every
+nonvacuous fixed prediction point \(x\in\Theta_X\) in it. Formally,
+\[
+  \mathcal A_\alpha
+  :=
+  \left\{
+    \varphi_n :\
+    \forall\,(\{\cP_n(\cdot)\},\Theta_0)\in\mathfrak P,\
+    \forall\,x\in\Theta_X\text{ with }\cP_n(z(x))\neq\varnothing
+    \text{ eventually},\
+    \varphi_n\text{ satisfies the honesty condition for }(x,\{\cP_n(\cdot)\},\Theta_0)
+  \right\}.
+\]
+The honesty condition is taken to be the definition of admissibility:
+\(\mathcal A_\alpha\) and the honest-procedure class coincide. We
+assume \(\mathcal A_\alpha\neq\varnothing\); a trivial witness is the
+constant-width interval \(\varphi_n(x;D_n)=[-C\|x\|,\,C\|x\|]\) with
+\(C\geq\|B\|\), which covers every admissible target with probability
+one and hence is honest at every level \(1-\alpha\).
+
+A \emph{problem instance} is a pair \((\{\cP_n(\cdot)\}_{n\ge1},\Theta_0)\)
+where \(\{\cP_n(\cdot)\}\) is an increasing sequence of pointwise
+distribution-class families satisfying the applicable subset of
+(A1)--(A4) (and, where the question imposes them, (C1)--(C2)), and
+\(\Theta_0(P_X)\) is a slope class as specified in the question. Let
+\(\mathfrak P\) denote the collection of all such admissible problem
+instances. The dependence on \(n\) is absorbed into the sequence
+\(\{\cP_n(\cdot)\}_{n\ge1}\) inside the instance itself, so
+\(\mathfrak P\) is not \(n\)-indexed.
+
+Henceforth a procedure is a \emph{sequence}
+\(\varphi=(\varphi_n)_{n\ge1}\) of single-\(n\) maps, and
+\(\mathcal A_\alpha\) is interpreted as a class of such sequences.
+
+The \emph{minimax rate exponent} \(\rho(r)\) is defined directly as the
+largest exponent for which one fixed procedure sequence attains the rate
+uniformly across all admissible problem instances:
+\[
+  \exists\,\varphi=(\varphi_n)_{n\ge1}\in\mathcal A_\alpha:\quad
+  \limsup_{n\to\infty}\
+  \sup_{(\{\cP_n(\cdot)\},\Theta_0)\in\mathfrak P}\
+  \sup_{P_X\in\cP_n}\
+  \sup_{\theta_0\in\Theta_0(P_X)}\
+  n^{\rho(r)}\,
+  R_n(\varphi_n;P_X,\theta_0)
+  <
+  \infty.
+\]
+Equivalently, with the infimum taken over procedure \emph{sequences}
+outside the \(\limsup\),
+\[
+  \inf_{\varphi\in\mathcal A_\alpha}\
+  \limsup_{n\to\infty}\
+  \sup_{(\{\cP_n(\cdot)\},\Theta_0)\in\mathfrak P}\
+  \sup_{P_X\in\cP_n}\
+  \sup_{\theta_0\in\Theta_0(P_X)}\
+  n^{\rho(r)}\,
+  R_n(\varphi_n;P_X,\theta_0)
+  <
+  \infty.
+\]
+Note the order: the inf over sequences is taken \emph{outside} the
+\(\limsup\) and all suprema, so the same \(\varphi=(\varphi_n)_n\) must
+work for every \(n\), every instance, and every \((P_X,\theta_0)\). This
+is strictly stronger than \(\limsup_n\inf_{\varphi_n}\) (which would
+allow \(\varphi_n\) to be retuned per \(n\) per instance) and reflects
+the universal-procedure obligation below.
+
+\paragraph{Convention on empty classes.} Throughout, suprema over an
+empty index set are interpreted as \(0\) and infima over an empty
+index set as \(+\infty\). In particular, if no admissible problem
+instance exists eventually (\(\mathfrak P=\varnothing\)) the rate
+obligation is vacuous; if for a given instance \(\cP_n(z(x))=\varnothing\)
+eventually for every \(x\), the integrated risk reduces to its inner
+component on the residual index set, and any pointwise-honesty
+requirement at such \(x\) is vacuous.
+
+An arbitrarily small exponent loss is considered matching: an upper
+bound of the above form with \(\rho(r)\) replaced by \(\rho(r)-\delta\)
+for every \(\delta>0\), combined with a lower bound
+\(\Omega(n^{-\rho(r)})\) for some single admissible problem instance,
+counts as the same minimax exponent.
+
+\paragraph{Upper-bound obligation.} A constructive upper bound must
+exhibit \emph{one} procedure \(\varphi_n\in\mathcal A_\alpha\),
+computable from \(D_n\), \(x\), \(K\), \(\alpha\), and the assumption
+constants
+\(\,r,\kappa,C_4,a_s,A_s,C_\infty,a_g\,\)
+(all of which are known to \(\varphi_n\); any subset not relevant to a
+given question may be omitted), that attains the rate uniformly over
+every admissible problem instance. Except where a specific question
+relaxes this rule (see Question 3a below), the procedure may not use
+\(P_X\), \(P_Z\), \(T(P_X)\), or population eigenvalues/eigenfunctions
+except through empirical quantities computed from \(D_n\).
+
+\paragraph{Lower-bound obligation.} A lower bound need only exhibit
+\emph{one} admissible problem instance
+\((\{\cP_n^\star(\cdot)\},\Theta_0^\star)\in\mathfrak P\) such that
+for every admissible procedure sequence
+\(\varphi=(\varphi_n)_{n\ge1}\in\mathcal A_\alpha\),
+\[
+  \liminf_{n\to\infty}\
+  \sup_{P_X\in\cP_n^\star}\
+  \sup_{\theta_0\in\Theta_0^\star(P_X)}\
+  n^{\rho(r)}\,
+  R_n(\varphi_n;P_X,\theta_0)
+  >0.
+\]
+
+\section{Questions}
+
+\paragraph{Acceptable obligations for Question 3 (parts a and b).}
+For both parts of Question 3, a proof is considered acceptable if it
+establishes the stated rate under the following relaxed quantifier
+structure on the smoothness exponent \(r\) and the (A3) envelope
+exponent \(\kappa\):
+\[
+  \exists\,r_0<10\ \text{such that}\ \forall\,r\geq r_0,\
+  \exists\,\kappa=\kappa(r)\in(0,1)
+\]
+for which the upper-bound obligation in the minimax block holds when
+the admissible class \(\mathfrak P\) is restricted to instances whose
+pointwise classes \(\cP_n(\cdot)\) use the smoothness exponent \(r\) and
+the envelope exponent \(\kappa(r)\) in (A3).
+
+\textbf{Strict constraints on \(\kappa(r)\).} The chosen \(\kappa(r)\)
+must be a \emph{strictly positive constant}, in the following precise
+sense:
+\begin{itemize}
+  \item \(\kappa(r)\) is a function of \(r\) \emph{only}; it does not
+    depend on \(n\), on the sample \(D_n\), on \(P_X\), on \(x\), on
+    any auxiliary parameter, or on any other quantity that varies with
+    \(n\). In particular, \(\kappa(r)\) is \emph{not} permitted to be a
+    sequence \(\kappa_n(r)\) tending to zero with \(n\).
+  \item \(\kappa(r)>0\) strictly. Taking \(\kappa=0\), or taking
+    \(\kappa_n\to 0\) along any subsequence, is explicitly excluded as
+    it greatly trivializes the problem.
+\end{itemize}
+Equivalently: for each \(r\geq r_0\), the prover commits in advance to
+a single positive number \(\kappa(r)\), and the rate must then hold
+under (A3) armed with that fixed \(\kappa(r)\) for all \(n\).
+
+The universal quantifier over
+\((r,\kappa)\in(1/2,\infty)\times(0,1)\) in the original obligation is
+thus replaced by the existential quantifier above on \(r_0\) and the
+prover's chosen constant \(\kappa(r)\), with \(r\geq r_0\).
+
+This relaxation does \emph{not} apply to Question 4: the strengthening
+from \(\liminf\) to exact \(=1-\alpha\) is unrelated.
+
+\paragraph{Question 3 --- shared setup for parts (a) and (b).}
+Do \emph{not} impose any analogue of a nondegeneracy condition.
+Instead, both parts assume \emph{(A1)--(A4)} (the base assumptions from
+\textsection2) \emph{together with} the following two additional
+conditions:
+
+\begin{enumerate}
+  \item[(C1)] There is \(a_g>0\) such that, for every \(P_X\in\cP_n\) and
+  every \(j\ge 1\),
+  \[
+    s_j-s_{j+1}\ge a_g j^{-2r-1}.
+  \]
+
+  \item[(C2)] The slope class is
+  \[
+    \Theta_0(P_X)=\Theta'(P_X)
+    :=
+    \left\{
+      \theta\in\Theta:
+      \sum_{j=1}^{\infty}|\langle\theta,\psi_j\rangle|\le 1
+    \right\}.
+  \]
+\end{enumerate}
+
+The admissible class \(\mathfrak P^{(3)}\) for both parts of Question 3
+is therefore the set of problem instances satisfying (A1)--(A4) and
+(C1)--(C2), with \(\Theta_0(P_X)=\Theta'(P_X)\).
+
+\paragraph{Procedure classes for Question 3.}
+Let \(\mathcal A_\alpha^{(3b)}\) denote the subclass of \(\mathcal A_\alpha\)
+consisting of procedure sequences with the original empirical
+signature
+\[
+  \varphi_n:\Theta_X\times(H\times\R)^n\to\cI,
+\]
+honest at level \(\alpha\) for every instance in \(\mathfrak P^{(3)}\)
+and every nonvacuous fixed prediction point in it.
+
+For the oracle version, define a separate \emph{oracle} procedure
+class \(\mathcal A_\alpha^{\mathrm{oracle}}\) whose elements are
+measurable sequences
+\[
+  \varphi_n^{\mathrm{or}}:\Theta_X\times(H\times\R)^n\times\mathcal T\to\cI,
+\]
+where \(\mathcal T\) is the space of admissible population covariance
+operators (compact, self-adjoint, nonnegative on \(H\), arising as
+\(T(P_X)\) for some \(P_X\) in some instance of \(\mathfrak P^{(3)}\)).
+Honesty for \(\mathcal A_\alpha^{\mathrm{oracle}}\) is the same as for
+\(\mathcal A_\alpha\) except that the procedure is evaluated with
+\(T(P_X)\) supplied as an additional argument; equivalently,
+\(\varphi_n^{\mathrm{or}}(x;D_n;T(P_X))\) takes the place of
+\(\varphi_n(x;D_n)\) inside the coverage probability.
+
+\paragraph{Rate obligation (procedure may depend on \(\delta\)).}
+For each part, a proof is considered acceptable if, for every
+sufficiently small \(\delta>0\), there exists a procedure
+\(\varphi^{(\delta)}\) in the relevant class
+(\(\mathcal A_\alpha^{(3b)}\) for Question 3b,
+\(\mathcal A_\alpha^{\mathrm{oracle}}\) for Question 3a) satisfying
+\[
+  \sup_{(\{\cP_n(\cdot)\},\Theta')\in\mathfrak P^{(3)}}\,
+  \sup_{P_X\in\cP_n}\,\sup_{\theta_0\in\Theta'(P_X)}
+  R_n(\varphi_n^{(\delta)};P_X,\theta_0)
+  \;=\;
+  O\!\left(n^{-2r/(2r+1)+\delta}\right).
+\]
+The procedure \(\varphi^{(\delta)}\) may depend on \(\delta\); it is
+\emph{not} required that a single \(\delta\)-free procedure achieve
+all such rates simultaneously.
+
+In both parts the interval must be derived from an explicit limiting
+distribution. The analysis must show that the bias divided by the
+stochastic standard deviation is \(o_{\Prb}(1)\) \emph{pointwise} in
+the fixed prediction point \(x\) and \emph{uniformly} over
+\((P_X,\theta_0)\); precisely, for every nonvacuous fixed
+\(x\in\Theta_X\),
+\[
+  \sup_{P_X\in\cP_n(z(x))}\,\sup_{\theta_0\in\Theta'(P_X)}\,
+  \Prb_{\theta_0,P_X}\!\left[
+    \frac{|b_n(x,P_X,\theta_0)|}{\sigma_n(x,P_X)}>\eta_n
+  \right]\to0
+\]
+for some \(\eta_n\to0\), where \(b_n\) and \(\sigma_n\) are the
+bias and stochastic standard deviation of the interval's underlying
+estimator (defined as part of the construction).
+
+The two parts differ only in which procedure class
+\(\varphi^{(\delta)}\) lives in.
+
+\paragraph{Question 3a (oracle version: procedure may use \(T\)).}
+\(\varphi^{(\delta)}\in\mathcal A_\alpha^{\mathrm{oracle}}\). Concretely,
+\(\varphi_n^{(\delta)}\) may depend on \(T(P_X)\) and on its eigenvalues
+\(s_j\) and eigenfunctions \(\psi_j\), in addition to \(D_n\), \(x\),
+\(K\), \(\alpha\), \(\delta\), and the assumption constants. The ``no
+population objects'' clause of the upper-bound obligation in the
+minimax block is therefore relaxed for Question 3a only, and replaced
+by the explicit oracle signature above.
+
+This is a strictly easier problem than Question 3b; it isolates the
+population oracle / charging inequality from any empirical
+spectral-transfer or eigenfunction-perturbation problem. A solution to
+Question 3a should make clear which steps would require empirical
+transfer in Question 3b and which would remain unchanged.
+
+\paragraph{Question 3b (empirical version: original Question 3).}
+\(\varphi^{(\delta)}\in\mathcal A_\alpha^{(3b)}\). Concretely,
+\(\varphi_n^{(\delta)}\) is computable from \(D_n\), \(x\), \(K\),
+\(\alpha\), \(\delta\), and the assumption constants only. In
+particular, \(\varphi_n^{(\delta)}\) may \emph{not} depend on
+\(T(P_X)\), \(P_X\), \(P_Z\), or on the population
+eigenvalues/eigenfunctions \(s_j,\psi_j\), except through empirical
+quantities computed from \(D_n\). No additional empirical perturbation
+assumptions may be imposed: any needed sample-covariance, empirical
+eigenvalue, or empirical eigenfunction approximation bounds must be
+derived from (A1)--(A4), (C1)--(C2), and the sample.
+
+This is the original (harder) form of the question. Solving Question
+3a first is acceptable as a partial result.
+
+\paragraph{Remark.}
+The bias/SD requirement is to be read for nonvacuous fixed prediction
+points \(x\in\Theta_X\), i.e.\ those for which \(\cP_n(z(x))\) is
+eventually nonempty. (Note \(\Theta_X\) already excludes \(x=0\), so
+\(z(x)\neq 0\) holds throughout under (A4) plus \(K\) injective.) For
+such \(x\), under (A4) and Gaussian noise, the stochastic standard
+deviation \(\sigma_n(x)\) of any reasonable estimator-based interval
+is strictly positive at every finite \(n\) with probability one even
+though \(\sigma_n(x)\to 0\); the \(o_{\Prb}(1)\) statement is the
+standard ratio in this finite-\(n\) sense, where the bias is required
+to vanish faster than the SD. No population-level positive-variance
+assumption is imposed for either part of Question 3.
+
+\paragraph{Question 4.}
+The honesty definition above uses a \(\liminf\). In this question the
+procedure \(\varphi_n\) is required to be \emph{empirical}:
+\(\varphi_n\in\mathcal A_\alpha^{(3b)}\), i.e.\ computable from \(D_n\),
+\(x\), \(K\), \(\alpha\), and the assumption constants only, with no
+dependence on \(T(P_X)\) or population eigenvalues/eigenfunctions
+except through empirical quantities. \(\varphi_n\) need not be the
+same procedure that solved Question 3a or 3b.
+
+Identify natural additional conditions, imposed only on
+population-level objects \(P_X\), \(\Theta_0(P_X)\), and \(T(P_X)\),
+under which this can be strengthened to
+\[
+  \lim_{n\to\infty}
+  \inf_{P_X\in\cP_n(z(x))}
+  \inf_{\theta_0\in\Theta_0(P_X)}
+  \Prb_{\theta_0,P_X}
+  \left[
+    \langle z(x),\theta_0\rangle\in\varphi_n(x;D_n)
+  \right]
+  =
+  1-\alpha
+\]
+for every \(x\in\Theta_X\) for which the pointwise class is nonvacuous.
+The equality is required to be \emph{exact} in the uniform two-sided
+sense:
+\[
+  \lim_{n\to\infty}\
+  \sup_{P_X\in\cP_n(z(x))}\,\sup_{\theta_0\in\Theta_0(P_X)}
+  \left|\,
+    \Prb_{\theta_0,P_X}
+    \!\left[\langle z(x),\theta_0\rangle\in\varphi_n(x;D_n)\right]
+    -(1-\alpha)
+  \,\right|
+  \;=\;0,
+\]
+for every nonvacuous fixed prediction point \(x\). A procedure that
+achieves only \(\liminf_n\inf_{\cdots}\Prb[\cdots]\ge 1-\alpha\),
+allowing coverage strictly above \(1-\alpha\) on a non-negligible
+subset of admissible instances, does not satisfy Question 4: the
+interval must not be asymptotically conservative on any tail.
+
+This $\varphi_n$ and its analysis can be different from previous questions.
+The
+additional conditions may not involve empirical quantities such as the sample
+covariance operator. Explain why the proposed conditions are sufficient and
+whether they are close to necessary.
+
+\paragraph{Acceptable partial resolutions.}
+The three sub-questions \emph{(3a)}, \emph{(3b)}, and \emph{(4)} are
+treated as \emph{independent} acceptable targets. A complete answer
+to \emph{any one} of them, with a rigorous proof, counts as a full
+acceptable resolution of the problem; the prover need not solve all
+three. Specifically:
+\begin{itemize}
+  \item Solving Question~3a alone (the oracle version with population
+    \(T\) available to the procedure) is acceptable. Question~3a is
+    deliberately the easiest of the three.
+  \item Solving Question~3b alone (the empirical version) is
+    acceptable.
+  \item Solving Question~4 alone (the exact-coverage strengthening) is
+    acceptable, treating the \(\varphi_n\) of Question~4 as an
+    independent construction in the empirical procedure class
+    \(\mathcal A_\alpha^{(3b)}\).
+  \item A negative answer (rigorous lower bound or counterexample)
+    for any one of \emph{(3a)}, \emph{(3b)}, \emph{(4)} is also
+    acceptable as a full resolution of that part, with the same
+    rules: a single part proved negative counts as a complete
+    resolution.
+\end{itemize}
+The prover should choose the most tractable target and resolve it
+cleanly rather than attempt all three simultaneously. The final
+proof document must clearly state which sub-question is being
+resolved (or that all three are) and which form (constructive
+upper bound, lower bound / counterexample) applies.
+
+\paragraph{Tractability hierarchy (advisory).}
+On the basis of the original (paper) literature and on prior runs of
+this pipeline, the following tractability ordering is expected:
+\(\text{(3a)}\) is strictly easier than \(\text{(3b)}\) (the
+empirical-eigenfunction transfer is exactly the hard part of
+\(\text{(3b)}\)). Question~\(\text{(4)}\) is independent of
+\(\text{(3a)}\)/\(\text{(3b)}\) and asks a coverage-calibration
+question that may be addressed without solving the rate problem at
+all. Question~\(\text{(3b)}\) in its fully empirical form is the
+hardest of the three and is the one for which a counterexample
+\emph{may} be the right answer (see the prior obstruction to an
+\(o(n^{-1/2})\) empirical eigenfunction tail-leakage bound that
+appears in standard analyses; the prover may either find a route
+that avoids this obstruction or prove that no such route can exist).
+
+
+
+
+\newpage
+
+
+
+
+\end{document}
+
