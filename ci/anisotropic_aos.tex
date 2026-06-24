@@ -153,40 +153,46 @@ Abstract here.
 
 \section{Introduction}
 
-We consider the classical model of linear functional regression with data $\{X_i,Y_i\}_{i=1}^n$, where $X_1,\cdots,X_n\sim P_X$ are independently and identically distributed \emph{functions} 
-whose domain is a non-empty compact interval $I\subseteq\mathbb R$, and $\{Y_i\}_{i=1}^n$ are scalar response variables, modeled by
+Linear functional regression is a standard model for predicting a scalar response from an entire curve. Given independent observations $\{(X_i,Y_i)\}_{i=1}^n$, with each $X_i$ a random function on a compact interval $I\subseteq\mathbb R$, the model takes the form
 \begin{equation}
 \mathbb E[Y_i|X_i] = \eta_0(X_i) := \gamma_0 + \int_I X_i(t)\beta_0(t)\ud t,
 \label{eq:model}
 \end{equation}
-where $\gamma_0\in\mathbb R$ is the intercept term and $\beta_0: I\to\mathbb R$ is the linear functional, both being unknown parameters.
-Many well-known methods have been proposed to estimate $\gamma_0$ and $\beta_0$ from data, such as functional principal component analysis (fPCA) approaches \citep[Chapter 8]{ramsay2005functional},
-\citep{cai2006prediction} and methods based on reproducing kernel Hilbert spaces \citep{yuan2010reproducing,cai2012minimax}.
+where the intercept $\gamma_0$ and slope function $\beta_0$ are unknown. A large literature studies estimation of $\beta_0$ and prediction of $\eta_0(X)$, most prominently through functional principal component analysis (FPCA) \citep[Chapter 8]{ramsay2005functional,cai2006prediction} and reproducing-kernel Hilbert space (RKHS) methods \citep{yuan2010reproducing,cai2012minimax}. Estimation accuracy, however, is only part of the inferential problem: in applications one often needs an uncertainty statement for the predicted value at a particular future curve $x$.
 
-In this paper, we consider the question of constructing \emph{pointwise} confidence intervals on $\eta_0(x)$ which are valuable in quantifying the uncertainty in estimates of the functional model
-when it is applied to a future data curve $x$. We study the construction of \emph{honest} confidence intervals, which are functions $\varphi$ mapping a data curve $x:I\to\mathbb R$ to a compact interval $\varphi(x)\subseteq\mathbb R$
-such that
+This paper studies \emph{pointwise} confidence intervals for $\eta_0(x)$ that are valid uniformly over both the regression functional and the test curve. We call a confidence procedure honest over a class $\Theta$ if it maps each test curve $x$ to an interval $\varphi(x)\subseteq\mathbb R$ satisfying
 \begin{equation}
 \liminf_{n\to\infty}\inf_{\eta_0\in\Theta} \Pr\left[\eta_0(x)\in\varphi(x)\right] \geq 1-\alpha,\;\;\;\;\;\;\forall x\in\mathrm{supp}(P_X)
 \label{eq:honest-ci}
 \end{equation}
-where $\alpha\in(0,1)$ is a pre-determined significance level,
-$\supp(P_X)$ is the support of $P_X$, $\Theta$ is a fixed and known function class and the randomness in Eq.~(\ref{eq:honest-ci}) is over $\{(X_i,Y_i)\}_{i=1}^n$.
-To understand how \emph{adative} an honest confidence interval is, we further study the worst-case mean-squared widths of constructed intervals
+for a predetermined significance level $\alpha\in(0,1)$, with probability taken over the training data. We measure the efficiency of such honest procedures by their worst-case mean-squared width,
 \begin{equation}
 \sup_{\eta_0\in\Theta}\mathbb E_{\eta_0} \left[\int_{\supp(P_X)}\big|\varphi(x)\big|^2\ud P_X(x)\right],
 \label{eq:adaptive}
 \end{equation}
-where $|\varphi(x)|$ is the Lesbesgue measure of the output interval $\varphi(x)$. We are particularly interested in how the above worst-case risk converges to zero as $n\to\infty$,
-and how it compares with the mean-squared prediction errors
-$$
-\sup_{\eta_0\in\Theta}\mathbb E_{\eta_0} \left[\int_{\supp(P_X)}\int_I [x(t)(\hat\eta_n(t)-\eta_0(t)]^2\ud t\ud P_X(x)\right]
-$$
-for classical fPCA or RKHS estimators $\hat\eta$ of $\eta_0$.
+where $|\varphi(x)|$ denotes interval length. This criterion is deliberately different from mean-squared prediction error: the interval must cover uniformly, so its width must account not only for the variance of an estimator but also for regularization and truncation bias at each possible test curve.
 
 \subsection{Our contributions}
 
+Our starting point is the spectral representation of RKHS regression after the transformation $Z=L_{K^{1/2}}X$. The relevant covariance operator is not the raw covariance of $X$, but
+\[
+T=\mathbb E[Z\otimes Z]=L_{K^{1/2}}\Sigma L_{K^{1/2}},
+\]
+whose eigenvalues and eigenfunctions combine the smoothness imposed by the RKHS with the geometry of the covariate distribution. This perspective leads to three main contributions.
+
+First, we construct honest pointwise intervals from undersmoothed KRR estimators. The isotropic construction is robust but conservative, while an anisotropic penalty aligned with the empirical spectrum of $T$ reduces width without sacrificing coverage.
+
+Second, we introduce truncated anisotropic intervals. Truncation is not merely a computational device: it separates the part of the test curve that can be estimated with a Gaussian approximation from the residual component that must be protected by an explicit bias term. Under polynomial spectral decay, these intervals attain the honest width rate $n^{-(2r-1)/(2r)}$ up to logarithmic factors.
+
+Third, we propose an adaptive-weight truncated interval whose regularization depends on the test curve. Under an additional absolute-summability condition on the transformed slope, this procedure improves the mean-squared width rate to the estimation-optimal order $n^{-2r/(2r+1)}$ while retaining honesty. The theory also clarifies why both ingredients, truncation and ridge smoothing, are needed: truncation controls spectral instability in the empirical tail, while smoothing controls bias and variance on the retained coordinates.
+
+The simulation study is designed around this spectral viewpoint. In addition to aligned and misaligned eigenbasis designs, we include a \emph{Shifted} design in which the covariance eigenfunctions remain smooth but the leading variance directions are moved away from the lowest frequencies. This design has essentially the same asymptotic decay as the aligned case after sorting eigenvalues, but it deliberately breaks the clean eigengap geometry assumed in the theory. We use it to assess how robust the competing confidence intervals are when the leading eigenspaces of the covariate covariance are not well separated.
+
 \subsection{Related works}
+
+Our work is closest to two strands of functional-regression methodology. The first is the FPCA approach, in which the covariate is projected onto leading empirical principal components and the regression is performed in the resulting finite-dimensional score space. This approach is natural when the leading eigenspace of the covariate covariance is well separated and the signal is well represented by the corresponding components, but its hard truncation makes inference sensitive to empirical eigenvalue ordering. The second is the RKHS approach of \cite{yuan2010reproducing,cai2012minimax}, which regularizes the slope through a smoothness space and studies prediction through the transformed covariance operator $T=L_{K^{1/2}}\Sigma L_{K^{1/2}}$. We build on this second viewpoint, but replace estimation error as the main objective with honest pointwise uncertainty quantification.
+
+The distinction matters because optimal prediction and honest inference generally require different tuning. Mean-squared prediction favors the usual bias-variance balance, whereas honest intervals must control regularization bias uniformly over the target class and over test curves. Our undersmoothed, truncated, and adaptive constructions can be read as three ways of negotiating this extra bias requirement while exploiting the spectral geometry of $T$.
 
 \subsection{Notations}
 
@@ -838,15 +844,19 @@ Provided that $r>(1+\sqrt{2})/2=1.207$, the valid range of $q$ is non-empty.
 \end{remark}
 
 
-The ``effective dimension'' $d$ at which $s_d\asymp \mu_n$, is $d\asymp n^{1/(2r+1)}$ when $\mu_n\approx n^{-2r/(2r+1)}$.
-This means that the ``truncation level'' $J$ should be significantly larger than $d$, because $q>\frac{2r}{(2r-1)(2r+1)} > \frac{1}{2r+1}$.
-This means that, in the anisotropic setting, \emph{both} truncation and Ridge smoothing are necessary to achieve optimal honest and adaptive confidence intervals.
+The rate statement has a useful interpretation in terms of effective dimension. If $\mu_n\asymp n^{-2r/(2r+1)}$, the index at which $s_d\asymp\mu_n$ is $d\asymp n^{1/(2r+1)}$. The admissible truncation condition for the adaptive interval requires
+\[
+J(n)=n^q\quad\text{with}\quad q>\frac{2r}{(2r-1)(2r+1)}>\frac{1}{2r+1},
+\]
+so the truncation level must extend beyond the effective dimension of the ridge problem. Thus truncation and ridge smoothing play different roles. Truncation removes the empirically unstable spectral tail and makes the normal approximation uniform, while the ridge weights continue to regularize the retained coordinates and deliver the adaptive width rate. Taking $J$ near the effective dimension would make the interval too biased; omitting truncation would leave the tail too unstable for the uniform honesty argument.
 
 \subsection{Minimax optimality of $\varphi^{\adptr}$}
 
 
 \section{Simulation study}\label{sec:simulation}
-In this section we empirically validate the four pointwise-CI procedures developed in Sections \ref{sec:isotropic}--\ref{sec:adptr}, namely the undersmoothed isotropic interval $\varphi^{\iso}$, the undersmoothed anisotropic interval $\varphi^{\ani}$, the truncated anisotropic interval $\varphi^{\anitr}$, and the adaptive-weight interval $\varphi^{\adptr}$, and we benchmark them against a standard functional principal-component (FPCA) estimator. The controlled simulation of Sections \ref{subsec:sim-setup} and \ref{subsec:sim-results} is designed to probe three questions: \emph{(i)} does each construction attain its nominal coverage in finite samples, as promised by Corollaries \ref{cor:isokrr-ci}, \ref{cor:anikrr-ci}, and \ref{cor:adptr}; \emph{(ii)} how do the mean CI widths compare across methods, so that the gains from anisotropy, truncation, and the adaptive weights of Section \ref{sec:adptr} can be isolated; and \emph{(iii)} how sensitive are these procedures along the axes that our theory flags as delicate, namely the covariance smoothness $r_2$ in Assumption (C2), the slope regime governing the absolute-summability condition (D1), and the truncation level $q$ in $J=\lfloor n^q\rfloor$ on which Theorems \ref{thm:anitr-rates} and \ref{thm:adptr-rates} impose lower bounds. Finally, Section \ref{subsec:sim-real-data} complements the controlled study with an illustration on real data, the Low Carbon London household electricity-consumption trial, asking whether the relative method-level patterns established in the simulation persist when the population covariance is replaced by the empirical covariance of an actual functional dataset.
+This section evaluates the four pointwise-CI procedures developed in Sections \ref{sec:isotropic}--\ref{sec:adptr}: the undersmoothed isotropic interval $\varphi^{\iso}$, the undersmoothed anisotropic interval $\varphi^{\ani}$, the truncated anisotropic interval $\varphi^{\anitr}$, and the adaptive-weight interval $\varphi^{\adptr}$. We compare them with a standard functional principal-component (FPCA) interval. The controlled simulation asks three questions. First, do the proposed intervals attain nominal coverage at the sample sizes considered here? Second, how much width is saved by moving from isotropic smoothing to anisotropic smoothing, then to truncation, and finally to adaptive weights? Third, how sensitive are the procedures to the features highlighted by the theory: the covariance smoothness $r_2$, the slope condition (D1), and the truncation exponent $q$ in $J=\lfloor n^q\rfloor$.
+
+The covariance designs are chosen to separate three kinds of spectral geometry. The Aligned design is the clean benchmark in which the covariance and RKHS bases agree. The Haar design keeps the eigenvalues ordered but misaligns the covariance eigenfunctions with the RKHS basis. Following the shifted-spectrum construction used in \cite{yuan2010reproducing,cai2012minimax}, the Shifted design preserves the cosine eigenbasis but moves the largest covariance eigenvalues to a moderate frequency. We include this case because it stresses the eigengap-type stability requirement behind Assumption~(C1), and therefore tests how robust the confidence intervals are when the leading empirical eigenspaces are not cleanly identifiable. Section \ref{subsec:sim-real-data} then complements the controlled study with an illustration on the Low Carbon London household electricity-consumption trial.
 
 \subsection{Experimental setup}\label{subsec:sim-setup}
 We borrow a similar experimental setup as that in \cite{yuan2010reproducing}.
@@ -859,21 +869,27 @@ X_i(t)=\sum_{k=1}^{K}\xi_{ik}\,e_k(t),\qquad \xi_{ik}\sim\mathcal N(0,\theta_k)\
 is truncated at $K=200$. The eigenbasis $\{e_k\}$ and the eigenvalues $\{\theta_k\}$ are specified by the covariance design introduced below.
 Responses follow \[Y_i=\int_0^1 X_i(t)\beta_0(t)\ud t+\varepsilon_i\] with $\varepsilon_i\stackrel{\text{iid}}{\sim}\mathcal N(0,\sigma^2)$ and $\sigma=0.5$. The RKHS $\mH$ is taken to be the second-order Sobolev space, whose reproducing kernel has the cosine eigenbasis
 \[\phi_k(t)=\sqrt{2}\cos(k\pi t),\qquad k\ge 1,\]
-and eigenvalues $\mu_k=2/(k\pi)^4\asymp k^{-4}$. When the eigenbasis of the covariance operator $\Sigma$ coincides with the cosine basis (the Aligned design introduced below), the operator $T=L_{K^{1/2}}\Sigma L_{K^{1/2}}$ has eigenvalues $k^{-(4+2r_2)}$ in that basis, giving a spectral-decay exponent $r=2+r_2$ that drives the rate constants $2r/(2r+1)$ and $(2r-1)/2r$ in Theorems~\ref{thm:adptr-limiting}--\ref{thm:adptr-rates}. The Haar and Shifted designs introduce misalignment between the eigenbasis of $\Sigma$ and that of $L_{K^{1/2}}$, so the eigenvalues of $T$ obey a different design-dependent (but still polynomial) decay law that is not expressible as a closed-form function of $r_2$ alone.
+and eigenvalues $\mu_k=2/(k\pi)^4\asymp k^{-4}$. When the covariance eigenbasis also equals the cosine basis, the operator $T=L_{K^{1/2}}\Sigma L_{K^{1/2}}$ is diagonal and its eigenvalues are the covariance eigenvalues multiplied by the RKHS eigenvalues. Thus the Aligned design has $T$-eigenvalues of order $k^{-(4+2r_2)}$, corresponding to spectral exponent $r=2+r_2$. The Shifted design remains diagonal in the same basis, but its largest covariance eigenvalues are placed near $k_0=25$; consequently the most variable directions of $X$ are no longer the lowest-frequency directions. The Haar design instead changes the eigenbasis itself, producing a non-diagonal covariance operator in the cosine basis.
 
 \medskip\noindent\textit{Covariance designs.}
-We consider three regimes for the population covariance operator $\Sigma$ of $X$, each engineered to target a different aspect of Assumptions (B1)--(B2):
+Given any specific decaying rate $r_2,$ we consider three regimes for the population covariance operator $\Sigma$ of $X$, each engineered to target a different aspect of Assumptions (B1)--(B2):
 \begin{itemize}
-\item \textbf{Aligned}: eigenfunctions $e_k$ coincide with $\{\phi_k\}$ and $\theta_k=k^{-2r_2}$; the population eigenbasis is aligned with the RKHS eigenbasis and (B1)--(B2) hold with $q=0$.
+\item \textbf{Aligned}: eigenfunctions $e_k$ coincide with $\{\phi_k\}$ and $\theta_k=k^{-2r_2}$;
 \item \textbf{Haar}: the eigenbasis $\{e_k\}_{k\ge 1}$ is the orthonormal Haar system on $[0,1]$, enumerated by increasing resolution. The first function is the constant $e_1\equiv 1$, and for $k\ge 2$ we set $e_k=\psi_{j,l}$ with $j=\lfloor\log_2(k-1)\rfloor$ and $l=(k-1)-2^{j}$, where
 \[
 \psi_{j,l}(t)=2^{j/2}\,\psi\!\left(2^{j}t-l\right),\qquad
 \psi(s)=\begin{cases}+1,&0\le s<\tfrac12,\\[-1pt] -1,&\tfrac12\le s<1,\\[-1pt] 0,&\text{otherwise,}\end{cases}
 \]
-is the Haar wavelet at level $j$ and shift $l$, supported on $[\,l\,2^{-j},(l+1)2^{-j}\,]$. Thus the basis runs $e_1\equiv 1$, $e_2=\psi_{0,0}$, $(e_3,e_4)=(\psi_{1,0},\psi_{1,1})$, $(e_5,\dots,e_8)=(\psi_{2,0},\dots,\psi_{2,3})$, and so on, with the eigenvalue attached to $e_k$ being $\theta_k=k^{-2r_2}$ as before. Because these eigenfunctions are piecewise constant rather than sinusoidal, the population eigenbasis is misaligned with the RKHS (cosine) eigenbasis, so $\Sigma$ is non-diagonal in the cosine basis and (B2) holds only with a nontrivial $q>0$.
-\item \textbf{Shifted} ($k_0=25$): eigenfunctions are $\{\phi_k\}$ but the eigenvalue ordering is scrambled via $\theta_k=(|k-k_0|+1)^{-2}$, so the leading spectral directions of $\Sigma$ sit at high frequency, an adversarial case for any procedure that ranks eigendirections by the magnitudes of $\hat s_j$.
+is the Haar wavelet at level $j$ and shift $l$, supported on $[\,l\,2^{-j},(l+1)2^{-j}\,]$. Thus the basis runs $e_1\equiv 1$, $e_2=\psi_{0,0}$, $(e_3,e_4)=(\psi_{1,0},\psi_{1,1})$, $(e_5,\dots,e_8)=(\psi_{2,0},\dots,\psi_{2,3})$, and so on, with the eigenvalue attached to $e_k$ being $\theta_k=k^{-2r_2}$ as before. Because these eigenfunctions are piecewise constant rather than sinusoidal, the population eigenbasis is misaligned with the RKHS (cosine) eigenbasis, and $\Sigma$ is non-diagonal in the cosine basis as a consequence.
+\item \textbf{Shifted} ($k_0=25$): eigenfunctions are $\{\phi_k\}$ but the eigenvalues are $\theta_k=(|k-k_0|+1)^{-2r_2}$. The leading variance directions are therefore concentrated around the moderate frequency $k_0$ rather than at $k=1$. Around this shifted peak,
+\[
+\theta_{k_0}=1,\qquad
+\theta_{k_0-1}=\theta_{k_0+1}=2^{-2r_2},\qquad
+\theta_{k_0-2}=\theta_{k_0+2}=3^{-2r_2},\quad \ldots .
+\]
+Thus, except for the peak itself, the population eigenvalues occur in tied pairs. The strict simple-eigengap condition in Assumption~C1 is therefore broken by construction once both sides of the shifted peak enter the leading eigenspace. The parameter $r_2$ controls the separation between distinct adjacent levels, where the rougher shifted case is the more weakly separated one.
 \end{itemize}
-For the Aligned and Haar designs we report three covariance-smoothness levels $r_2\in\{0.5,1,2\}$, in Figures~\ref{fig:sim-grid-r1}, \ref{fig:sim-grid-r2-0p5}, and \ref{fig:sim-grid-r2-2} respectively (the Shifted design is governed by $k_0=25$ and does not depend on $r_2$). In the Aligned design $r_2$ sets $T$'s decay exponent to $r=2+r_2$, which for every $r_2\in\{0.5,1,2\}$ lies comfortably inside the regime $r>(1+\sqrt 2)/2\approx 1.207$ in which the valid range of $q$ in Theorem \ref{thm:adptr-rates} is non-empty.
+For all three designs we report two covariance-smoothness levels, $r_2=1$ in Figure~\ref{fig:sim-grid-r1} and the rougher value $r_2=0.5$ in Figure~\ref{fig:sim-grid-r2-0p5}. 
 
 \medskip\noindent\textit{Slope functions.}
 The slope function is represented in cosine basis,
@@ -888,7 +904,7 @@ truncated at the same $K=200$. Because $\phi_k$ are orthonormal in $L^2([0,1])$,
 \end{itemize}
 
 \medskip\noindent\textit{Test functions, replications, and significance levels.}
-Coverage and width are population quantities under $x\sim P_X$, and each covariance design has its own input distribution $P_X$; the test functions are therefore drawn from that same design-specific distribution, so changing the covariance design changes the test distribution as well. This is by construction: it keeps the evaluation aligned with the honest-coverage target $\Pr[\eta_0(x)\in\varphi(x)]\ge 1-\alpha$ for $x\in\supp(P_X)$ of the design at hand. Concretely, for each (covariance design, sample size) configuration we draw one set of $500$ test inputs $\{x_\ell\}_{\ell=1}^{500}$ from the same generator that produces the training inputs of that design, using a fixed seed independent of the training data. This test set is then held fixed across the $500$ Monte-Carlo replicates of the configuration: only the training sample $\{(X_i,Y_i)\}_{i=1}^n$ and its noise are redrawn between replicates, and coverage and CI width are always evaluated at the same $500$ test functions and then averaged over the replicates. The nominal level $\alpha$ is swept over $30$ values, of which we display $1-\alpha\in\{75\%,85\%,95\%\}$, for sample sizes $n\in\{1000,2000,4000\}$.
+Coverage and width are population quantities under $x\sim P_X$, and each covariance design has its own input distribution $P_X$; the test functions are therefore drawn from that same design-specific distribution, so changing the covariance design changes the test distribution as well.  Concretely, for each (covariance design, sample size) configuration we draw one set of $500$ test inputs $\{x_\ell\}_{\ell=1}^{500}$ from the same generator that produces the training inputs of that design, using a fixed seed independent of the training data. This test set is then held fixed across the $500$ Monte-Carlo replicates of the configuration: only the training sample $\{(X_i,Y_i)\}_{i=1}^n$ and its noise are redrawn between replicates, and coverage and CI width are always evaluated at the same $500$ test functions and then averaged over the replicates. We display nominal levels $1-\alpha\in\{75\%,85\%,95\%\}$ for sample sizes $n\in\{1000,2000,4000\}$.
 
 \medskip\noindent\textit{Methods compared.}
 We evaluate five pointwise CI constructions; the truncated and adaptive-weight estimators share a common truncation level $J=\lfloor n^{0.4}\rfloor$ so that their performance is directly comparable.
@@ -900,7 +916,7 @@ We evaluate five pointwise CI constructions; the truncated and adaptive-weight e
 \item \textbf{Adapt.\,Trunc} at $J=\lfloor n^{0.4}\rfloor$: the adaptive-weight estimator $\varphi^{\adptr}$ of Section \ref{sec:adptr} with $\mu_n$ chosen by $10$-fold cross-validation and subsequently scaled by $(\log n)^{-2}$.
 \end{enumerate}
 \medskip\noindent\textit{Choosing $\lambda_n$.}
-The three KRR-type intervals (Aniso, Iso, and Trunc.\,Aniso) all require an \emph{undersmoothed} scalar penalty $\lambda_n$, in the sense that $\lambda_n$ must decay faster than the rate that is optimal for mean squared estimation error: at the MSE-optimal $\lambda_n$ the bias of $\langle z, \hat\beta_n\rangle$ does not vanish faster than its standard deviation, and the asymptotic normality used to form the interval breaks down. Standard $k$-fold cross-validation targets MSE optimality and therefore does not deliver a $\lambda_n$ of the right order for these intervals. We instead select $\lambda_n$ on a log-spaced grid of length $L=2n$ by a Lepski-type adaptive rule with threshold $\kappa=C\sqrt{\log n+\log L}$ and $C=0.005$, in the spirit of the honest adaptive confidence procedure of \citet{chernozhukov2014anticoncentration}; the resulting $\hat\lambda_n$ is then further shrunk by a factor of $(\log n)^{-2}$ to enforce strict undersmoothing.
+The three KRR-type intervals (Aniso, Iso, and Trunc.\,Aniso) all require an \emph{undersmoothed} scalar penalty $\lambda_n$, in the sense that $\lambda_n$ must decay faster than the rate that is optimal for mean squared estimation error. Standard $k$-fold cross-validation targets MSE optimality and therefore does not deliver a $\lambda_n$ of the right order for these intervals. We instead select $\lambda_n$ on a log-spaced grid of length $L=2n$ by a Lepski-type adaptive rule with threshold $\kappa=C\sqrt{\log n+\log L}$ and $C=0.005$, in the spirit of the honest adaptive confidence procedure of \citet{chernozhukov2014anticoncentration}; the resulting $\hat\lambda_n$ is then further shrunk by a factor of $(\log n)^{-2}$ to enforce strict undersmoothing.
 Algorithm~\ref{alg:lepski} states the selection rule precisely. Sweeping from the least- to the most-smoothed fit, it keeps the largest penalty whose point estimate still agrees, within $\kappa$ standard errors, with every less-smoothed estimate, and then applies the $(\log n)^{-2}$ shrinkage.
 
 \begin{algorithm}[!htbp]
@@ -925,7 +941,7 @@ For Adapt.\,Trunc the situation is different. The adaptive-weight construction o
 
 \subsection{Results}\label{subsec:sim-results}
 
-Figure \ref{fig:sim-grid-r1} reports two-sided coverage (panel~\subref{fig:sim-grid-r1-cov}) and mean CI width (panel~\subref{fig:sim-grid-r1-wid}) of the five methods at fixed covariance smoothness $r_2=1$. Each panel is a $3\times 3$ grid. Rows vary the slope across the three regimes singled out by Assumption (D1), namely $b_k\propto k^{-2}$ for which (D1) \emph{fails}, $b_k\propto k^{-4}$ for which (D1) is satisfied, and the sparse slope $(b_1,b_2)=(4,-2)$ for which (D1) holds trivially. Columns vary the covariance design (Aligned, Haar, Shifted). Within every cell of either grid, the nine $x$-positions index the three sample sizes $n\in\{1000,2000,4000\}$ paired with the three target levels $\{75\%,85\%,95\%\}$, and the five methods are jittered at each tick; error bars are one standard deviation across the $500$ Monte-Carlo replicates.
+Figures~\ref{fig:sim-grid-r1} and~\ref{fig:sim-grid-r2-0p5} report two-sided coverage and mean CI width of the five methods at covariance smoothness $r_2=1$ and $r_2=0.5$, respectively. Each panel is a $3\times 3$ grid. Rows vary the slope across the three regimes singled out by Assumption (D1), namely $b_k\propto k^{-2}$ for which (D1) \emph{fails}, $b_k\propto k^{-4}$ for which (D1) is satisfied, and the sparse slope $(b_1,b_2)=(4,-2)$ for which (D1) holds trivially. Columns vary the covariance design (Aligned, Haar, Shifted). Within every cell of either grid, the nine $x$-positions index the three sample sizes $n\in\{1000,2000,4000\}$ paired with the three target levels $\{75\%,85\%,95\%\}$, and the five methods are jittered at each tick; error bars are one standard deviation across the $500$ Monte-Carlo replicates.
 
 \begin{figure}[!htbp]
 \centering
@@ -949,16 +965,6 @@ Figure \ref{fig:sim-grid-r1} reports two-sided coverage (panel~\subref{fig:sim-g
 \label{fig:sim-grid-r1}
 \end{figure}
 
-The three intervals introduced in Sections~\ref{sec:anikrr}--\ref{sec:adptr}, namely $\varphi^{\ani}$, $\varphi^{\anitr}$, and $\varphi^{\adptr}$, attain nominal coverage in every cell of Figure~\ref{fig:sim-grid-r1}: their markers sit on the dashed nominal lines throughout, with no systematic departure. The slope axis exerts essentially no influence on this calibration: even on the $b_k\propto k^{-2}$ row, where Assumption~(D1) provably fails, the coverage of $\varphi^{\anitr}$ is indistinguishable from that on the (D1)-satisfying rows. The empirical honesty of the proposed methods therefore extends beyond the regime in which Theorems~\ref{thm:anikrr-rates}--\ref{thm:adptr-rates} formally apply.
-
-The FPCA baseline tells a different story. On the Aligned and Haar designs it tracks the nominal lines closely, but on the Shifted design its coverage collapses far below nominal at the two smaller sample sizes across all three slopes, before recovering at $n=4000$. This is exactly the failure mode the RKHS framework was designed to address: when the population eigenvalues peak away from $k=1$, ranking empirical principal components by magnitude inverts the ordering of the leading directions at moderate $n$, and FPCA truncates the wrong subspace. None of the four KRR-type intervals exhibit a comparable failure; their Shifted coverage stays on the nominal lines at every $n$.
-
-Even outside the Shifted regime, the undersmoothed isotropic interval $\varphi^{\iso}$ is visibly miscalibrated, over-covering at every $(n,\text{design},\text{slope})$ combination, its markers sitting noticeably above the nominal lines with a gap that does not shrink with $n$. This conservativeness is paid for in width: $\varphi^{\iso}$ is consistently wider than $\varphi^{\ani}$ across the grid, an empirical illustration of the cost of using a penalty that is blind to the eigenstructure of $T$.
-
-On the width dimension, all nine cells obey the same ordering, $\varphi^{\adptr}<\varphi^{\anitr}<\varphi^{\ani}<\varphi^{\iso}\approx\text{FPCA}$, and the adaptive interval $\varphi^{\adptr}$ is the narrowest in every panel while matching or improving on the other methods' coverage. At the common truncation level $J=\lfloor n^{0.4}\rfloor$, $\varphi^{\adptr}$ is appreciably narrower than $\varphi^{\anitr}$ and far narrower than the un-truncated KRR baselines, an empirical realisation of the variance gain promised by the adaptive weights of Section~\ref{sec:adptr}.
-
-Figures~\ref{fig:sim-grid-r2-0p5} and~\ref{fig:sim-grid-r2-2} repeat the experiment at the rougher covariance regime $r_2=0.5$ and the smoother regime $r_2=2$. The four KRR-type intervals tighten monotonically as $r_2$ increases, reflecting the easier estimation problem under smoother covariance: the width of $\varphi^{\ani}$ shrinks steadily from $r_2=0.5$ through $r_2=1$ to $r_2=2$, with $\varphi^{\iso}$ following the same trajectory. The truncation-based intervals $\varphi^{\anitr}$ and $\varphi^{\adptr}$ shrink more modestly, as their truncation cap already controls variance. FPCA, by contrast, is essentially insensitive to $r_2$ in width (its $J=\lfloor\sqrt n\rfloor$ truncation discards the additional smoothness), and its coverage on the Aligned and Haar designs is mildly under-calibrated at $r_2=0.5$ while remaining nearly perfect at $r_2\in\{1,2\}$. The catastrophic failure of FPCA on the Shifted design persists at both $r_2$ values, since the Shifted covariance is itself $r_2$-independent. The qualitative method ordering of Figure~\ref{fig:sim-grid-r1} is otherwise unchanged.
-
 \begin{figure}[!htbp]
 \centering
 \begin{subfigure}{\textwidth}
@@ -981,31 +987,17 @@ Figures~\ref{fig:sim-grid-r2-0p5} and~\ref{fig:sim-grid-r2-2} repeat the experim
 \label{fig:sim-grid-r2-0p5}
 \end{figure}
 
-\begin{figure}[!htbp]
-\centering
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../simulation/numeric_code/yuan_cai_replication/results/inference_grid_legend_inputtest.pdf}
-\end{subfigure}\\[0.5ex]
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../simulation/numeric_code/yuan_cai_replication/results/inference_r2_2_grid_coverage_inputtest.pdf}
-\caption{Two-sided coverage; dashed lines mark nominal levels.}
-\label{fig:sim-grid-r2-2-cov}
-\end{subfigure}\\[1ex]
-\begin{subfigure}{\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../simulation/numeric_code/yuan_cai_replication/results/inference_r2_2_grid_width_inputtest.pdf}
-\caption{Mean CI width on a linear vertical scale.}
-\label{fig:sim-grid-r2-2-wid}
-\end{subfigure}
-\caption{Same layout as Figure~\ref{fig:sim-grid-r1} at the smoother covariance regime $r_2=2$.}
-\label{fig:sim-grid-r2-2}
-\end{figure}
+Across both covariance smoothness levels, the three anisotropic intervals, $\varphi^{\ani}$, $\varphi^{\anitr}$, and $\varphi^{\adptr}$, attain nominal coverage. Their markers stay close to the dashed nominal lines across covariance designs, sample sizes, and slope regimes. This includes the rough slope $b_k\propto k^{-2}$, where Assumption~(D1) fails, indicating that the finite-sample coverage of the truncated anisotropic procedures is more robust in these examples than the sufficient conditions of Theorems~\ref{thm:anitr-rates}--\ref{thm:adptr-rates} alone would suggest.
 
-Across Figures~\ref{fig:sim-grid-r1}--\ref{fig:sim-grid-r2-2} the two truncation-based intervals, $\varphi^{\anitr}$ and $\varphi^{\adptr}$, were the narrowest of the honest methods in every regime. A natural worry, however, is that this advantage is an artifact of the single truncation level at which they were run, the deliberately conservative $J=\lfloor n^{0.4}\rfloor$. One could imagine that a smaller $J$ would cut variance further and make the intervals look misleadingly narrow, or that a larger $J$ would erode the gain, so that the apparent dominance reflects a lucky tuning choice rather than a property of the methods. To test this, and to map how robust the two intervals are to the truncation level, the remaining experiments hold every other ingredient of the setup fixed and sweep $J$ directly over $\{\lfloor n^{0.2}\rfloor,\lfloor n^{0.3}\rfloor,\lfloor n^{0.4}\rfloor\}$, first for the D1-satisfying slope $b_k\propto k^{-4}$ (Figure~\ref{fig:sim-grid-trunc}) and then for the D1-failing slope $b_k\propto k^{-2}$ (Figure~\ref{fig:sim-grid-trunc-k2}).
+FPCA behaves differently. On the Aligned and Haar designs its coverage is close to nominal, but in the Shifted design it under-covers at moderate sample sizes before recovering at $n=4000$; the under-coverage is more pronounced at $r_2=0.5$ than at $r_2=1$. This is the same phenomenon highlighted by the shifted-spectrum experiment in \cite{cai2012minimax}: the leading eigenfunctions of the covariance are moved away from the leading eigenfunctions of the RKHS. FPCA orders directions by the empirical variance of $X$, so its low-dimensional regression basis is determined by the leading empirical principal components. In the Shifted design those high-variance directions are centered near $k_0=25$, and the leading shifted eigenvalues are tied or close. Consequently, finite-sample perturbations of the covariance can alter the empirical ordering of the leading directions, making the FPCA basis less stable at moderate sample sizes. This effect is stronger at $r_2=0.5$ because reducing $r_2$ makes the Shifted spectrum less separated, and more sensitive to the finite-sample perturbations. In contrast, the proposed anisotropic procedures preserve coverage in both regimes.
 
-Figure~\ref{fig:sim-grid-trunc} carries out this sweep for the $b_k\propto k^{-4}$ slope, comparing $\varphi^{\anitr}$ and $\varphi^{\adptr}$ at the three truncation levels. Columns correspond to $r_2\in\{0.5,1,2\}$ and rows to the Aligned and Haar covariance designs (the Shifted design is omitted here as its eigenstructure is largely orthogonal to the truncation choice). Because the two rows share a common $y$-axis on each panel of width and coverage, the dependence of method behaviour on $r_2$ can be read off horizontally.
+The isotropic interval $\varphi^{\iso}$ is honest but conservative in both figures. Its coverage is typically above the nominal lines, reflecting the fact that its variance proxy is deliberately larger than the variance of the undersmoothed estimator. This conservatism is the price of the weaker structural requirements behind the isotropic construction.
+
+The width comparisons show the expected efficiency ordering in both covariance regimes. Among the honest procedures, Adapt.\,Trunc is the narrowest in every cell, followed by Trunc.\,Aniso and then Aniso, with Iso substantially wider. Moving from $r_2=1$ to the rougher case $r_2=0.5$ generally widens the KRR-type intervals, consistent with a harder estimation problem under slower spectral decay. At the common truncation level, the adaptive weights visibly reduce interval width relative to the non-adaptive truncated interval while preserving coverage.
+
+Across Figures~\ref{fig:sim-grid-r1} and~\ref{fig:sim-grid-r2-0p5} the two truncation-based intervals, $\varphi^{\anitr}$ and $\varphi^{\adptr}$, were the narrowest of the honest methods in every regime. A natural worry, however, is that this advantage is an artifact of the single truncation level at which they were run, the deliberately conservative $J=\lfloor n^{0.4}\rfloor$. To test this, and to map how robust the two intervals are to the truncation level, the remaining experiments hold every other ingredient of the setup fixed and sweep $J$ directly over $\{\lfloor n^{0.2}\rfloor,\lfloor n^{0.3}\rfloor,\lfloor n^{0.4}\rfloor\}$, first for the D1-satisfying slope $b_k\propto k^{-4}$ (Figure~\ref{fig:sim-grid-trunc}) and then for the D1-failing slope $b_k\propto k^{-2}$ (Figure~\ref{fig:sim-grid-trunc-k2}).
+
+Figure~\ref{fig:sim-grid-trunc} carries out this sweep for the $b_k\propto k^{-4}$ slope, comparing $\varphi^{\anitr}$ and $\varphi^{\adptr}$ at the three truncation levels. Columns correspond to $r_2\in\{0.5,1\}$ and rows to the Aligned and Haar covariance designs (the Shifted design is omitted here as its eigenstructure is largely orthogonal to the truncation choice). Because the two rows share a common $y$-axis on each panel of width and coverage, the dependence of method behaviour on $r_2$ can be read off horizontally.
 
 \begin{figure}[!htbp]
 \centering
@@ -1025,11 +1017,11 @@ Figure~\ref{fig:sim-grid-trunc} carries out this sweep for the $b_k\propto k^{-4
 \caption{Mean CI width on a linear vertical scale.}
 \label{fig:sim-grid-trunc-wid}
 \end{subfigure}
-\caption{Truncation-level sensitivity at slope $b_k\propto k^{-4}$ with input-distribution test points: $\varphi^{\anitr}$ (squares) and $\varphi^{\adptr}$ (circles) at $J=\lfloor n^q\rfloor$ for $q\in\{0.2,0.3,0.4\}$ (blue / green / red). Columns: $r_2\in\{0.5,1,2\}$. Rows: covariance design Aligned / Haar. Within each cell, the nine $x$-positions index $n\in\{1000,2000,4000\}$ paired with target levels $\{75\%,85\%,95\%\}$; error bars are $\pm 1$ s.d.\ across $500$ Monte-Carlo replicates.}
+\caption{Truncation-level sensitivity at slope $b_k\propto k^{-4}$ with input-distribution test points: $\varphi^{\anitr}$ (squares) and $\varphi^{\adptr}$ (circles) at $J=\lfloor n^q\rfloor$ for $q\in\{0.2,0.3,0.4\}$ (blue / green / red). Columns: $r_2\in\{0.5,1\}$. Rows: covariance design Aligned / Haar. Within each cell, the nine $x$-positions index $n\in\{1000,2000,4000\}$ paired with target levels $\{75\%,85\%,95\%\}$; error bars are $\pm 1$ s.d.\ across $500$ Monte-Carlo replicates.}
 \label{fig:sim-grid-trunc}
 \end{figure}
 
-Figure~\ref{fig:sim-grid-trunc} is a direct empirical check of the lower bound on the truncation exponent that each method's theory imposes. The two intervals carry \emph{separate} requirements: $\varphi^{\anitr}$ attains its honest rate $n^{-(2r-1)/2r}$ only when $q>\tfrac{1}{2r}$ (Theorem~\ref{thm:anitr-rates}), whereas $\varphi^{\adptr}$ attains the faster adaptive rate $n^{-2r/(2r+1)}$ only when $q>\tfrac{2r}{(2r-1)(2r+1)}$ (Theorem~\ref{thm:adptr-rates}). In the Aligned designs the operator $T$ has decay exponent $r=2+r_2$, and the two lower bounds nearly coincide numerically: at $r_2=0.5,\,1,\,2$ they evaluate to $q_{\min}\approx 0.200,\,0.167,\,0.125$ for $\varphi^{\anitr}$ and $q_{\min}\approx 0.208,\,0.171,\,0.127$ for $\varphi^{\adptr}$. For both methods, then, $q=0.2$ sits essentially on the boundary at $r_2=0.5$ and comfortably inside the admissible range at $r_2\in\{1,2\}$, and the figure shows exactly this: averaged over $n$, target level, and the two designs, the $q=0.2$ coverage of both $\varphi^{\anitr}$ and $\varphi^{\adptr}$ has markedly larger variance in the $r_2=0.5$ column than at $q\in\{0.3,0.4\}$, while at $r_2\in\{1,2\}$ all three $q$ values produce small, stable coverage errors.
+Figure~\ref{fig:sim-grid-trunc} is a direct empirical check of the lower bound on the truncation exponent that each method's theory imposes. The two intervals carry \emph{separate} requirements: $\varphi^{\anitr}$ attains its honest rate $n^{-(2r-1)/2r}$ only when $q>\tfrac{1}{2r}$ (Theorem~\ref{thm:anitr-rates}), whereas $\varphi^{\adptr}$ attains the faster adaptive rate $n^{-2r/(2r+1)}$ only when $q>\tfrac{2r}{(2r-1)(2r+1)}$ (Theorem~\ref{thm:adptr-rates}). In the Aligned designs the operator $T$ has decay exponent $r=2+r_2$, and the two lower bounds nearly coincide numerically: at $r_2=0.5$ and $1$ they evaluate to $q_{\min}\approx 0.200$ and $0.167$ for $\varphi^{\anitr}$, and $q_{\min}\approx 0.208$ and $0.171$ for $\varphi^{\adptr}$. For both methods, then, $q=0.2$ sits essentially on the boundary at $r_2=0.5$ and comfortably inside the admissible range at $r_2=1$, and the figure shows exactly this: averaged over $n$, target level, and the two designs, the $q=0.2$ coverage of both $\varphi^{\anitr}$ and $\varphi^{\adptr}$ has markedly larger variance in the $r_2=0.5$ column than at $q\in\{0.3,0.4\}$, while at $r_2=1$ all three $q$ values produce small, stable coverage errors.
 
 The width behaviour separates the two methods most clearly at the moderate and larger truncation levels. At the smallest $q=0.2$ both methods are nearly insensitive to $r_2$ and give essentially the same width, since the adaptive correction has little to work with once the truncation level is small enough to dominate the variance-bias trade-off. As $q$ increases to $0.3$ and then $0.4$, Trunc.\,Aniso width stays comparatively flat in $r_2$ while Adapt.\,Trunc width falls appreciably as the covariance smooths, so the two pull apart visibly in the width panels. The advantage of $\varphi^{\adptr}$ over $\varphi^{\anitr}$ is therefore concentrated at the larger $q$ values, where there is more variance for the adaptive weights to tame, and grows with $r_2$, where the smoother covariance gives them more leverage.
 
@@ -1053,7 +1045,7 @@ Figure~\ref{fig:sim-grid-trunc} fixed the slope at the D1-satisfying regime $b_k
 \caption{Mean CI width on a linear vertical scale.}
 \label{fig:sim-grid-trunc-k2-wid}
 \end{subfigure}
-\caption{Same layout as Figure~\ref{fig:sim-grid-trunc}, but at the D1-\emph{failing} slope $b_k\propto k^{-2}$: $\varphi^{\anitr}$ (squares) and $\varphi^{\adptr}$ (circles) at $J=\lfloor n^q\rfloor$ for $q\in\{0.2,0.3,0.4\}$ (blue / green / red). Columns: $r_2\in\{0.5,1,2\}$. Rows: covariance design Aligned / Haar. Within each cell the nine $x$-positions index $n\in\{1000,2000,4000\}$ paired with target levels $\{75\%,85\%,95\%\}$; error bars are $\pm 1$ s.d.\ across $500$ Monte-Carlo replicates.}
+\caption{Same layout as Figure~\ref{fig:sim-grid-trunc}, but at the D1-\emph{failing} slope $b_k\propto k^{-2}$: $\varphi^{\anitr}$ (squares) and $\varphi^{\adptr}$ (circles) at $J=\lfloor n^q\rfloor$ for $q\in\{0.2,0.3,0.4\}$ (blue / green / red). Columns: $r_2\in\{0.5,1\}$. Rows: covariance design Aligned / Haar. Within each cell the nine $x$-positions index $n\in\{1000,2000,4000\}$ paired with target levels $\{75\%,85\%,95\%\}$; error bars are $\pm 1$ s.d.\ across $500$ Monte-Carlo replicates.}
 \label{fig:sim-grid-trunc-k2}
 \end{figure}
 
@@ -1061,7 +1053,7 @@ The contrast with Figure~\ref{fig:sim-grid-trunc} is stark, and it is concentrat
 
 The pair of slope regimes also speaks to the role of (D1) in the analysis of $\varphi^{\adptr}$. The honest guarantee for $\varphi^{\anitr}$ is proved over the class $\Theta_2(\mH)$, which does not invoke (D1), whereas the adaptive guarantee for $\varphi^{\adptr}$ is proved over the smaller class $\Theta_1(\mH)$ and uses (D1) to earn the faster rate $n^{-2r/(2r+1)}$. We stress that our experiments do not show (D1) to be \emph{necessary} for $\varphi^{\adptr}$ to be honest. In the settings considered here, $\varphi^{\adptr}$ stays at the nominal coverage even when (D1) fails, provided the truncation level is chosen conservatively, and at $q=0.4$ its coverage under the rough slope is indistinguishable from that under the smooth one. What the failure of (D1) does is make the choice of truncation level more \emph{stringent}. As Figure~\ref{fig:sim-grid-trunc-k2} shows, once (D1) fails the smallest level $q=0.2$ collapses and even $q=0.3$ is only marginally honest at the rough $r_2=0.5$, whereas under (D1) those same levels are safe; the honest range of $q$ thus narrows from the bottom. The other imprint of (D1) is on \emph{efficiency}: the width advantage of $\varphi^{\adptr}$ over $\varphi^{\anitr}$ that is plain under the smooth slope is perceptibly smaller under the rough slope, so the edge supplied by the adaptive weights erodes once the slope leaves the (D1) class. In short, (D1) is not what makes $\varphi^{\adptr}$ honest in these experiments; rather, it is the condition under which aggressive truncation remains safe and the adaptive width advantage is fully realised. Without it, $\varphi^{\adptr}$ can still be honest, but only at a more cautious truncation level and with a reduced width advantage.
 
-Taken together, Figures~\ref{fig:sim-grid-trunc} and~\ref{fig:sim-grid-trunc-k2} answer the concern that motivated them: the strong performance of the truncation-based intervals in Figures~\ref{fig:sim-grid-r1}--\ref{fig:sim-grid-r2-2} is not an artifact of the conservative $J=\lfloor n^{0.4}\rfloor$ choice. At $q\in\{0.3,0.4\}$ both $\varphi^{\anitr}$ and $\varphi^{\adptr}$ remain honest and narrow across every design and every $r_2$, and the only regime that demands care is over-aggressive truncation ($q=0.2$) once (D1) fails. The default $J=\lfloor n^{0.4}\rfloor$ thus sits in the safe interior of the usable range rather than at a fragile sweet spot, and the width advantage of $\varphi^{\adptr}$ persists throughout it.
+Taken together, Figures~\ref{fig:sim-grid-trunc} and~\ref{fig:sim-grid-trunc-k2} answer the concern that motivated them: the strong performance of the truncation-based intervals in Figures~\ref{fig:sim-grid-r1} and~\ref{fig:sim-grid-r2-0p5} is not an artifact of the conservative $J=\lfloor n^{0.4}\rfloor$ choice. At $q\in\{0.3,0.4\}$ both $\varphi^{\anitr}$ and $\varphi^{\adptr}$ remain honest and narrow across every design and both values of $r_2$, and the only regime that demands care is over-aggressive truncation ($q=0.2$) once (D1) fails. The default $J=\lfloor n^{0.4}\rfloor$ thus sits in the safe interior of the usable range rather than at a fragile sweet spot, and the width advantage of $\varphi^{\adptr}$ persists throughout it.
 
 \subsection{Real-data illustration}\label{subsec:sim-real-data}
 
@@ -1096,7 +1088,7 @@ x_\ell^{\text{test}} \;=\; U \cdot \mathrm{diag}\!\big(\sqrt{w_1}, \ldots, \sqrt
 \]
 so that $x_\ell^{\text{test}} \sim \mathcal N(0, \hat\Sigma)$. The random seed is fixed so that the same $100$ test covariates are used by every method. We emphasise that the test set consists of \emph{covariates only}: no synthetic response $y_\ell^{\text{test}}$ is generated and no ground-truth $\eta(x_\ell^{\text{test}})$ is assumed. For each test covariate $x_\ell^{\text{test}}$ and each method, we fit $\hat\beta$ on the $n=2640$ LCL training pairs $\{(X_i, Y_i)\}_{i=1}^n$ and report the resulting pointwise CI for $\eta(x_\ell^{\text{test}})$, centred at the method's own point estimate $\hat\eta(x_\ell^{\text{test}}) = \langle x_\ell^{\text{test}}, \hat\beta\rangle$. Figure~\ref{fig:lcl-forest} compares those CIs across methods at the same $100$ test covariates.
 
-The five methods reported in the figure are $\varphi^{\ani}$, $\varphi^{\iso}$, FPCA at $J=\lfloor\sqrt n\rfloor$, and $\varphi^{\anitr}$ and $\varphi^{\adptr}$ at the common default truncation level $J=\lfloor n^{0.3}\rfloor$. We take $q=0.3$ as the default truncation level because Figure~\ref{fig:sim-grid-trunc} shows it is the smallest truncation level whose coverage stays honest across all simulated covariance-smoothness levels $r_2\in\{0.5,1,2\}.$
+The five methods reported in the figure are $\varphi^{\ani}$, $\varphi^{\iso}$, FPCA at $J=\lfloor\sqrt n\rfloor$, and $\varphi^{\anitr}$ and $\varphi^{\adptr}$ at the common default truncation level $J=\lfloor n^{0.3}\rfloor$. We take $q=0.3$ as the default truncation level because Figure~\ref{fig:sim-grid-trunc} shows it is the smallest truncation level whose coverage stays honest across the simulated covariance-smoothness levels $r_2\in\{0.5,1\}.$
 
 Panel~(a) of Figure~\ref{fig:lcl-forest} draws side-by-side $95\%$ intervals for fifteen representative test functions, quantile-spaced by the Aniso point estimate, so that the horizontal axis covers a range of $\hat\eta(x_\ell^{\text{test}})$ values from approximately $-0.9$ to $+0.9$ in log-kWh units. Across the middle of this range the five method intervals overlap pairwise, indicating broad agreement on the location of $\eta(x_\ell^{\text{test}})$ up to their respective widths. Toward the tails, in particular at the largest $\hat\eta$ test curve and to a lesser extent at the smallest, the intervals separate a bit.
 
