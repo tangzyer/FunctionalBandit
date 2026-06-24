@@ -162,12 +162,12 @@ where the intercept $\gamma_0$ and slope function $\beta_0$ are unknown. A large
 
 This paper studies \emph{pointwise} confidence intervals for $\eta_0(x)$ that are valid uniformly over both the regression functional and the test curve. We call a confidence procedure honest over a class $\Theta$ if it maps each test curve $x$ to an interval $\varphi(x)\subseteq\mathbb R$ satisfying
 \begin{equation}
-\liminf_{n\to\infty}\inf_{\eta_0\in\Theta} \Pr\left[\eta_0(x)\in\varphi(x)\right] \geq 1-\alpha,\;\;\;\;\;\;\forall x\in\mathrm{supp}(P_X)
+\liminf_{n\to\infty}\inf_{\eta_0\in\Theta} \Pr\left[\eta_0(x)\in\varphi(x)\right] \geq 1-\alpha,\;\;\;\;\;\;\forall x\in\mathcal X
 \label{eq:honest-ci}
 \end{equation}
-for a predetermined significance level $\alpha\in(0,1)$, with probability taken over the training data. We measure the efficiency of such honest procedures by their worst-case mean-squared width,
+for a predetermined significance level $\alpha\in(0,1)$ and a pre-determined target set $\mathcal X$ of test curves, with probability taken over the training data. We measure the efficiency of such honest procedures by their worst-case mean-squared width,
 \begin{equation}
-\sup_{\eta_0\in\Theta}\mathbb E_{\eta_0} \left[\int_{\supp(P_X)}\big|\varphi(x)\big|^2\ud P_X(x)\right],
+\sup_{\eta_0\in\Theta}\mathbb E_{\eta_0} \left[\int\big|\varphi(x)\big|^2\ud P_X(x)\right],
 \label{eq:adaptive}
 \end{equation}
 where $|\varphi(x)|$ denotes interval length. This criterion is deliberately different from mean-squared prediction error: the interval must cover uniformly, so its width must account not only for the variance of an estimator but also for regularization and truncation bias at each possible test curve.
@@ -310,7 +310,8 @@ The following assumptions on imposed directly on the structure of $\{\psi_j\}_j$
 \item[(B1)] There exists numerical constants $r>1/2$ and $0<c_s\leq C_s<+\infty$ such that $c_s j^{-2r}\leq s_j\leq C_sj^{-2r}$ for all $j\geq 1$;
 this also implies that $T$ is invertible;
 \item[(B2)] There exists a numerical constant $C_p<+\infty$ such that for every $f\in L_2(I)$, $\mathbb E[\langle Z,f\rangle^4] \leq C_p(\mathbb E[\langle Z,f\rangle^2])^2$;
-\item[(B3)] There exists numerical constants $\kappa\in[0,1/2)$ and $C_\nu<+\infty$ such that for every $j\geq 1$, $|\langle Z,\psi_j\rangle| \leq C_\nu n^{\kappa}\cdot \sqrt{s_j}$ almost surely.
+\item[(B3)] Let $z$ be a given, fixed test function after RKHS transformation. There exists numerical constants $\kappa\in[0,1/2)$ and $C_\nu<+\infty$ such that for every $j\geq 1$, $|\langle Z,\psi_j\rangle| \leq C_\nu n^{\kappa}\cdot \sqrt{s_j}$ almost surely with respect to $P_Z$,
+and furthermore $|\langle z,\psi_j\rangle|\leq C_\nu n^\kappa\cdot \sqrt{s_j}$ for the fixed test function $z$.
 \end{enumerate}
 
 Assumption (B2) is also imposed, in the form of Assumption (b) in \citep{yuan2010reproducing}. It is satisfied when $X$ is a Gaussian process.
@@ -334,7 +335,8 @@ which coincides with coefficient decay assumptions adopted in many fPCA analysis
 {\color{red}In light of Assumption (B3) which is weaker for larger $n$, we allow the distribution $P_X$ (and therefore the population covariance operator $T$) to vary for different $n$,
 so that more distributions $P_X$ satisfy Assumption (B3) for larger values of $n$.
 When necessary, we use the notation $P_X^n$ to emphasize on this fact.
-We also use $P_Z^n$ to denote the distribution of $Z=L_{K^{1/2}}X$ when $X\sim P_X$.}
+We also use $P_Z^n$ to denote the distribution of $Z=L_{K^{1/2}}X$ when $X\sim P_X$.
+Furthermore, for any test function $x$ and its induced $z=L_{K^{1/2}}x$, we use $\mathcal P_X^n(z)$ to denote all population distributions $P_X^n$ satisfying Assumptions (A3), (B1), (B2) and (B3) with respect to the test function $z$.}
 
 {\color{red}It should also be remarked that the assumption (B3) with $\kappa=0$ would greatly simplify the problem, because isotropic weight choices are automatically adaptive.
 Similar phenomenon revealed in \citep{liu2025scalable}.}
@@ -356,7 +358,7 @@ with $Y_i'=Y_i-\bar Y$, $Z_i'=L_{K^{1/2}}(X_i-\bar X)$ and $T_n=\frac{1}{n}\sum_
 This is an \emph{under-smoothed} kernel ridge regression estimator with $\lambda_n=o(n^{-1})$, while the optimal penalty parameter choice for estimating $\eta_0$ in mean-squared errors 
 is $\lambda_n\asymp n^{-2r/(2r+1)}$, per results in \cite{cai2012minimax}.
 
-For a test function $x$ in the support $P_X^n$, an honest and adaptive confidence interval of $\eta(x)$ at significance level $\alpha\in(0,1)$ is constructed as
+For a test function $x$, an honest and adaptive confidence interval of $\eta(x)$ at significance level $\alpha\in(0,1)$ is constructed as
 $$
 \varphi^\iso(x) = [\hat\eta_n^\iso(x)\;\pm\;\tau_{\alpha/2}\hat\sigma_n^\iso(L_{K^{1/2}}x)]
 $$
@@ -370,6 +372,13 @@ $$
 %$$
 %which is smaller than $\hat\sigma_n(z)$ almost surely.
 
+{\color{cyan}
+We need an additional assumption on the behavior of the test function.
+\begin{enumerate}
+    \item[(B4)] There exists a strictly positive numerical constant $c_z>0$ such that for any test function $x$ and its associated transformed function $z=L_{K^{1/2}}x$, it holds for any $n\geq 1$ and $P_X^n\in\mathcal P_X^n(z)$ that $\mathbb E[|\langle z, (T+I/n)^{-1} Z\rangle|^2]\geq c_z^2$, where both the expectation and the population covariance operator $T$ are with respect to $P_X^n$, and $I$ is the identity operator.
+\end{enumerate}
+}
+
 \subsection{Honesty of confidence intervals}
 
 For the purpose of our analysis, 
@@ -379,39 +388,41 @@ $$
 $$
 which is smaller than $\hat\sigma_n^\iso(z)$ almost surely.
 
-Let $\mX := \cup_{n=1}^{\infty}\cap_{m=n}^{\infty}\supp(P_X^m)$ denote the class of all functions which belong to the support of $P_X^n$ for all sufficiently large $n$.
+%Let $\mX := \cup_{n=1}^{\infty}\cap_{m=n}^{\infty}\supp(P_X^m)$ denote the class of all functions which belong to the support of $P_X^n$ for all sufficiently large $n$.
 
 \begin{theorem}
-Suppose Assumptions (A1), (A2), (A3), (B1), (B2), (B3) hold, where (B3) holds with $\kappa<\frac{1}{6}-\frac{1}{4r}$. Suppose also that Eq.~(\ref{eq:lambdan-1}) holds. Then 
-for any $x\in\supp(P_X)$, one can decompose the pointwise prediction error at $x$ as $\hat\eta_n^\iso(x)-\eta_0(x)=b_n(x)+v_n(x)$ such that, as $n\to\infty$, 
+Fix a test function $x$ with $z=L_{K^{1/2}}x$, and let $\mathcal P_X^n(z)$ denote the class of all population distributions at sample size $n$ that satisfy
+Assumptions (A1) through (B4), where (B3) holds with $\kappa<\frac{1}{6}-\frac{1}{4r}$. Suppose also that Eq.~(\ref{eq:lambdan-1}) holds. Then
+for any sequence of population distributions $\{P_X^n\}_{n=1}^{\infty}$ and functional regression models $\{\theta_n\}_{n=1}^{\infty}$ where $P_X^n\in\mathcal P_X^n(z)$ and $\theta_n\in L_2(I)$, one can decompose the pointwise prediction error at $x$ as $\hat\eta_n^\iso(x)-\eta_0(x)=b_n(x)+v_n(x)$ such that, as $n\to\infty$,
 \begin{align*}
 \frac{b_n(x)}{\hat\sigma_n^\iso(z)}\;\;\overset{a.s.}{\to}\;\; 0,\;\;\;\;\;\;\frac{v_n(x)}{\tilde\sigma_n(z)}\;\;\overset{d}{\to}\;\;\mathcal N(0,1),
 \end{align*}
 where $z=L_{K^{1/2}}x$.
-Furthermore, if $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed, then $v_n(x)/\tilde\sigma_n(z)$ is exactly distributed as $\mathcal N(0,1)$, and
-$\sup_{x\in\mX}|b_n(x)|/\hat\sigma_n^{\iso}(z)\to 0$ almost surely, and both are true without assuming (B3).
+Furthermore, if $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed, then $v_n(x)/\tilde\sigma_n(z)$ is exactly distributed as $\mathcal N(0,1)$ without assuming (B3).
 \label{thm:isokrr-limiting}
 \end{theorem}
 
 The following corollary is then immediate, noting that $\tilde\sigma_n(z)\leq\hat\sigma_n^\iso(z)$ almost surely.
 \begin{corollary}
-Impose conditions in Theorem \ref{thm:isokrr-limiting}. Then
+Impose conditions in Theorem \ref{thm:isokrr-limiting}. Then for any test function $x$
+and $z=L_{K^{1/2}}x$,
 $$
-\liminf_{n\to\infty}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\iso(x)]\;\;\geq\;\; 1-\alpha,\;\;\;\;\;\;\forall x\in\mX.
+\liminf_{n\to\infty}\inf_{P_X^n\in\mathcal P_X^n(z)}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\iso(x)]\;\;\geq\;\; 1-\alpha.
 $$
-Furthermore, if $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed, then the following strengthened result holds and it holds without assuming (B3):
-$$
-\liminf_{n\to\infty}\inf_{P_X^n}\inf_{x\in\supp(P_X^n)}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\iso(x)] \;\;\geq\;\; 1-\alpha.
-$$
+Furthermore, if $\{\varepsilon_i\}_{i=1}^n$ are Normally distributed, then the above inequality holds without assuming (B3).
 \label{cor:isokrr-ci}
 \end{corollary}
 
 \subsection{Rates of convergence}
 
+Let $\mathcal Z$ denote the set of all transformed
+test functions $z$ on which $\varphi$ needs
+to be honest. Let $\mathcal P_X^n = \bigcup_{z\in\mathcal Z}\mathcal P_X^n(z)$.
+
 \begin{theorem}
-Suppose Assumptions (A1)-(A3) and (B1)-(B3) hold, with $\kappa<1/2$. Then as $n\to\infty$, 
+Suppose Assumptions (A1) through (B4) hold, with $\kappa<1/2$. Then as $n\to\infty$,
 \begin{equation}
-\sup_{P_X^n}\sup_{\beta_0\in\Theta_2(\mH)}\mathbb E_{\eta_0}\left[\int\big|\varphi^\iso(x)\big|^2\ud P_X^n(x)\right]\lesssim n^{-\frac{2r-1}{2r}+\delta}
+\sup_{P_X^n\in\mathcal P_X^n}\sup_{\beta_0\in\Theta_2(\mH)}\mathbb E_{\eta_0}\left[\int\big|\varphi^\iso(x)\big|^2\ud P_X^n(x)\right]\lesssim n^{-\frac{2r-1}{2r}+\delta}
 \label{eq:simple-validity}
 \end{equation}
 for any $\delta>0$.
@@ -422,8 +433,7 @@ for any $\delta>0$.
 \subsection{Minimax optimality}
 
 \begin{theorem}
-Fix arbitrary $\alpha\in(0,1/4)$, $r>1/2$ and $\kappa=0$. There exists a distribution $P_X$ satisfying Assumptions (A1), (A3), (B1), (B2), and (B3), such that for any $\varphi$ satisfying Eq.~(\ref{eq:honest-ci})
-with respect to the constructed $P_X$ and $\Theta_2(\mH)$, it holds that
+Fix arbitrary $\alpha\in(0,1/4)$, $r>1/2$ and $\kappa=0$. There exists a distribution $P_X$ \emph{not} depending on $n$ and satisfying Assumptions (A1) through (B4), such that for any $\varphi$ satisfying Eq.~(\ref{eq:honest-ci}) with $\mathcal X=\mathrm{supp}(X)$\footnote{For the constructed $P_X$ in this theorem, $\mathrm{supp}(X)$ is countable and therefore well-defined.}, it holds that
 $$
 \sup_{\beta_0\in\Theta_2(\mH)} \mathbb E_{\beta_0}\left[\int\big|\varphi(x)\big|^2\ud P_X(x)\right] \gtrsim n^{-\frac{2r-1}{2r}}.
 $$
@@ -558,7 +568,7 @@ Let $\{\omega_n\}_{n=1}^{\infty}$ be a sequence of slowly increasing positive co
 as $n\to\infty$, for any $\delta>0$.
 The estimator is then $\hat\eta_n^\anitr(\cdot)=\hat\gamma_n + \langle\cdot,\hat\beta_n^\anitr\rangle$ where $\hat\beta_n^\anitr = L_{K^{1/2}}\hat\theta_n^\anitr$,
 and $\langle f,g\rangle = \int_I f(t)g(t)\ud t$.
-Afterwards, for a test function $x\in\supp(P_X)$, a confidence interval for $\eta_0(x)$ is constructed as
+Afterwards, for a test function $x$, a confidence interval for $\eta_0(x)$ is constructed as
 $$
 \varphi^\anitr(x) = [\hat\eta_n^\anitr(x)\;\pm\; \tau_{\alpha}\hat\sigma_n^\anitr(L_{K^{1/2}}x) + \omega_n\|\hat\Pi_J^\perp (L_{K^{1/2}}x)\|_2],
 $$
@@ -605,6 +615,10 @@ Note that, here the denominator is the expected value of the numerator.
 \end{enumerate}
 }
 %{\color{red}We need it to hold for $a_j=s_{\varpi(j)}/(s_{\varpi(j)}+\lambda_{nj})$. However, $\varpi$ is dependent on $\{Z_i\}_{i=1}^n$ and $\lambda_{nj}$ depends on $Z$, in the adaptive case.}
+
+Notation-wise, we use $\mathcal Q_X^n(z)$ to denote the class of all population distributions $P_X^n$ when $n$ samples are available, such that Assumptions (A1) through (B3) and Assumption (C3) hold.
+We also write $\mathcal Q_X^n = \bigcup_{z}\mathcal Q_X^n(z)$ as the aggregated class of population distributions for all test functions we consider.
+Let $\mathcal Q_Z^n(z)$ denote the corresponding class of distributions of $Z=L_{K^{1/2}}X$ induced by $P_X^n\in\mathcal Q_X^n(z)$.
 
 Recall that the population covariance operator $T=\mathbb E[Z\otimes Z]$ and the sample covariance operator $T_n=\frac{1}{n}\sum_{i=1}^nZ_i\otimes Z_i$ admit spectral decomposition of
 $T=\sum_{j=1}^{\infty}s_j\psi_j\otimes\psi_j$ and $T_n=\sum_{j=1}^n\hat s_j\hat\psi_j\otimes\hat\psi_j$, where $\{\psi_j\}_{j=1}^{\infty}$ is an orthonormal basis of $L_2(I)$ and $\{\hat\psi_j\}_{j=1}^n$ are orthonormal in $L_2(I)$.
@@ -665,19 +679,20 @@ $$
 
 The following theorem establishes the limiting distribution of $\hat\eta_n^\anitr$.
 \begin{theorem}
+Fix an arbitrary test function $x$ and $z=L_{K^{1/2}}x$.
 Impose all assumptions and conditions in Lemma \ref{lem:stability}. Suppose $\Lambda_n$ is constructed as $\lambda_{nj}=\sqrt{\hat s_j\lambda_n}$ for all $j\leq J(n)$,
 where $\lambda_n$ satisfies Eq.~(\ref{eq:lambdan-1}). Suppose also that Assumptions (A1), (A2) hold, and $\kappa<(1-q)/2$. Then 
 $$
-\lim_{n\to\infty} \sup_{P_X^n}\sup_{x\in\supp(P_X^n)}\sup_{\beta_0\in\Theta_2(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{\hat\eta_n^{\anitr}(x)-\eta_0(x)+\langle\hat\Pi_J^\perp z, \theta_0\rangle}{\hat\sigma_n^\anitr(z)}\leq t\right] - \Phi(t)\right| = 0,
+\lim_{n\to\infty} \sup_{P_X^n\in\mathcal Q_X^n(z)}\sup_{\beta_0\in\Theta_2(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{\hat\eta_n^{\anitr}(x)-\eta_0(x)+\langle\hat\Pi_J^\perp z, \theta_0\rangle}{\hat\sigma_n^\anitr(z)}\leq t\right] - \Phi(t)\right| = 0,
 $$
-where $z=L_{K^{1/2}}x$, $\theta_0=L_{K^{-1/2}}\beta_0$, $\hat\Pi_J^\perp = I - \sum_{j=1}^{J(n)}\hat\psi_j\otimes\hat\psi_j$, and $\Phi(\cdot)$ is the CDF of the standard Normal distribution.
+where $\theta_0=L_{K^{-1/2}}\beta_0$, $\hat\Pi_J^\perp = I - \sum_{j=1}^{J(n)}\hat\psi_j\otimes\hat\psi_j$, and $\Phi(\cdot)$ is the CDF of the standard Normal distribution.
 The probability is over the randomness of both $\{X_i\}_{i=1}^n$ and $\{\varepsilon_i\}_{i=1}^n$. 
 
 {\color{orange}
-Furthermore, if $\frac{1}{2r}<q<\frac{1}{2}$ and Assumption (C3) holds, then for every $\epsilon>0$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
+Furthermore, if $\frac{1}{2r}<q<\frac{1}{2}$ and Assumption (C3) holds, then for every $\epsilon>0$ and every sequence of population distributions $\{P_X^n\}_{n=1}^{\infty}$ where $P_X^n\in\mathcal Q_X^n$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
 such that
 $$
-\lim_{n\to\infty} \sup_{P_X^n}\sup_{x\in\mX_n}\sup_{\beta_0\in\Theta_2(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{\hat\eta_n^{\anitr}(x)-\eta_0(x)}{\hat\sigma_n^\anitr(z)}\leq t\right] - \Phi(t)\right| = 0.
+\lim_{n\to\infty} \sup_{x\in\mX_n}\sup_{\beta_0\in\Theta_2(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{\hat\eta_n^{\anitr}(x)-\eta_0(x)}{\hat\sigma_n^\anitr(z)}\leq t\right] - \Phi(t)\right| = 0.
 $$}
 \label{thm:anitr-limiting}
 \end{theorem}
@@ -696,12 +711,12 @@ where the first inequality holds from Cauchy-Schwarz inequality and the fact tha
 last inequality holds for sufficiently large $n$ because $\|\theta_0\|_2\leq 1$ and $\omega_n\to\infty$ as $n\to\infty$.
 
 \begin{corollary}
-Impose the same set of assumptions and conditions in Theorem \ref{thm:anitr-limiting}. Then
+Impose the same set of assumptions and conditions in Theorem \ref{thm:anitr-limiting}. Then for any test function $x$ and $z=L_{K^{1/2}}x$,
 $$
-\liminf_{n\to\infty}\inf_{P_X^n}\inf_{x\in\supp(P_X^n)}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\anitr(x)] \;\;\geq\;\; 1-\alpha.
+\liminf_{n\to\infty}\inf_{P_X^n\in\mathcal Q_X^n(z)}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\anitr(x)] \;\;\geq\;\; 1-\alpha.
 $$
 Furthermore, if $\frac{1}{2r}<q<\frac{1}{2}$, then the following holds for the choice of $\omega_n\equiv 0$:
-for any $\epsilon>0$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
+for any $\epsilon>0$, and any sequence of population distributions $\{P_X^n\}_{n=1}^{\infty}$ such that $P_X^n\in\mathcal Q_X^n$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
 such that for any sequence $x_1\in\mX_1,x_2\in\mX_2,\cdots$, 
 $$
 \lim_{n\to\infty}\inf_{\beta_0\in\Theta_2(\mH)} \Pr[\eta_0(x)\in\varphi^\anitr(x)] \;\; = \;\; 1-\alpha.
@@ -715,7 +730,7 @@ $$
 Impose all assumptions and conditions in Lemma \ref{lem:stability}. Suppose $\Lambda_n$ is constructed as $\lambda_{nj}=\sqrt{\hat s_j\lambda_n}$ for all $j\leq J(n)$,
 where $\lambda_n$ satisfies Eq.~(\ref{eq:lambdan-1}). Then as $n\to\infty$, 
 $$
-\sup_{P_X^n}\sup_{\beta_0\in\Theta_2(\mH)}\mathbb E\left[\int \big|\varphi^\anitr(x)\big|^2\ud P_X^n(x) \right] \lesssim n^{-\frac{2r-1}{2r}+\delta} + n^{2q-\frac{3}{2}+\delta} + n^{-q(2r-1)+\delta} + n^{1-c}.
+\sup_{P_X^n\in\mathcal Q_X^n}\sup_{\beta_0\in\Theta_2(\mH)}\mathbb E\left[\int \big|\varphi^\anitr(x)\big|^2\ud P_X^n(x) \right] \lesssim n^{-\frac{2r-1}{2r}+\delta} + n^{2q-\frac{3}{2}+\delta} + n^{-q(2r-1)+\delta} + n^{1-c}.
 $$
 for any $\delta>0$, where $c\geq 2$ is the parameter in the failure probability in Lemma \ref{lem:stability}.
 \label{thm:anitr-rates}
@@ -779,23 +794,24 @@ $$
 \subsection{Honesty of confidence intervals}
 
 \begin{theorem}
+Fix an arbitrary test function $x$ and $z=L_{K^{1/2}}x$.
 Impose all assumptions and conditions in Lemma \ref{lem:stability}. Suppose $\Lambda_n$ is constructed in Eq.~(\ref{eq:lambda-adp}) for all $j\leq J(n)$,
 where $\mu_n$ satisfies Eq.~(\ref{eq:mun}) and $q$ in Assumption (C2) satisfies $q<1/2$. Suppose also that Assumptions (A1), (A2), (D1) hold, and $\kappa<(1-q)/2$. Then 
-$\hat\eta_n^\adptr(x)-\eta_0(x)+\langle\hat\Pi_J^\perp L_{K^{1/2}}x,\theta_0\rangle = b_n(L_{K^{1/2}}x)+v_n(L_{K^{1/2}}x)$ for every $n$ and $x\in\supp(P_X^n)$, where
+$\hat\eta_n^\adptr(x)-\eta_0(x)+\langle\hat\Pi_J^\perp L_{K^{1/2}}x,\theta_0\rangle = b_n(L_{K^{1/2}}x)+v_n(L_{K^{1/2}}x)$ for every $n$, where
 $$
-\limsup_{n\to\infty}\sup_{P_Z^n}\sup_{z\in\supp(P_Z^n)}\sup_{\beta_0\in\Theta_1(\mH)} \frac{|b_n(z)|}{\sqrt{\mu_n}} < +\infty\;\;\;\;\;\;a.s.,
+\limsup_{n\to\infty}\sup_{P_Z^n\in\mathcal Q_Z^n(z)}\sup_{\beta_0\in\Theta_1(\mH)} \frac{|b_n(z)|}{\sqrt{\mu_n}} < +\infty\;\;\;\;\;\;a.s.,
 $$
 and
 $$
-\lim_{n\to\infty} \sup_{P_Z^n}\sup_{z\in\supp(P_Z^n)}\sup_{\beta_0\in\Theta_1(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{v_n(z)}{\hat\sigma_n^\adptr(z)}\leq t\right] - \Phi(t)\right| = 0,
+\lim_{n\to\infty} \sup_{P_Z^n\in\mathcal Q_Z^n(z)}\sup_{\beta_0\in\Theta_1(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{v_n(z)}{\hat\sigma_n^\adptr(z)}\leq t\right] - \Phi(t)\right| = 0,
 $$
 where $\theta_0=L_{K^{-1/2}}\beta_0$, $\hat\Pi_J^\perp = I - \sum_{j=1}^{J(n)}\hat\psi_j\otimes\hat\psi_j$, and $\Phi(\cdot)$ is the CDF of the standard Normal distribution.
 The probability is over the randomness of both $\{X_i\}_{i=1}^n$ and $\{\varepsilon_i\}_{i=1}^n$. 
 
-Furthermore, if $\frac{2r}{(2r-1)(2r+1)}<q<\frac{1}{2}$ and Assumption (C3) holds, then for every $\epsilon>0$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
+Furthermore, if $\frac{2r}{(2r-1)(2r+1)}<q<\frac{1}{2}$ and Assumption (C3) holds, then for every $\epsilon>0$ and every sequence of population distributions $\{P_X^n\}_{n=1}^{\infty}$ where $P_X^n\in\mathcal Q_X^n$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
 such that for any sequence $x_1\in\mX_1,x_2\in\mX_2,\cdots$, it holds that
 $$
-\lim_{n\to\infty} \sup_{\beta_0\in\Theta_1(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{\hat\eta_n^\adptr(x)-\eta_0(x)}{\hat\sigma_n^\adptr(L_{K^{1/2}}x)}\leq t\right] - \Phi(t)\right| = 0.
+\lim_{n\to\infty} \sup_{\beta_0\in\Theta_1(\mH)}\sup_{t\in\mathbb R}\left|\Pr\left[\frac{\hat\eta_n^\adptr(x_n)-\eta_0(x_n)}{\hat\sigma_n^\adptr(L_{K^{1/2}}x_n)}\leq t\right] - \Phi(t)\right| = 0.
 $$
 %
 %Furthermore, if $??$ then for every $\epsilon>0$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
@@ -808,14 +824,15 @@ $$
 
 \begin{corollary}
 Impose the same set of assumptions and conditions in Theorem \ref{thm:adptr-limiting}. Then
+for any test function $x$ and $z=L_{K^{1/2}}x$,
 $$
-\liminf_{n\to\infty}\inf_{P_X^n}\inf_{x\in\supp(P_X^n)}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\adptr(x)] \;\;\geq\;\; 1-\alpha.
+\liminf_{n\to\infty}\inf_{P_X^n\in\mathcal Q_X^n(z)}\inf_{\beta_0\in\Theta_2(\mH)}\Pr[\eta_0(x)\in\varphi^\adptr(x)] \;\;\geq\;\; 1-\alpha.
 $$
 Furthermore, if $\frac{2r}{(2r-1)(2r+1)}<q<\frac{1}{2}$ and Assumption (C3) holds, then the following holds for the choice of $\omega_n\equiv 0$:
-for any $\epsilon>0$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
+for any $\epsilon>0$ and any population distributions $\{P_X^n\}_{n=1}^{\infty}$ where $P_X^n\in\mathcal Q_X^n$, there exist measurable sets $\mX_1\subseteq\supp(P_X^1),\mX_2\subseteq\supp(P_X^2),\cdots$ satisfying $P_X^1(\mX_1),P_X^2(\mX_2),\cdots\geq 1-\epsilon$,
 such that for any sequence $x_1\in\mX_1,x_2\in\mX_2,\cdots$, 
 $$
-\lim_{n\to\infty}\inf_{\beta_0\in\Theta_1(\mH)} \Pr[\eta_0(x)\in\varphi^\adptr(x)] \;\; = \;\; 1-\alpha.
+\lim_{n\to\infty}\inf_{\beta_0\in\Theta_1(\mH)} \Pr[\eta_0(x_n)\in\varphi^\adptr(x_n)] \;\; = \;\; 1-\alpha.
 $$
 \label{cor:adptr}
 \end{corollary}
@@ -829,7 +846,7 @@ $$
 Impose all assumptions and conditions in Lemma \ref{lem:stability}. Suppose $\Lambda_n$ is constructed as in Eq.~(\ref{eq:lambda-adp}),
 where $\mu_n$ satisfies Eq.~(\ref{eq:mun}). Then as $n\to\infty$, 
 $$
-\sup_{P_X^n}\sup_{\beta_0\in\Theta_1(\mH)}\mathbb E\left[\int \big|\varphi^\adptr(x)\big|^2\ud P_X^n(x) \right] \lesssim n^{-\frac{2r}{2r+1}+\delta} + n^{2q-\frac{3}{2}+\delta} + n^{-q(2r-1)+\delta} + n^{1-c}.
+\sup_{P_X^n\in\mathcal Q_X^n}\sup_{\beta_0\in\Theta_1(\mH)}\mathbb E\left[\int \big|\varphi^\adptr(x)\big|^2\ud P_X^n(x) \right] \lesssim n^{-\frac{2r}{2r+1}+\delta} + n^{2q-\frac{3}{2}+\delta} + n^{-q(2r-1)+\delta} + n^{1-c}.
 $$
 for any $\delta>0$, where $c\geq 2$ is the parameter in the failure probability in Lemma \ref{lem:stability}.
 \label{thm:adptr-rates}
@@ -1262,6 +1279,7 @@ This completes the proof.
 \begin{lemma}
 Assume the same set of conditions in Lemmas \ref{lem:empirical-population-cov} and \ref{lem:gdiff}. 
 {\color{cyan}Suppose also that $\kappa < 1/4-1/(4r)$ in Assumption (B3).}
+Assume in addition that Assumption (B4) holds.
 Let $\varepsilon_i = Y_i - \langle X_i,\beta_0\rangle$. 
 Then for any $x\in\mX$ and $z=L_{K^{1/2}}x$, as $n\to\infty$, 
 $$
@@ -1284,15 +1302,15 @@ $$
 $$
 for any $\delta>0$, where the last inequality holds because $\lambda_n n\to 0$ and $\lambda_n n^{1+\delta}\to \infty$ for any $\delta>0$.
 
-For any $z$ in the support of $P_{\mathcal Z}$, let $\varsigma(z)^2 := \mathbb E[\langle z,(T+I)^{-1}Z\rangle^2]$.
-Because $P_{\mathcal Z}$ is non-degenerate (see Assumption (B3)), we have that $\varsigma(z)^2 > 0$ for almost every $z$. Consequently, 
+For any $z$ in the support of $P_{\mathcal Z}$, let $\varsigma_n(z)^2 := \mathbb E[\langle z,(T+I/n)^{-1}Z\rangle^2]$.
+By Assumption (B4), we have that $\varsigma_n(z)^2\geq c_z^2>0$. Consequently,
 \begin{align*}
 \lim_{n\to\infty}& \frac{1}{\sqrt{n}}\frac{\mathbb E[|\langle z, (T+\lambda_n)^{-1}Z\rangle|^3]}{\mathbb E[\langle z,(T+\lambda_n)^{-1}Z\rangle^2]^{3/2}} \leq 
 \lim_{n\to\infty}\frac{n^{2\kappa+1/(2r)+\delta}}{\sqrt{n}} \times \frac{1}{\mathbb E[\langle z,(T+\lambda_n)^{-1}Z\rangle^2]^{1/2}}\\
-&\overset{*}{\leq} \lim_{n\to\infty} n^{2\kappa+(1/2r)+\delta-1/2}\times \sigma^{-1} = 0,
+&\overset{*}{\leq} \lim_{n\to\infty} n^{2\kappa+(1/2r)+\delta-1/2}\times c_z^{-1} = 0,
 \end{align*}
-where Eq.~(*) holds because $\lambda_n\leq 1$ and therefore $\mathbb E[\langle z,(T+\lambda_n)^{-1}Z\rangle^2] \leq \mathbb E[\langle z,(T+I)^{-1}Z\rangle^2] = \sigma^2$,
-and the last equality holds provided that $\kappa < \frac{1}{4}(1-1/r)$.
+where Eq.~(*) holds because $\lambda_n\leq 1/n$ for all sufficiently large $n$, hence $\mathbb E[\langle z,(T+\lambda_n)^{-1}Z\rangle^2] \geq \mathbb E[\langle z,(T+I/n)^{-1}Z\rangle^2] = \varsigma_n(z)^2\geq c_z^2$ by Assumption (B4),
+and the last limit holds provided that $\kappa < \frac{1}{4}(1-1/r)$.
 }
 This verifies the Lyapnov condition, which implies 
 %Because $\{\varepsilon_i\bar g(z,Z_i)\}_{i=1}^n$ are i.i.d.~centered random variables with finite variance, the standard central-limit theorem yields that
